@@ -1,0 +1,54 @@
+
+  /* Default mode */
+  .nav-tabs {
+    border: none;
+    margin: 0px;
+  }
+  .nav-tabs > li {
+    margin-right: 2px;
+  }
+  .nav-tabs > li > a {
+    border: 0;
+    margin-right: 5px;
+    color: #737373;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .nav-tabs > li > a > i {
+    color: #a6a6a6;
+  }
+  .nav-tabs > li.open, .nav-tabs > li:hover {
+    border-bottom: 4px solid #fbcdcf;
+  }
+  .nav-tabs > li.open > a, .nav-tabs > li:hover > a {
+    border: 0;
+    background: none !important;
+    color: #333333;
+  }
+  .nav-tabs > li.open > a > i,.nav-tabs > li:hover > a > i {
+    color: #a6a6a6;
+  }
+  .nav-tabs > li.open .dropdown-menu,.nav-tabs > li:hover .dropdown-menu {
+    margin-top: 0px;
+  }
+  .nav-tabs > .nav-link.active {
+    border-bottom: 4px solid #f3565d;
+    position: relative;
+    background:none;
+  }
+  .nav-tabs > li >a.active {
+    border: 0;
+    color: #333333;
+  }
+  .nav-tabs > li.active > a > i {
+    color: #404040;
+  }
+  td.details-control {
+    text-align:center;
+    color:forestgreen;
+    cursor: pointer;
+  }
+  tr.shown td.details-control {
+    text-align:center;
+    color:red;
+  }
