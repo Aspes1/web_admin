@@ -1,6 +1,13 @@
 # ppob-webadmin
 
- Clone branch **dev**
+> Branch **dev**
 
- after fork from **https://github.com/PAYINM/ppob-webadmin.git**
- **git clone -b dev https://github.com/{username your git}/ppob-webadmin.git**
+  
+
+Clone branch **dev**
+
+  
+
+**after fork from** `https://github.com/PAYINM/ppob-webadmin.git`
+
+    git clone -b dev https://github.com/{username your git}/ppob-webadmin.git
