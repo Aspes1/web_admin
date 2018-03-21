@@ -1,0 +1,3 @@
+[20-Feb-2018 16:58:58 Asia/Bangkok] PHP Fatal error:  Call to undefined method CSVReader::csvToArrayBRI() in /home/payinmco123/public_html/webadmin_beta/application/controllers/Mutasi.php on line 366
+[07-Mar-2018 14:34:12 Asia/Jakarta] PHP Fatal error:  Call to undefined method Mutasi::autoCompare() in /home/payinmco123/public_html/webadmin_beta/application/controllers/Mutasi.php on line 136
+[08-Mar-2018 17:41:00 Asia/Jakarta] PHP Fatal error:  Call to undefined method Mutasi::autoCompare() in /home/payinmco123/public_html/webadmin_beta/application/controllers/Mutasi.php on line 136
