@@ -81,6 +81,10 @@ $route['pinjaman/list']                 = 'Pinjaman/listDbsPage';
 $route['pinjaman/isi_p']                = 'Pinjaman/isiPinjamanPage';
 $route['pinjaman/list_p']               = 'Pinjaman/listPinjamanPage';
 
+$route['master']                        = 'Master/index';
+
+
+
 $route['error_550']                     = 'Error';
 
 $route['default_controller'] = $route['login'];

@@ -58,7 +58,7 @@
         <a class="nav-link" href="<?php echo base_url('admin');?>">Admin Users</a>
       </li>
       <li class="nav-item px-3">
-        <a class="nav-link" href="javascript:coomingSoon()">Master INM</a>
+        <a class="nav-link" href="<?php echo base_url('master');?>">Master INM</a>
       </li>
     </ul>
     <ul class="nav navbar-nav ml-auto">
