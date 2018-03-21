@@ -1100,6 +1100,226 @@ var resetJenisProduk = function (event){
       }
   });
 }
-
-
 // =========================== jenis produk =========================== //
+
+// =========================== vendor =========================== //
+var submit_vendor = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#vendor_form')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Input data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormVendorEmpty()){
+              $.ajax({
+                  url:base_url+'master/create_vendor',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal disimpan');
+                      }
+                      if(datas.msg == 'success') {
+                        $.alert('Data berhasil disimpan');
+                        resetFormVendor();
+                      }
+                      if(datas.msg == '1'){
+                        $.alert('Nama vendor sudah ada');
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+var isFormVendorEmpty = function()
+{
+    var vendor = $('#nama_vendor').val();
+    var kdvendor = $('#kode_vendor').val();
+
+    if(vendor == "" || kdvendor == ""){
+      return false;
+    }
+    else {
+      return true;
+    }
+}
+
+var resetFormVendor = function(){
+    $('#nama_vendor').val('');
+    $('#kode_vendor').val('');
+}
+
+var resetVendor = function (event){
+    event.preventDefault();
+    $.confirm({
+      title: 'Confirm!',
+      content: 'Reset Form ?',
+      buttons: {
+          confirm: function () {
+              resetFormVendor();
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+// =========================== end vendor =========================== //
+
+// =========================== biaya admin =========================== //
+var submit_biaya_admin = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#biaya_admin_form')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Input data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormBiayaEmpty()){
+              $.ajax({
+                  url:base_url+'master/create_biaya_admin',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal disimpan');
+                      }
+                      if(datas.msg == 'success') {
+                        $.alert('Data berhasil disimpan');
+                          resetFormBiaya();
+                      }
+                      if(datas.msg == '1'){
+                        $.alert('Nama vendor sudah ada');
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+var isFormBiayaEmpty = function()
+{
+    var kode = $('#kode_produk').val();
+    var biaya = $('#biaya_admin').val();
+
+    if(kode == "" || biaya == ""){
+      return false;
+    }
+    else {
+      return true;
+    }
+}
+
+var resetBiaya = function(event){
+  event.preventDefault();
+    $.confirm({
+      title: 'Confirm!',
+      content: 'Reset Form ?',
+      buttons: {
+          confirm: function () {
+              resetFormBiaya();
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+var resetFormBiaya = function(){
+    $('#kode_produk').val('');
+    $('#biaya_admin').val('');
+}
+// =========================== end biaya admin =========================== //
+
+// =========================== pengumuman =========================== //
+var submit_pengumuman = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#pengumuman_form')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Input data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormPengumumanEmpty()){
+              $.ajax({
+                  url:base_url+'master/create_pengumuman',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal disimpan');
+                      }
+                      if(datas.msg == 'success') {
+                        $.alert('Data berhasil disimpan');
+                          $('#judul').val('');
+                          $('#isipengumuman').val('');
+                      }
+                      if(datas.msg == '1'){
+                        $.alert('Nama vendor sudah ada');
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+var isFormPengumumanEmpty = function()
+{
+    var judul = $('#judul').val();
+    var isi = $('#isipengumuman').val();
+
+    if(judul == "" || isi == ""){
+      return false;
+    }
+    else {
+      return true;
+    }
+}
+
+var resetPengumumanForm = function (event){
+    event.preventDefault();
+    $.confirm({
+      title: 'Confirm!',
+      content: 'Reset Form ?',
+      buttons: {
+          confirm: function () {
+            $('#judul').val('');
+            $('#isipengumuman').val('');
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+// =========================== end pengumuman =========================== //

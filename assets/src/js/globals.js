@@ -65,6 +65,9 @@ var master_page = function()
   console.log('master_page');
   produkList();
   JenisProdukList();
+  VendorList();
+  BiayaAdminList();
+  PengumumanList();
 }
 
 var saldo_table = function()

@@ -99,6 +99,85 @@ class Produk_model extends CI_Model{
   }
   /* ----- end function model jenis produk ----- */
 
+  /* ----- start function model vendor ----- */
+  public function getTabelVendor()
+  {
+      $this->datatables->select('id, nama_vendor, kode_vendor');
+      $this->datatables->from('inm_vendor');
+      return $this->datatables->generate();     
+  } 
+
+  public function cek_nama_vendor($param)
+  {
+      $this->db->select('nama_vendor');
+      $this->db->from('inm_vendor');
+      $this->db->where('nama_vendor', $param);
+      $row = $this->db->get()->num_rows();
+      if($row > 0){
+        return true;
+      }
+      else{
+        return false;
+      }    
+  }
+
+  public function store_vendor($data)
+  {
+     $store = $this->db->insert('inm_vendor', $data);
+     if($store)
+     {
+        return true;
+     }
+     else
+     {
+        return false;
+     }
+  }  
+  /* ----- end function model vendor ----- */
+
+  /* ----- start function model biaya admin ----- */
+  public function getTabelBiayaAdmin()
+  {
+      $this->datatables->select('id, kode_produk, nominal_admin_bank, tgl_create');
+      $this->datatables->from('inm_admin_bank');
+      return $this->datatables->generate();    
+  }
+
+  public function store_biaya_admin($data)
+  {
+     $store = $this->db->insert('inm_admin_bank', $data);
+     if($store)
+     {
+        return true;
+     }
+     else
+     {
+        return false;
+     }
+  }
+  /* ----- start function model biaya admin ----- */
+
+  /* ----- end function model pengumuman ----- */
+  public function getTabelPengumuman()
+  {
+      $this->datatables->select('id, isi, judul, tgl_update, tgl_create, admin_id');
+      $this->datatables->from('inm_pengumuman');
+      return $this->datatables->generate();    
+  }
+
+  public function store_pengumuman($data)
+  {
+     $store = $this->db->insert('inm_pengumuman', $data);
+     if($store)
+     {
+        return true;
+     }
+     else
+     {
+        return false;
+     }
+  }
+  /* ----- end function model pengumuman ----- */
 
 
 }

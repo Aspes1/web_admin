@@ -1016,3 +1016,173 @@ var JenisProdukList = function(){
 
   });  
 }
+
+var VendorList = function(){
+  $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+  {
+      return {
+          "iStart": oSettings._iDisplayStart,
+          "iEnd": oSettings.fnDisplayEnd(),
+          "iLength": oSettings._iDisplayLength,
+          "iTotal": oSettings.fnRecordsTotal(),
+          "iFilteredTotal": oSettings.fnRecordsDisplay(),
+          "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+          "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+      };
+  };
+
+  var table = $("#tabelVendor").DataTable({
+      "dom": 'Zlfrtip',
+      initComplete: function() {
+          var api = this.api();
+          $('#tabelVendor_filter input')
+              .off('.DT')
+              .on('input.DT', function() {
+                  api.search(this.value).draw();
+          });
+      },
+          oLanguage: {
+            "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+          sProcessing: "loading..."
+      },
+          processing: true,
+          serverSide: true,
+          destroy: true,
+          ajax: {"url": base_url+"master/getVendorJson", "type": "POST"},
+
+            columns: [
+                  // {
+                  //     "data": null,
+                  //     render: function (data, type, row, meta) {
+                  //         return meta.row + meta.settings._iDisplayStart + 1;
+                  //     }
+                  // },
+                  {"data": "nama_vendor"},
+                  {"data": "kode_vendor"},
+
+            ],
+            // order: [[1, 'desc']],
+            rowCallback: function(row, data, iDisplayIndex) {
+                var info = this.fnPagingInfo();
+                var page = info.iPage;
+                var length = info.iLength;
+                $('td:eq(0)', row).html();
+            }
+
+  });  
+}
+
+
+var BiayaAdminList = function(){
+  $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+  {
+      return {
+          "iStart": oSettings._iDisplayStart,
+          "iEnd": oSettings.fnDisplayEnd(),
+          "iLength": oSettings._iDisplayLength,
+          "iTotal": oSettings.fnRecordsTotal(),
+          "iFilteredTotal": oSettings.fnRecordsDisplay(),
+          "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+          "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+      };
+  };
+
+  var table = $("#tabelBiayaAdmin").DataTable({
+      "dom": 'Zlfrtip',
+      initComplete: function() {
+          var api = this.api();
+          $('#tabelBiayaAdmin_filter input')
+              .off('.DT')
+              .on('input.DT', function() {
+                  api.search(this.value).draw();
+          });
+      },
+          oLanguage: {
+            "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+          sProcessing: "loading..."
+      },
+          processing: true,
+          serverSide: true,
+          destroy: true,
+          ajax: {"url": base_url+"master/getBiayaAdminJson", "type": "POST"},
+
+            columns: [
+                  // {
+                  //     "data": null,
+                  //     render: function (data, type, row, meta) {
+                  //         return meta.row + meta.settings._iDisplayStart + 1;
+                  //     }
+                  // },
+                  {"data": "kode_produk"},
+                  {"data": "nominal_admin_bank", render: $.fn.dataTable.render.number(',', '.', '')},
+                  {
+                    "data": "tgl_create"
+                  }
+
+            ],
+            // order: [[1, 'desc']],
+            rowCallback: function(row, data, iDisplayIndex) {
+                var info = this.fnPagingInfo();
+                var page = info.iPage;
+                var length = info.iLength;
+                $('td:eq(0)', row).html();
+            }
+
+  });  
+}
+
+var PengumumanList = function(){
+  $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+  {
+      return {
+          "iStart": oSettings._iDisplayStart,
+          "iEnd": oSettings.fnDisplayEnd(),
+          "iLength": oSettings._iDisplayLength,
+          "iTotal": oSettings.fnRecordsTotal(),
+          "iFilteredTotal": oSettings.fnRecordsDisplay(),
+          "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+          "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+      };
+  };
+
+  var table = $("#tabelPengumuman").DataTable({
+      "dom": 'Zlfrtip',
+      initComplete: function() {
+          var api = this.api();
+          $('#tabelPengumuman_filter input')
+              .off('.DT')
+              .on('input.DT', function() {
+                  api.search(this.value).draw();
+          });
+      },
+          oLanguage: {
+            "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+          sProcessing: "loading..."
+      },
+          processing: true,
+          serverSide: true,
+          destroy: true,
+          ajax: {"url": base_url+"master/getPengumumanJson", "type": "POST"},
+
+            columns: [
+                  // {
+                  //     "data": null,
+                  //     render: function (data, type, row, meta) {
+                  //         return meta.row + meta.settings._iDisplayStart + 1;
+                  //     }
+                  // },
+                  {"data": "judul"},
+                  {"data": "isi"},
+                  {"data": "tgl_update"},
+
+            ],
+            // order: [[1, 'desc']],
+            rowCallback: function(row, data, iDisplayIndex) {
+                var info = this.fnPagingInfo();
+                var page = info.iPage;
+                var length = info.iLength;
+                $('td:eq(0)', row).html();
+            }
+
+  });  
+}

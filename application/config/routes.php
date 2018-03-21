@@ -88,6 +88,15 @@ $route['master/create_produk']          = 'Master/CreateProduk';
 $route['master/jenis']               		= 'Master/jenisPage';
 $route['master/tambah_jenis_produk']    = 'Master/AddJeniskPage';
 $route['master/create_jenis_produk']    = 'Master/CreateJenisProduk';
+$route['master/vendor']               	= 'Master/vendorPage';
+$route['master/tambah_vendor']          = 'Master/AddVendorPage';
+$route['master/create_vendor']          = 'Master/CreateVendor';
+$route['master/biaya']          				= 'Master/BiayaAdminPage';
+$route['master/tambah_biaya']          	= 'Master/AddBiayaAdminPage';
+$route['master/create_biaya_admin']     = 'Master/CreateBiayaAdmin';
+$route['master/pengumuman']     				= 'Master/pengumumanPage';
+$route['master/tambah_pengumuman']     	= 'Master/AddPengumumanPage';
+$route['master/create_pengumuman']     	= 'Master/CreatePengumuman';
 
 $route['error_550']                     = 'Error';
 
