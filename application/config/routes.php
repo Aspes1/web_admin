@@ -82,8 +82,12 @@ $route['pinjaman/isi_p']                = 'Pinjaman/isiPinjamanPage';
 $route['pinjaman/list_p']               = 'Pinjaman/listPinjamanPage';
 
 $route['master']                        = 'Master/index';
-
-
+$route['master/produk']               	= 'Master/produkPage';
+$route['master/tambah']               	= 'Master/AddProdukPage';
+$route['master/create_produk']          = 'Master/CreateProduk';
+$route['master/jenis']               		= 'Master/jenisPage';
+$route['master/tambah_jenis_produk']    = 'Master/AddJeniskPage';
+$route['master/create_jenis_produk']    = 'Master/CreateJenisProduk';
 
 $route['error_550']                     = 'Error';
 

@@ -938,3 +938,168 @@ var submitPinjamanForm = function(event){
   });
 }
 // =========================== close pinjaman Menu =========================== //
+
+
+// =========================== open produk mester =========================== //
+var add_produk_form = function (event){
+  event.preventDefault();
+  var formData = new FormData($('#produk_form')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Input data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormProdukEmpty()){
+              $.ajax({
+                  url:base_url+'master/create_produk',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal disimpan');
+                        console.log('aaa');
+                      }
+                      if(datas.msg == 'success') {
+                        $.alert('Data Berhasil disimpan');
+                        resetFormProduk();
+                      }
+                      if(datas.msg == '1'){
+                        $.alert('Kode produk sudah ada');
+                        $('#kd_produk').focus();              
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+var isFormProdukEmpty = function()
+{
+    var nama = $('#nama_produk').val();
+    var vendor = $('#vendor').val();
+    var singkatan = $('#singkatan').val();
+    var kd_vendor = $('#kd_vendor').val();
+    var jenis = $('#jenis_produk').val();
+    var kd_produk = $('#kd_produk').val();
+    var keterangan = $('#keterangan').val();
+
+    if(nama == "" || vendor == "" || singkatan == "" || kd_vendor == "" || jenis == "" || kd_produk == "" || keterangan == ""){
+      return false;
+    }
+    else {
+      return true;
+    }
+}
+
+var resetFormProduk = function()
+{
+    $('#nama_produk').val('');
+    $('#vendor').val('');
+    $('#singkatan').val('');
+    $('#kd_vendor').val('');
+    $('#jenis_produk').val('');
+    $('#kd_produk').val('');
+    $('#keterangan').val('');    
+}
+
+var resetProduk = function (event){
+    event.preventDefault();
+    $.confirm({
+      title: 'Confirm!',
+      content: 'Reset Form ?',
+      buttons: {
+          confirm: function () {
+              resetFormProduk();
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+
+// =========================== close produk mester =========================== //
+
+// =========================== jenis produk =========================== //
+var submit_jenis_produk = function (event){
+  event.preventDefault();
+  var formData = new FormData($('#jenis_produk_form')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Input data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormJenisProdukEmpty()){
+              $.ajax({
+                  url:base_url+'master/create_jenis_produk',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal disimpan');
+                      }
+                      if(datas.msg == 'success') {
+                        $.alert('Data berhasil disimpan');
+                        resetFormJenisProduk();
+                      }
+                      if(datas.msg == '1'){
+                        $.alert('Jenis produk sudah ada');
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+var isFormJenisProdukEmpty = function(){
+    var jenis = $('#nama_jenis').val();
+
+    if(jenis == ""){
+      return false;
+    }
+    else {
+      return true;
+    }  
+}
+
+var resetFormJenisProduk = function(){
+  $('#nama_jenis').val('');
+}
+
+var resetJenisProduk = function (event){
+    event.preventDefault();
+    $.confirm({
+      title: 'Confirm!',
+      content: 'Reset Form ?',
+      buttons: {
+          confirm: function () {
+              resetFormJenisProduk();
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+
+// =========================== jenis produk =========================== //

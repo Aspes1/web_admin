@@ -64,6 +64,7 @@ var master_page = function()
 {
   console.log('master_page');
   produkList();
+  JenisProdukList();
 }
 
 var saldo_table = function()
