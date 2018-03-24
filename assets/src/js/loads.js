@@ -1323,3 +1323,82 @@ var resetPengumumanForm = function (event){
   });
 }
 // =========================== end pengumuman =========================== //
+
+$("#import_csv_per_tgl").ready(function() {
+  $(document).on('submit', '#form_csv', function(event){
+    event.preventDefault();
+    var formData = new FormData($('#form_csv')[0]);
+    $.confirm({
+        title: 'Confirm!, Upload File',
+        content: 'Submit data... ??',
+        buttons: {
+            confirm: {
+                text: 'Confirm',
+                btnClass: 'btn-blue',
+                keys: ['enter', 'shift'],
+                action: function(){
+                    if(isFormNotFile()){
+                        $('#loading-image').show();
+                        $('#submit_scv').hide();
+                       $.ajax({
+                           url:base_url+'laporan/upload_csv',
+                           method:'POST',
+                           data:formData,
+                           contentType:false,
+                           processData:false,
+                           dataType:"json",
+                           success:function(html){
+                             if (html.title == 'success'){
+                                $.alert(html.msg);
+                                $('#loading-image').hide();
+                                $('#submit_scv').show();
+                                $('#file_csv').val('');
+
+                             }
+                             if (html.title == 'failed') {
+                                $.alert(html.msg);
+                                $('#loading-image').hide();
+                                $('#submit_scv').show();
+                                $('#file_csv').val('');
+                             }
+                           }
+                       });
+                    }
+                   else {
+                       $.alert('Ada form yang belum diisi');
+                   }
+                }
+            },
+            cancel: function () {
+            },
+        }
+    });
+
+  });
+});
+
+var checkExtension2 = function () {
+  var file = document.querySelector("#file_csv");
+  if ( /\.(csv)$/i.test(file.files[0].name) === false ) {
+    $('#file_csv').val('');
+    $.alert("Bukan file CSV");
+  }
+}
+
+var isFormNotFile = function()
+{
+  var userfile = $('#file_csv').val();
+
+  if(userfile == ""){
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+var resetDate = function (event){
+    event.preventDefault();
+    $("#fromT").val('');
+    console.log('ssss');
+}

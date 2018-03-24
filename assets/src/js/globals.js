@@ -96,6 +96,11 @@ var flatpickrActivation = function()
   $('.toT').flatpickr();
   $('.tgl_isi').flatpickr();
   $('.rekapDate').flatpickr();
+  laporanHarian();
+  laporanPeriode();
+  laporanHarianDetail();
+  laporaGriyaPerTgl();
+  laporaGriyaPerUser();
 }
 
 var hideErrMsg = function()

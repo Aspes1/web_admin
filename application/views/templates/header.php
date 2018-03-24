@@ -40,7 +40,7 @@
 
     <ul class="nav navbar-nav d-md-down-none">
       <li class="nav-item px-3">
-        <a class="nav-link" href="javascript:coomingSoon()">Laporan</a>
+        <a class="nav-link" href="laporan">Laporan</a>
       </li>
       <li class="nav-item px-3">
         <a class="nav-link" href="<?php echo base_url('loket');?>">Loket</a>

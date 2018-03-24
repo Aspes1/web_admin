@@ -46,6 +46,11 @@ var formatExtraSaldo = function (d) {
     return text;
 }
 
+var formatgriya = function (d) {
+    // `d` is the original data object for the row
+    return '<div>'+d.tablenya+'</div>';
+}
+
 var inputMutasi = function (id) {
     var text = '<form method="post" id="rekon_mutasi" enctype="multipart/form-data" class="form-horizontal">';
     text += '<div class="row"><div class="col-md-8">';
@@ -1185,4 +1190,610 @@ var PengumumanList = function(){
             }
 
   });  
+}
+
+var laporanHarian=function(){
+    if ($.fn.DataTable.isDataTable('#tabelTransaksiHarian')) {
+        $('#tabelTransaksiHarian').DataTable().destroy();
+    }
+
+    $(document).ready(function(){
+        // Setup datatables
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+      {
+          return {
+              "iStart": oSettings._iDisplayStart,
+              "iEnd": oSettings.fnDisplayEnd(),
+              "iLength": oSettings._iDisplayLength,
+              "iTotal": oSettings.fnRecordsTotal(),
+              "iFilteredTotal": oSettings.fnRecordsDisplay(),
+              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+          };
+      };
+
+      var dari  = $("input[name=fromT]").val();
+      var sampai= $("input[name=toT]").val();
+
+      console.log(dari);
+
+      var table = $("#tabelTransaksiHarian").DataTable({
+          "dom": 'Zlfrtip',
+          initComplete: function() {
+              var api = this.api();
+              $('#tabelTransaksiHarian_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+
+          oLanguage: {
+            "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+            sProcessing: "loading..."
+          },          
+
+              bInfo: false,
+              bPaginate: false,
+              processing: true,
+              serverSide: true,
+              ajax: {
+                  "url": base_url+"laporan/transaksiHarian",
+                  "type": "POST",
+                  "data": { dari: dari, sampai: sampai },      
+                  },         
+                columns: [
+                      {
+                          "data": "username",
+                          defaultContent: '-'
+                      },
+                      {
+                        "data": "PDAM",
+                        defaultContent: '-',
+                        className: "sum"
+                      },
+                      {
+                        "data": "TotalTagihan_PDAM",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                      },
+                      {
+                          "data": "PLN",
+                          defaultContent: '-',
+                          className: "sum"
+                      },
+                      {
+                          "data": "TotalTagihan_PLN",
+                          render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                          defaultContent: '-',
+                          className: "sum"
+                      }
+                ],
+                "footerCallback": function(row, data, start, end, display) {
+                    console.log('in footerCallback');
+                    // var api = this.api(),;
+
+                    var api = this.api(),
+                    intVal = function (i) {
+                      return typeof i === 'string' ?
+                        i.replace(/[. Rp]|(\.\d{2})/g, "") * 1 :
+                        typeof i === 'number' ?
+                          i : 0;
+                    };
+
+
+                  api.columns('.sum', { page: 'current' }).every(function () {
+                    var sum = api
+                        .cells( null, this.index(), { page: 'current'} )
+                        .render('display')
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                          }, 0);
+                    console.log(this.index() +' '+ sum); //alert(sum);
+                    var numFormat = $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ).display;
+
+                    if(this.index()==2||this.index()==4){
+                        $(this.footer()).html(numFormat(sum));
+                    }else{
+                        $(this.footer()).html(sum);
+                    }
+                });
+
+                }
+                // rowCallback: function(row, data, iDisplayIndex) {
+                //     var info = this.fnPagingInfo();
+                //     var page = info.iPage;
+                //     var length = info.iLength;
+                //     $('td:eq(0)', row).html();
+                // }
+
+      });      
+
+    });
+
+}
+
+var laporanPeriode=function(){
+    if ($.fn.DataTable.isDataTable('#tabelTransaksiPeriode')) {
+        $('#tabelTransaksiPeriode').DataTable().destroy();
+    }
+
+    $(document).ready(function(){
+        // Setup datatables
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+      {
+          return {
+              "iStart": oSettings._iDisplayStart,
+              "iEnd": oSettings.fnDisplayEnd(),
+              "iLength": oSettings._iDisplayLength,
+              "iTotal": oSettings.fnRecordsTotal(),
+              "iFilteredTotal": oSettings.fnRecordsDisplay(),
+              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+          };
+      };
+      var dari  = $("input[name=fromT]").val();
+      var sampai= $("input[name=toT]").val();
+
+      console.log(dari);
+
+      var tablePeriode = $("#tabelTransaksiPeriode").DataTable({
+          "dom": 'Zlfrtip',
+          initComplete: function() {
+              var api = this.api();
+              $('#tabelTransaksiPeriode_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+              oLanguage: {
+                  "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+                  sProcessing: "loading..."
+              },
+              bInfo: false,
+              bPaginate: false,
+              processing: true,
+              serverSide: true,
+              ajax: {
+                  "url": base_url+"laporan/transaksiPerPeriode",
+                  "type": "POST",
+                  "data": { dari: dari, sampai: sampai },
+                },
+                columns: [
+                      {
+                          "data": "tgl_transaksi",
+                          defaultContent: '-',
+                      },
+                      {
+                        "data": "PDAM",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "TotalTagihan_PDAM",
+                        defaultContent: '-',
+                        className: "sum",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                    },
+                      {
+                          "data": "PLN",
+                          defaultContent: '-',
+                          className: "sum"
+                      },
+                      {
+                          "data": "TotalTagihan_PLN",
+                          render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                          defaultContent: '-',
+                          className: "sum"
+                      }
+
+                ],
+                "footerCallback": function(row, data, start, end, display) {
+                    console.log('in footerCallback');
+                    // var api = this.api(),;
+
+                    var api = this.api(),
+                    intVal = function (i) {
+                      return typeof i === 'string' ?
+                        i.replace(/[. Rp]|(\.\d{2})/g, "") * 1 :
+                        typeof i === 'number' ?
+                          i : 0;
+                    };
+
+
+                  api.columns('.sum', { page: 'current' }).every(function () {
+                    var sum = api
+                        .cells( null, this.index(), { page: 'current'} )
+                        .render('display')
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                          }, 0);
+                    console.log(this.index() +' '+ sum); //alert(sum);
+                    var numFormat = $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ).display;
+
+                    if(this.index()==2||this.index()==4){
+                        $(this.footer()).html(numFormat(sum));
+                    }else{
+                        $(this.footer()).html(sum);
+                    }
+                });
+
+                }
+                // rowCallback: function(row, data, iDisplayIndex) {
+                //     var info = this.fnPagingInfo();
+                //     var page = info.iPage;
+                //     var length = info.iLength;
+                //     $('td:eq(0)', row).html();
+                // }
+
+      });
+
+    });
+}
+
+var laporanHarianDetail=function(){
+    if ($.fn.DataTable.isDataTable('#tabelTransaksiHarianDetail')) {
+        $('#tabelTransaksiHarianDetail').DataTable().destroy();
+    }
+
+    $(document).ready(function(){
+        // Setup datatables
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+      {
+          return {
+              "iStart": oSettings._iDisplayStart,
+              "iEnd": oSettings.fnDisplayEnd(),
+              "iLength": oSettings._iDisplayLength,
+              "iTotal": oSettings.fnRecordsTotal(),
+              "iFilteredTotal": oSettings.fnRecordsDisplay(),
+              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+          };
+      };
+
+      var dari  = $("input[name=inptDari]").val();
+      var sampai= $("input[name=inptSampai]").val();
+
+      console.log(dari);
+
+      var table = $("#tabelTransaksiHarianDetail").DataTable({
+          "dom": 'Zlfrtip',
+          initComplete: function() {
+              var api = this.api();
+              $('#tabelTransaksiHarianDetail_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+              oLanguage: {
+                  "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+                  sProcessing: "loading..."
+              },
+              bInfo: true,
+              bPaginate: true,
+              processing: true,
+              serverSide: true,
+              ajax: {
+                  "url": base_url+"laporan/transaksiHarianDetail",
+                  "type": "POST",
+                  "data": { dari: dari, sampai: sampai },               
+                },
+                columns: [
+                      {"data": "id_pelanggan"},
+                      {"data": "nama_pelanggan"},
+                      {"data": "tgl_transaksi"},
+                      {"data": "lembar"},
+                      {
+                          "data": "jumlah_tagihan",
+                          render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' )
+                      },
+                      {
+                          "data": "biaya_admin",
+                          render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' )
+                      },
+                      {
+                          "data":"total_tagihan",
+                           render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' )
+                      },
+                      {"data":"nama_lengkap"}
+                ],
+                rowCallback: function(row, data, iDisplayIndex) {
+                    var info = this.fnPagingInfo();
+                    var page = info.iPage;
+                    var length = info.iLength;
+                    $('td:eq(0)', row).html();
+                }
+
+      });
+    });
+}
+
+var laporaGriyaPerTgl=function(){
+    if ($.fn.DataTable.isDataTable('#tabelTransaksiGriyaPerTgl')) {
+        $('#tabelTransaksiGriyaPerTgl').DataTable().destroy();
+    }
+
+    $(document).ready(function(){
+        // Setup datatables
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+      {
+          return {
+              "iStart": oSettings._iDisplayStart,
+              "iEnd": oSettings.fnDisplayEnd(),
+              "iLength": oSettings._iDisplayLength,
+              "iTotal": oSettings.fnRecordsTotal(),
+              "iFilteredTotal": oSettings.fnRecordsDisplay(),
+              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+          };
+      };
+      var dari  = $("input[name=fromT]").val();
+      var sampai= $("input[name=inptSampai]").val();
+
+      console.log(dari);
+
+      var tablePerTgl = $("#tabelTransaksiGriyaPerTgl").DataTable({
+          "dom": 'Zlfrtip',
+          initComplete: function() {
+              var api = this.api();
+              $('#tabelTransaksiGriyaPerTgl_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+              oLanguage: {
+                  "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+                  sProcessing: "loading..."
+              },
+              bInfo: false,
+              bPaginate: true,
+              processing: true,
+              serverSide: true,
+              ajax: {
+                  "url": base_url+"laporan/transaksiGriyaBayarPerTgl",
+                  "type": "POST",
+                  "data": { dari: dari, sampai: sampai },
+                },
+                columns: [
+                      {
+                          "data": "tanggal",
+                          defaultContent: '-',
+                          // render: function(d){
+                          //   return moment(d).format("DD/MMM/YYYY");
+                          // },
+                      },
+                      {
+                        "data": "PDAM",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "TotalTagihan_PDAM",
+                        defaultContent: '-',
+                        className: "sum",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                    },
+                      {
+                          "data": "PLN",
+                          defaultContent: '-',
+                          className: "sum"
+                      },
+                      {
+                          "data": "TotalTagihan_PLN",
+                          render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                          defaultContent: '-',
+                          className: "sum"
+                      }
+
+                ],
+                "footerCallback": function(row, data, start, end, display) {
+                    console.log('in footerCallback');
+                    // var api = this.api(),;
+
+                    var api = this.api(),
+                    intVal = function (i) {
+                      return typeof i === 'string' ?
+                        i.replace(/[. Rp]|(\.\d{2})/g, "") * 1 :
+                        typeof i === 'number' ?
+                          i : 0;
+                    };
+
+
+                  api.columns('.sum', { page: 'current' }).every(function () {
+                    var sum = api
+                        .cells( null, this.index(), { page: 'current'} )
+                        .render('display')
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                          }, 0);
+                    console.log(this.index() +' '+ sum); //alert(sum);
+                    var numFormat = $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ).display;
+
+                    if(this.index()==2||this.index()==4){
+                        $(this.footer()).html(numFormat(sum));
+                    }else{
+                        $(this.footer()).html(sum);
+                    }
+                });
+
+                }
+                // rowCallback: function(row, data, iDisplayIndex) {
+                //     var info = this.fnPagingInfo();
+                //     var page = info.iPage;
+                //     var length = info.iLength;
+                //     $('td:eq(0)', row).html();
+                // }
+
+      });
+
+    });
+}
+
+var laporaGriyaPerUser=function(){
+    if ($.fn.DataTable.isDataTable('#tabelTransaksiGriyaBayarPerUser')) {
+        $('#tabelTransaksiGriyaBayarPerUser').DataTable().destroy();
+    }
+
+    $(document).ready(function(){
+        // Setup datatables
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+      {
+          return {
+              "iStart": oSettings._iDisplayStart,
+              "iEnd": oSettings.fnDisplayEnd(),
+              "iLength": oSettings._iDisplayLength,
+              "iTotal": oSettings.fnRecordsTotal(),
+              "iFilteredTotal": oSettings.fnRecordsDisplay(),
+              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+          };
+      };
+
+      var dari  = $("input[name=fromT]").val();
+      var sampai= $("input[name=inptSampai]").val();
+
+      var table = $("#tabelTransaksiGriyaBayarPerUser").DataTable({
+          "dom": 'Zlfrtip',
+          initComplete: function() {
+              var api = this.api();
+              $('#tabelTransaksiGriyaBayarPerUser_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+              oLanguage: {
+                  "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+                  sProcessing: "loading..."
+              },
+              bInfo: false,
+              bPaginate: true,
+              processing: true,
+              serverSide: true,
+              ajax: {
+                  "url": base_url+"laporan/transaksiGriyaBayarPerUser",
+                  "type": "POST",
+                  "data": { dari: dari, sampai: sampai },
+                },
+                columns: [
+                      {
+                          data: "nama",
+                          // orderable: false,
+                          orderClasses: false,
+                          defaultContent: '-',
+                          render: function ( data, type, row, meta ) {
+                                  return '<a href="javascript:void(0);" data-nama="'+ data +'" title="Detail"><i class="fa fa-caret-right" aria-hidden="true"></i></a>';
+                          },
+                          className: "details-control"
+                      },
+                      {
+                          data: "nama",
+                          defaultContent: '-',
+                          // className: "details-control"
+                      },
+                      {
+                        data: "PDAM",
+                        defaultContent: '-',
+                        className: "sum"
+                      },
+                      {
+                        "data": "TotalTagihan_PDAM",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                      },
+                      {
+                          "data": "PLN",
+                          defaultContent: '-',
+                          className: "sum"
+                      },
+                      {
+                          "data": "TotalTagihan_PLN",
+                          render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                          defaultContent: '-',
+                          className: "sum"
+                      }
+                ],
+                "footerCallback": function(row, data, start, end, display) {
+                    console.log('in footerCallback');
+                    // var api = this.api(),;
+
+                    var api = this.api(),
+                    intVal = function (i) {
+                      return typeof i === 'string' ?
+                        i.replace(/[. Rp]|(\.\d{2})/g, "") * 1 :
+                        typeof i === 'number' ?
+                          i : 0;
+                    };
+
+
+                  api.columns('.sum', { page: 'current' }).every(function () {
+                    var sum = api
+                        .cells( null, this.index(), { page: 'current'} )
+                        .render('display')
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                          }, 0);
+                    console.log(this.index() +' '+ sum); //alert(sum);
+                    var numFormat = $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ).display;
+
+                    if(this.index()==3||this.index()==5){
+                        $(this.footer()).html(numFormat(sum));
+                    }else{
+                        $(this.footer()).html(sum);
+                    }
+                });
+
+                }
+                // rowCallback: function(row, data, iDisplayIndex) {
+                //     var info = this.fnPagingInfo();
+                //     var page = info.iPage;
+                //     var length = info.iLength;
+                //     $('td:eq(0)', row).html();
+                // }
+
+      });
+
+    });
+
+    $('#tabelTransaksiGriyaBayarPerUser tbody').on('click', 'td.details-control', function () {
+        var table = $('#tabelTransaksiGriyaBayarPerUser').DataTable();
+        var tr = $(this).closest('tr');
+        var tdi = tr.find("i.fa");
+        var row = table.row(tr);
+        // var nama = row.data().nama;
+
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+            tdi.first().removeClass('fa-caret-down');
+            tdi.first().addClass('fa-caret-right');
+        }
+        else {
+            var nama = row.data().nama;
+            if(nama){
+                $.ajax({
+                    type:'POST',
+                    url:base_url+'laporan/infoExtra',
+                    data:'nama='+nama,
+                    dataType:'json',
+                    success:function(res){
+                      row.child(formatgriya(res)).show();
+                      //console.log(res.nama);
+                      tr.addClass('shown');
+                      tdi.first().removeClass('fa-caret-right');
+                      tdi.first().addClass('fa-caret-down');
+                    }
+                });
+            }
+        }
+        console.log(nama);
+        // console.log(nama);
+    });
+
 }

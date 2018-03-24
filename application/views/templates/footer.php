@@ -37,9 +37,9 @@
   <script src="<?php echo base_url('assets/src/js/app.js') ?>"></script>
 
   <!-- Custom Scripts -->
-  <script src="<?php echo base_url('assets/src/js/globals.js') ?>"></script>
   <script src="<?php echo base_url('assets/src/js/loads.js') ?>"></script>
   <script src="<?php echo base_url('assets/src/js/tables.js') ?>"></script>
+  <script src="<?php echo base_url('assets/src/js/globals.js') ?>"></script>
   <script>var base_url = '<?php echo base_url() ?>';</script>
 
   <!-- qz.io scripts  -->
