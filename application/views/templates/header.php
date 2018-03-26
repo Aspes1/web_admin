@@ -19,11 +19,10 @@
   <!-- Main styles for this application -->
   <link href="<?php echo base_url('assets/src/css/style.css') ?>" rel="stylesheet">
   <link href="<?php echo base_url('assets/src/css/custom_css.css') ?>" rel="stylesheet">
-  <link href="<?php echo base_url('assets/src/css/datatables.min.css') ?>" rel="stylesheet">
-  <link href="<?php echo base_url('assets/src/css/jquery.dataTables.min.css') ?>" rel="stylesheet">
+  <link href="<?php echo base_url('assets/src/css/datatables.bootstrap.css') ?>" rel="stylesheet">
   <link href="<?php echo base_url('assets/src/css/jquery-confirm.min.css') ?>" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> -->
   <!-- Styles required by this views -->
 
 </head>

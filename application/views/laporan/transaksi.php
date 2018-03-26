@@ -25,8 +25,8 @@
         </div>
       <!-- </form> -->
 
-        <table id="tabelTransaksiHarian" class="table table-bordered" cellspacing="0" width="100%">
-          <thead>
+        <table id="tabelTransaksiHarian" class="table-striped table-sm table table-bordered table-condensed table-hover " cellspacing="0" width="100%">
+          <thead style="background-color:#bfe7bf">
           <!-- <thead> -->
             <tr>
               <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px">Users</th>

@@ -15,8 +15,8 @@
           <button type="submit" id="loket_submit" class="btn btn-xs btn-primary" onclick="showRekap()"><i class="fa fa-dot-circle-o"></i> Submit</button>
         </div>
       </div>
-      <table class="table table-bordered" id="tabelRekapHistory">
-          <thead>
+      <table class="table-striped table-sm table table-bordered table-condensed table-hover" cellspacing="0" width="100%" id="tabelRekapHistory">
+          <thead style="background-color:#bfe7bf">
             <tr>
               <th>Tanggal</th>
               <th>Total Deposit</th>

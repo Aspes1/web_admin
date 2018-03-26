@@ -7,8 +7,8 @@
     </div>
 
     <div class="card-body table-responsive col-md-12">
-      <table class="table table-bordered" id="tabelBiayaAdmin">
-          <thead>
+      <table class="table-striped table-sm table table-bordered table-condensed table-hover" cellspacing="0" width="100%" id="tabelBiayaAdmin">
+          <thead style="background-color:#bfe7bf">
             <tr>
             	<!-- <th width="30">#</th> -->
               <th>Kode Produk</th>

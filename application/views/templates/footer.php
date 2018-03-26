@@ -25,8 +25,8 @@
 
     <!-- Plugins and scripts required by all views -->
     <script src="<?php echo base_url('assets/dist/vendors/js/Chart.min.js') ?>"></script>
-    <script src="<?php echo base_url('assets/src/js/datatables.min.js') ?>"></script>
     <script src="<?php echo base_url('assets/src/js/jquery.dataTables.min.js') ?>"></script>
+    <script src="<?php echo base_url('assets/src/js/dataTables.bootstrap.js') ?>"></script>
     <script src="<?php echo base_url('assets/src/js/jquery-confirm.min.js') ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="<?php echo base_url('assets/src/js/dataTables.colResize.js') ?>"></script>

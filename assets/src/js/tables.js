@@ -66,7 +66,10 @@ var inputMutasi = function (id) {
 }
 
 var loketTable = function () {
-  maskMoney();
+    if ($.fn.DataTable.isDataTable('#tabelLoket')) {
+        $('#tabelLoket').DataTable().destroy();
+    }
+
   $(document).ready(function(){
         // Setup datatables
         $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)

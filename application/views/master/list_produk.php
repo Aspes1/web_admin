@@ -7,8 +7,8 @@
     </div>
 
     <div class="card-body table-responsive col-md-12">
-      <table class="table table-bordered" id="tabelProduk">
-          <thead>
+      <table id="tabelProduk" class="table-striped table-sm table table-bordered table-condensed table-hover " cellspacing="0" width="100%">
+          <thead style="background-color:#bfe7bf">
             <tr>
               <th>Nama Produk</th>
               <th>Singkatan</th>
