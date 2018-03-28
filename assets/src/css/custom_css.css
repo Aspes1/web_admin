@@ -69,3 +69,7 @@
     float: left;
     padding-top: 0.755em;
   }
+
+  #bg-modal{
+    background-color: #e4e5e6;
+  }

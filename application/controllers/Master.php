@@ -54,7 +54,7 @@ class Master extends CI_Controller{
   {
       $this->form_validation->set_rules('nama_produk', 'Nama Produk', 'required');
       $this->form_validation->set_rules('vendor', 'Vendoe', 'required');
-      $this->form_validation->set_rules('singkatan','Singkata', 'required');
+      $this->form_validation->set_rules('singkatan','Singkatan', 'required');
       $this->form_validation->set_rules('kd_vendor', 'Kode Vendor', 'required');
       $this->form_validation->set_rules('kd_produk', 'Kode Produk', 'required');
       $this->form_validation->set_rules('jenis_produk', 'Jenis Produk', 'required');
@@ -103,6 +103,77 @@ class Master extends CI_Controller{
 
       }
 
+  }
+
+  public function EditPodukModal()
+  {
+      $id = $this->input->get('id');
+      $data['jenisproduk'] = $this->produk_model->all_jenis_produk();
+      $data['vendor'] = $this->produk_model->all_vendor();
+      $data['status'] = $this->produk_model->get_status($id);
+      $data['product'] = $this->produk_model->get_produk_for_edit($id);
+      $this->load->view('master/modal_edit_produk', $data);
+  }
+
+  public function UpdateProduk()
+  {
+      $this->form_validation->set_rules('nama_produk', 'Nama Produk', 'required');
+      $this->form_validation->set_rules('vendor', 'Vendoe', 'required');
+      $this->form_validation->set_rules('singkatan','Singkatan', 'required');
+      $this->form_validation->set_rules('kd_vendor', 'Kode Vendor', 'required');
+      $this->form_validation->set_rules('kd_produk', 'Kode Produk', 'required');
+      $this->form_validation->set_rules('jenis_produk', 'Jenis Produk', 'required');
+      $this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
+      
+      if($this->form_validation->run() == FALSE)
+      {
+          $error = validation_errors();
+          $output['msg'] = 'failed';
+          $output['msg_error'] = $error;
+          echo json_encode($output);
+      }
+
+      else
+      {
+         $data = array(
+            'jenis_produk_id' => $this->input->post('jenis_produk'),
+            'vendor_id' => $this->input->post('vendor'),
+            'nama_singkat' => $this->input->post('singkatan'),
+            'nama_lengkap' => $this->input->post('nama_produk'),
+            'kode_produk' => $this->input->post('kd_produk'),
+            'kode_produk_vendor' => $this->input->post('kd_vendor'),
+            'keterangan' => $this->input->post('keterangan'),
+            'status_id' => $this->input->post('status'),
+          );
+
+             $insert = $this->produk_model->update_produk($data, $this->input->post('idproduk'));
+             if($insert)
+             {
+                $output['msg'] = 'success';
+                echo json_encode($output);
+             }
+             else
+             {
+                $output['msg'] = 'failed';
+                echo json_encode($output);            
+             }
+      }      
+  }
+
+  public function DeleteProduk()
+  {
+      $id = $this->input->post('id');
+      $delete = $this->produk_model->delete_produk($id);
+      if($delete)
+      {
+          $output['msg'] = 'success';
+          echo json_encode($output);
+      }
+      else
+      {
+          $output['msg'] = 'failed';
+          echo json_encode($output);            
+      }
   }
   /*------ master produk ------*/
 
@@ -157,7 +228,56 @@ class Master extends CI_Controller{
           }
       }
 
+  }
+
+  public function EditJenisPodukModal()
+  {
+      $id = $this->input->get('id');
+      $data['jenisproduct'] = $this->produk_model->get_jenis_produk($id);
+      $this->load->view('master/modal_edit_jenis_produk', $data);
   }  
+
+  public function UpdateJenisProduk()
+  {
+      $this->form_validation->set_rules('nama_jenis', 'Nama Jenis Produk', 'required');
+      if($this->form_validation->run() == FALSE)
+      {
+          $output['msg'] = validation_errors();
+          echo json_encode($output);
+      }
+      else
+      {
+          $data = array('nama_jenis' => $this->input->post('nama_jenis'));
+
+              $insert = $this->produk_model->update_jenis_produk($data, $this->input->post('id'));
+              if($insert)
+              {
+                  $output['msg'] = 'success';
+                  echo json_encode($output);
+              }
+              else
+              {
+                  $output['msg'] = 'failed';
+                  echo json_encode($output);            
+              }
+      }    
+  }
+
+  public function DeleteJenis()
+  {
+      $id = $this->input->post('id');
+      $delete = $this->produk_model->delete_jenis_produk($id);
+      if($delete)
+      {
+          $output['msg'] = 'success';
+          echo json_encode($output);
+      }
+      else
+      {
+          $output['msg'] = 'failed';
+          echo json_encode($output);            
+      }
+  }
   /*------ end master jenis produk ------*/
 
   /*------ start master vendor ------*/
@@ -215,7 +335,60 @@ class Master extends CI_Controller{
               }
           }
       }      
-  } 
+  }
+
+  public function EditVendorModal()
+  {
+      $id = $this->input->get('id');
+      $data['vendor'] = $this->produk_model->get_vendor($id);
+      $this->load->view('master/modal_vendor', $data);
+  }
+
+  public function UpdateVendor()
+  {
+      $this->form_validation->set_rules('nama_vendor', 'Nama Vendor', 'required');
+      $this->form_validation->set_rules('kode_vendor', 'Kode Vendor', 'required');
+      if($this->form_validation->run() == FALSE)
+      {
+          $output['msg'] = validation_errors();
+          echo json_encode($output);
+      }
+      else
+      {
+          $data = array(
+            'nama_vendor' => $this->input->post('nama_vendor'),
+            'kode_vendor' => $this->input->post('kode_vendor'),
+          );
+          
+              $insert = $this->produk_model->update_vendor($data, $this->input->post('id'));
+              if($insert)
+              {
+                  $output['msg'] = 'success';
+                  echo json_encode($output);
+              }
+              else
+              {
+                  $output['msg'] = 'failed';
+                  echo json_encode($output);            
+              }
+      }       
+  }
+
+  public function DeleteVendor()
+  {
+      $id = $this->input->post('id');
+      $delete = $this->produk_model->delete_vendor($id);
+      if($delete)
+      {
+          $output['msg'] = 'success';
+          echo json_encode($output);
+      }
+      else
+      {
+          $output['msg'] = 'failed';
+          echo json_encode($output);            
+      }      
+  }
   /*------ end master vendor ------*/
 
   /*------ start master biaya admin ------*/
@@ -264,6 +437,60 @@ class Master extends CI_Controller{
                   echo json_encode($output);            
               }
       }            
+  }
+
+  public function EditBiayaAdminModal()
+  {
+      $id = $this->input->get('id');
+      $data['biayaadmin'] = $this->produk_model->get_biaya_admin($id);
+      $this->load->view('master/modal_biaya_admin', $data);
+  }
+
+  public function UpdateBiaya()
+  {
+      $this->form_validation->set_rules('kode_produk', 'Kode Produk', 'required');
+      $this->form_validation->set_rules('biaya_admin', 'Biaya Admin', 'required');
+      if($this->form_validation->run() == FALSE)
+      {
+          $output['msg'] = validation_errors();
+          echo json_encode($output);
+      }
+      else
+      {
+          $data = array(
+            'kode_produk' => $this->input->post('kode_produk'),
+            'nominal_admin_bank' => $this->input->post('biaya_admin'),
+            'tgl_create' => date('Y-m-d h:i:s')
+          );
+
+              $update = $this->produk_model->update_biaya_admin($data, $this->input->post('id'));
+              if($update)
+              {
+                  $output['msg'] = 'success';
+                  echo json_encode($output);
+              }
+              else
+              {
+                  $output['msg'] = 'failed';
+                  echo json_encode($output);            
+              }
+      }        
+  }
+
+  public function DeleteBiaya()
+  {
+      $id = $this->input->post('id');
+      $delete = $this->produk_model->delete_biaya_admin($id);
+      if($delete)
+      {
+          $output['msg'] = 'success';
+          echo json_encode($output);
+      }
+      else
+      {
+          $output['msg'] = 'failed';
+          echo json_encode($output);            
+      }      
   }
   /*------ end master biaya admin ------*/
 
@@ -315,6 +542,61 @@ class Master extends CI_Controller{
                   echo json_encode($output);            
               }
       }             
+  }
+
+  public function EditPengumumanModal()
+  {
+      $id = $this->input->get('id');
+      $data['pengumuman'] = $this->produk_model->get_pengumuman($id);
+      $this->load->view('master/modal_edit_pengumuman', $data);
+  }
+
+  public function UpdatePengumuman()
+  {
+      $this->form_validation->set_rules('judul', 'judul', 'required');
+      $this->form_validation->set_rules('isipengumuman', 'Isi Pengumuman', 'required');
+      if($this->form_validation->run() == FALSE)
+      {
+          $output['msg'] = validation_errors();
+          echo json_encode($output);
+      }
+      else
+      {
+          $data = array(
+            'judul' => $this->input->post('judul'),
+            'isi' => $this->input->post('isipengumuman'),
+            'tgl_update' => date('Y-m-d h:i:s'),
+            'admin_id' => $this->session->userdata('adminId')
+          );
+
+              $update = $this->produk_model->update_pengumuman($data, $this->input->post('id'));
+              if($update)
+              {
+                  $output['msg'] = 'success';
+                  echo json_encode($output);
+              }
+              else
+              {
+                  $output['msg'] = 'failed';
+                  echo json_encode($output);            
+              }
+      }            
+  }
+
+  public function DeletePengumuman()
+  {
+      $id = $this->input->post('id');
+      $delete = $this->produk_model->delete_pengumuman($id);
+      if($delete)
+      {
+          $output['msg'] = 'success';
+          echo json_encode($output);
+      }
+      else
+      {
+          $output['msg'] = 'failed';
+          echo json_encode($output);            
+      }  
   }
   /*------ end master pengumuman ------*/
 

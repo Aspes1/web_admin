@@ -1027,6 +1027,43 @@ var resetProduk = function (event){
   });
 }
 
+var edit_produk = function (event){
+  event.preventDefault();
+  var formData = new FormData($('#form_edit_produk')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Edit data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormProdukEmpty()){
+              $.ajax({
+                  url:base_url+'master/update_produk',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert(data.msg_error);
+                      }
+                      if(datas.msg == 'success') {
+                        $('#myModal').modal('hide')
+                        $.alert('Data Berhasil diupdate');
+                        $('#tabelProduk').DataTable().ajax.reload();
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
 
 // =========================== close produk mester =========================== //
 
@@ -1100,6 +1137,44 @@ var resetJenisProduk = function (event){
       }
   });
 }
+
+var edit_jenis_produk = function (event){
+  event.preventDefault();
+  var formData = new FormData($('#form_edit_jenis_produk')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Edit data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormJenisProdukEmpty()){
+              $.ajax({
+                  url:base_url+'master/update_jenis_produk',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal diupdate');
+                      }
+                      if(datas.msg == 'success') {
+                        $('#myModal').modal('hide')
+                        $.alert('Data berhasil diupdate');
+                        $('#tabelJenis').DataTable().ajax.reload();
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });  
+}
 // =========================== jenis produk =========================== //
 
 // =========================== vendor =========================== //
@@ -1129,6 +1204,44 @@ var submit_vendor = function(event){
                       }
                       if(datas.msg == '1'){
                         $.alert('Nama vendor sudah ada');
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+var edit_vendor = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#form_edit_vendor')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Edit data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormVendorEmpty()){
+              $.ajax({
+                  url:base_url+'master/update_vendor',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal disimpan');
+                      }
+                      if(datas.msg == 'success') {
+                        $('#myModal').modal('hide')
+                        $.alert('Data berhasil diupdate');
+                        $('#tabelVendor').DataTable().ajax.reload();
                       }
                   }
               });
@@ -1218,6 +1331,44 @@ var submit_biaya_admin = function(event){
   });
 }
 
+var edit_biaya = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#form_edit_biaya_admin')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Edit data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormBiayaEmpty()){
+              $.ajax({
+                  url:base_url+'master/update_biaya_admin',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal diupdate');
+                      }
+                      if(datas.msg == 'success') {
+                        $('#myModal').modal('hide')
+                        $.alert('Data berhasil diupdate');
+                        $('#tabelBiayaAdmin').DataTable().ajax.reload();
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
 var isFormBiayaEmpty = function()
 {
     var kode = $('#kode_produk').val();
@@ -1280,6 +1431,44 @@ var submit_pengumuman = function(event){
                       }
                       if(datas.msg == '1'){
                         $.alert('Nama vendor sudah ada');
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });
+}
+
+var edit_pengumuman = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#form_edit_pengumuman')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Edit data !!',
+      buttons: {
+          confirm: function () {
+            if(isFormPengumumanEmpty()){
+              $.ajax({
+                  url:base_url+'master/update_pengumuman',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal diupdate');
+                      }
+                      if(datas.msg == 'success') {
+                        $('#myModal').modal('hide')
+                        $.alert('Data berhasil diupdate');
+                        $('#tabelPengumuman').DataTable().ajax.reload();
                       }
                   }
               });

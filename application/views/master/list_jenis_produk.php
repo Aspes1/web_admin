@@ -12,7 +12,7 @@
             <tr>
               <!-- <th width="30">#</th> -->
               <th>Nama Jenis Produk</th>
-              <!-- <th width="50">Action</th> -->
+              <th width="100">Action</th>
             </tr>
           </thead>
         </table>
@@ -23,3 +23,18 @@
     </div>
   </div>
 </div>
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" id="bg-modal">
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div id="result_jenis"></div>
+        </div>
+        
+        <!-- Modal footer -->
+                
+      </div>
+    </div>
+  </div>

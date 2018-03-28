@@ -1,37 +1,25 @@
 'use strict'
 var format = function (d) {
     // `d` is the original data object for the row
-    return '<table cellpadding="5" class="table-striped" cellspacing="0" border="0" style="padding-left:50px;">'+
+    return '<table cellpadding="5" class="table-striped" cellspacing="0" border="0" style="padding-left:50px;" width="100%">'+
         '<tr>'+
-            '<td>Nama Loket:</td>'+
+        '<th>Nama Loket</th>'+
+        '<th>No. Telp</th>'+
+        '<th>Alamat</th>'+
+        '<th>Kabupaten</th>'+
+        '<th>Provinsi</th>'+
+        '<th>IP Adrress</th>'+
+        '<th>Mac Adrress</th>'+
+        '<th>Tanggal Pendaftaran</th>'+
+        '</tr>'+
+        '<tr>'+
             '<td>'+d.nama+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>No Telp:</td>'+
             '<td>'+d.no_telp+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Alamat:</td>'+
             '<td>'+d.alamat+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Kabupaten:</td>'+
             '<td>'+d.kab+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Provinsi:</td>'+
             '<td>'+d.prov+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>IP Adrress:</td>'+
             '<td>'+d.ip_address+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Mac Adress:</td>'+
             '<td>'+d.mac_address+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Tanggal Daftar:</td>'+
             '<td>'+d.tgl_create+'</td>'+
         '</tr>'+
     '</table>';
@@ -740,7 +728,8 @@ var produkList = function() {
                   {"data": "nama_singkat"},
                   {"data": "jenis"},
                   {"data": "vendor"},
-                  {"data": "status"}
+                  {"data": "status"},
+                  {"data": "view"}
             ],
             //order: [[1, 'desc']],
             rowCallback: function(row, data, iDisplayIndex) {
@@ -751,6 +740,57 @@ var produkList = function() {
             }
 
   });
+
+        // update produk
+        $('#tabelProduk').on('click','.editProduk',function(){
+            var id = $(this).data('id');
+            $('#myModal').modal('show')
+            $.ajax({
+              type: 'get',
+              url:base_url+'master/edit?id='+id,
+              success: function(result){
+                $('#result_data').html(result);
+              }
+            });
+        });
+
+        // hapus produk
+        $('#tabelProduk').on('click','.hapusProduk',function(){
+            var id = $(this).data('id');
+            $.confirm({
+                title: 'Confirm!, Hapus data',
+                content: id,
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/delete',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Data berhasil dihapus');
+                                      $('#tabelProduk').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Data gagal dihapus');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        });        
+
 }
 
 var mutasiList = function() {
@@ -1000,18 +1040,8 @@ var JenisProdukList = function(){
           ajax: {"url": base_url+"master/getJenisProdukJson", "type": "POST"},
 
             columns: [
-                  // {
-                  //     "data": null,
-                  //     render: function (data, type, row, meta) {
-                  //         return meta.row + meta.settings._iDisplayStart + 1;
-                  //     }
-                  // },
                   {"data": "nama_jenis"},
-                  // {
-                  //   data: null,
-                  //   className: "center",
-                  //   defaultContent: '<a href="javascript:void(0);"><i class="fa fa-pencil-square-o" aria-hidden="true" title="Edit"></i></a> | <a href="javascript:void(0);"><i class="fa fa-trash" aria-hidden="true" title="Hapus"></i></a>'
-                  // }
+                  {"data": "view"},
 
             ],
             // order: [[1, 'desc']],
@@ -1023,6 +1053,56 @@ var JenisProdukList = function(){
             }
 
   });  
+
+        // update jenis produk
+        $('#tabelJenis').on('click','.editJenisProduk',function(){
+            var id = $(this).data('id');
+            $('#myModal').modal('show')
+            $.ajax({
+              type: 'get',
+              url:base_url+'master/edit_jenis_produk?id='+id,
+              success: function(result){
+                $('#result_jenis').html(result);
+              }
+            });
+        });
+
+        // hapus jenis produk
+        $('#tabelJenis').on('click','.hapusJenisProduk',function(){
+            var id = $(this).data('id');
+            $.confirm({
+                title: 'Confirm!, Hapus data',
+                content: id,
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/delete_jenis',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Data berhasil dihapus');
+                                      $('#tabelJenis').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Data gagal dihapus');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        });                
 }
 
 var VendorList = function(){
@@ -1067,6 +1147,7 @@ var VendorList = function(){
                   // },
                   {"data": "nama_vendor"},
                   {"data": "kode_vendor"},
+                  {"data": "view"},
 
             ],
             // order: [[1, 'desc']],
@@ -1077,7 +1158,57 @@ var VendorList = function(){
                 $('td:eq(0)', row).html();
             }
 
-  });  
+  }); 
+
+        // update vendor
+        $('#tabelVendor').on('click','.editVendor',function(){
+            var id = $(this).data('id');
+            $('#myModal').modal('show')
+            $.ajax({
+              type: 'get',
+              url:base_url+'master/edit_vendor?id='+id,
+              success: function(result){
+                $('#result').html(result);
+              }
+            });
+        });
+
+        $('#tabelVendor').on('click','.hapusVendor',function(){
+            var id = $(this).data('id');
+            var nama = $(this).data('nama');
+            $.confirm({
+                title: 'Confirm!, Hapus data',
+                content: nama,
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/delete_vendor',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Data berhasil dihapus');
+                                      $('#tabelVendor').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Data gagal dihapus');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        });              
 }
 
 
@@ -1115,17 +1246,10 @@ var BiayaAdminList = function(){
           ajax: {"url": base_url+"master/getBiayaAdminJson", "type": "POST"},
 
             columns: [
-                  // {
-                  //     "data": null,
-                  //     render: function (data, type, row, meta) {
-                  //         return meta.row + meta.settings._iDisplayStart + 1;
-                  //     }
-                  // },
                   {"data": "kode_produk"},
                   {"data": "nominal_admin_bank", render: $.fn.dataTable.render.number(',', '.', '')},
-                  {
-                    "data": "tgl_create"
-                  }
+                  {"data": "tgl_create"},
+                  {"data": "view"},
 
             ],
             // order: [[1, 'desc']],
@@ -1137,6 +1261,55 @@ var BiayaAdminList = function(){
             }
 
   });  
+
+          // update biaya admin
+        $('#tabelBiayaAdmin').on('click','.editBiaya',function(){
+            var id = $(this).data('id');
+            $('#myModal').modal('show')
+            $.ajax({
+              type: 'get',
+              url:base_url+'master/edit_biaya?id='+id,
+              success: function(result){
+                $('#result').html(result);
+              }
+            });
+        });
+
+        //hapus
+        $('#tabelBiayaAdmin').on('click','.hapusBiaya',function(){
+            var id = $(this).data('id');
+            $.confirm({
+                title: 'Confirm!, Hapus data',
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/delete_biaya_admin',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Data berhasil dihapus');
+                                      $('#tabelBiayaAdmin').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Data gagal dihapus');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        });                
 }
 
 var PengumumanList = function(){
@@ -1173,16 +1346,10 @@ var PengumumanList = function(){
           ajax: {"url": base_url+"master/getPengumumanJson", "type": "POST"},
 
             columns: [
-                  // {
-                  //     "data": null,
-                  //     render: function (data, type, row, meta) {
-                  //         return meta.row + meta.settings._iDisplayStart + 1;
-                  //     }
-                  // },
                   {"data": "judul"},
                   {"data": "isi"},
                   {"data": "tgl_update"},
-
+                  {"data": "view"},
             ],
             // order: [[1, 'desc']],
             rowCallback: function(row, data, iDisplayIndex) {
@@ -1193,6 +1360,56 @@ var PengumumanList = function(){
             }
 
   });  
+          // update pengumuman
+        $('#tabelPengumuman').on('click','.editPengumuman',function(){
+            var id = $(this).data('id');
+            $('#myModal').modal('show')
+            $.ajax({
+              type: 'get',
+              url:base_url+'master/edit_pengumuman?id='+id,
+              success: function(result){
+                $('#result').html(result);
+              }
+            });
+        });
+
+        //hapus
+        $('#tabelPengumuman').on('click','.hapusPengumuman',function(){
+            var id = $(this).data('id');
+            var judul = $(this).data('judul');
+            $.confirm({
+                title: 'Confirm!, Hapus data',
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/delete_pengumuman',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Data berhasil dihapus');
+                                      $('#tabelPengumuman').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Data gagal dihapus');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        });                 
+
 }
 
 var laporanHarian=function(){
