@@ -17,6 +17,8 @@
   </footer>
     <!-- <script src="http://code.jquery.com/jquery-1.10.2.js"></script> -->
     <!-- Bootstrap and necessary plugins -->
+
+    <!-- Plugins and scripts required by all views -->
     <script src="<?php echo base_url('assets/dist/vendors/js/jquery.min.js') ?>"></script>
     <script src="<?php echo base_url('assets/dist/vendors/js/popper.min.js') ?>"></script>
     <script src="<?php echo base_url('assets/dist/vendors/js/bootstrap.min.js') ?>"></script>
@@ -27,6 +29,7 @@
     <script src="<?php echo base_url('assets/dist/vendors/js/Chart.min.js') ?>"></script>
     <script src="<?php echo base_url('assets/src/js/jquery.dataTables.min.js') ?>"></script>
     <script src="<?php echo base_url('assets/src/js/dataTables.bootstrap.js') ?>"></script>
+    
     <script src="<?php echo base_url('assets/src/js/jquery-confirm.min.js') ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="<?php echo base_url('assets/src/js/dataTables.colResize.js') ?>"></script>
@@ -37,6 +40,7 @@
   <script src="<?php echo base_url('assets/src/js/app.js') ?>"></script>
 
   <!-- Custom Scripts -->
+  <script src="<?php echo base_url('assets/src/js/moment.js') ?>"></script>
   <script src="<?php echo base_url('assets/src/js/loads.js') ?>"></script>
   <script src="<?php echo base_url('assets/src/js/tables.js') ?>"></script>
   <script src="<?php echo base_url('assets/src/js/globals.js') ?>"></script>
