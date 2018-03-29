@@ -5,18 +5,22 @@
     </div>
 
     <div class="card-body table-responsive">
-      <table class="table table-bordered" id="tabelHistoryDeposit">
-          <thead>
-            <tr>
-              <th>No Kwitansi</th>
-              <th>Nama Loket</th>
-              <th>Username</th>
-              <th>Nominal</th>
-              <th>Tanggal</th>
-              <th>Print</th>
-            </tr>
-          </thead>
-        </table>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table-striped table-sm table table-bordered table-condensed table-hover" cellspacing="0" width="100%" id="tabelHistoryDeposit">
+              <thead style="background-color:#bfe7bf">
+                <tr>
+                  <th>No Kwitansi</th>
+                  <th>Nama Loket</th>
+                  <th>Username</th>
+                  <th>Nominal</th>
+                  <th>Tanggal</th>
+                  <th>Print</th>
+                </tr>
+              </thead>
+            </table>
+        </div>
+      </div>
     </div>
 
     <div class="card-footer">
