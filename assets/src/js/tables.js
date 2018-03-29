@@ -266,7 +266,11 @@ var loketTable = function () {
                                 url:base_url+'loket/reset_pass',
                                 data:'username='+username,
                                 success:function(res){
+<<<<<<< HEAD
                                   $.alert('Password <b>'+username+'</b> telah direset menjadi 123456');
+=======
+                                  $.alert('Password <b>'+username+'</b> telah direset menjadi 12345');
+>>>>>>> 2af70eb7702828e4206d87ba6c104f8cf8381040
                                   $('#tabelLoket').DataTable().ajax.reload();
                                 }
                             });
