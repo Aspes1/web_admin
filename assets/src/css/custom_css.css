@@ -10,16 +10,18 @@
   .nav-tabs > li > a {
     border: 0;
     margin-right: 5px;
-    color: #737373;
+    color: #0D47A1 !important;
     font-size: 14px;
     font-weight: 600;
   }
   .nav-tabs > li > a > i {
     color: #a6a6a6;
   }
-  .nav-tabs > li.open, .nav-tabs > li:hover {
-    border-bottom: 4px solid #fbcdcf;
+  .nav-tabs > li.open, .nav-tabs > li>a:hover {
+    color:  #f44336 !important;
+    /* border-bottom: 2px solid #f44336; */
   }
+  
   .nav-tabs > li.open > a, .nav-tabs > li:hover > a {
     border: 0;
     background: none !important;
@@ -38,11 +40,19 @@
   }
   .nav-tabs > li >a.active {
     border: 0;
-    color: #333333;
+    color: #f44336 !important;
+    border-bottom: 2px solid #f44336 !important;
+    
   }
   .nav-tabs > li.active > a > i {
     color: #404040;
   }
+
+  .flatpickr-input{
+    background:none !important;
+  }
+
+
   td.details-control {
     text-align:center;
     color:forestgreen;
@@ -52,3 +62,34 @@
     text-align:center;
     color:red;
   }
+  body{
+    background-color: #ffffff;
+  }
+
+  .lf-rg-5px{
+    margin: 0 5px 0 5px;
+  }
+
+  .lbl-weight-700{
+    font-weight: 700 !important;
+    font-size: 15 px;
+  }
+
+  div.dataTables_paginate {
+    /* margin: 0; */
+    /* white-space: nowrap; */
+    /* text-align: right; */
+    float: right;
+    text-align: right;
+    padding-top: 0.25em;
+  }
+
+  div.dataTables_info {
+    /* padding-top: 8px; */
+    /* white-space: nowrap; */
+    clear: both;
+    float: left;
+    padding-top: 0.755em;
+  }
+
+ 

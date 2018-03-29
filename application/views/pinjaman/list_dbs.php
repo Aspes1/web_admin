@@ -5,8 +5,8 @@
     </div>
 
     <div class="card-body table-responsive col-md-8">
-      <table class="table table-bordered" id="tabelListDbs">
-          <thead>
+      <table id="tabelListDbs" class="table-striped table-sm table table-bordered table-condensed table-hover " cellspacing="0" width="tabelListDbs%">
+          <thead style="background-color:#bfe7bf">
             <tr>
               <th>Nama Group</th>
               <th>No Telp</th>

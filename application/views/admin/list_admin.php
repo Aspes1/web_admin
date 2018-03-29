@@ -5,8 +5,8 @@
     </div>
 
     <div class="card-body table-responsive">
-      <table class="table table-bordered" id="tabelAdmin">
-          <thead>
+      <table id="tabelAdmin" class="table-striped table-sm table table-bordered table-condensed table-hover " cellspacing="0" width="tabelListDbs%">
+          <thead style="background-color:#bfe7bf">
             <tr>
               <th>Username</th>
               <th>Nama</th>
