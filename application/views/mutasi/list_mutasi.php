@@ -5,8 +5,8 @@
     </div>
 
     <div class="card-body table-responsive">
-      <table class="table table-bordered" id="tabelMutasi">
-          <thead>
+      <table class="table-striped table-sm table table-bordered table-condensed table-hover" cellspacing="0" width="100%" id="tabelMutasi">
+          <thead style="background-color:#bfe7bf">
             <tr>
               <th></th>
               <th>Nama Bank</th>

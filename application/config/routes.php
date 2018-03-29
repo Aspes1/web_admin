@@ -1,55 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/*
-| -------------------------------------------------------------------------
-| URI ROUTING
-| -------------------------------------------------------------------------
-| This file lets you re-map URI requests to specific controller functions.
-|
-| Typically there is a one-to-one relationship between a URL string
-| and its corresponding controller class/method. The segments in a
-| URL normally follow this pattern:
-|
-|	example.com/class/method/id/
-|
-| In some instances, however, you may want to remap this relationship
-| so that a different class/function is called than the one
-| corresponding to the URL.
-|
-| Please see the user guide for complete details:
-|
-|	https://codeigniter.com/user_guide/general/routing.html
-|
-| -------------------------------------------------------------------------
-| RESERVED ROUTES
-| -------------------------------------------------------------------------
-|
-| There are three reserved routes:
-|
-|	$route['default_controller'] = 'welcome';
-|
-| This route indicates which controller class should be loaded if the
-| URI contains no data. In the above example, the "welcome" class
-| would be loaded.
-|
-|	$route['404_override'] = 'errors/page_missing';
-|
-| This route will tell the Router which controller/method to use if those
-| provided in the URL cannot be matched to a valid route.
-|
-|	$route['translate_uri_dashes'] = FALSE;
-|
-| This is not exactly a route, but allows you to automatically route
-| controller and method names that contain dashes. '-' isn't a valid
-| class or method name character, so it requires translation.
-| When you set this option to TRUE, it will replace ALL dashes in the
-| controller and method URI segments.
-|
-| Examples:	my-controller/index	-> my_controller/index
-|		my-controller/my-method	-> my_controller/my_method
-*/
-
 $route['login']                         = 'Login';
 $route['dashboard']                     = 'Dashboard';
 
@@ -57,9 +8,20 @@ $route['loket']                         = 'Loket/index';
 $route['loket/create']                  = 'Loket/addLoketPage';
 $route['loket/list']                    = 'Loket/listLoketPage';
 
-$route['laporan']                       = 'Laporan/index';
-$route['laporan/transaksi']             = 'Laporan/addTransaksiPage';
-$route['laporan/history']               = 'Laporan/addHistoryPage';
+$route['laporan']                       	= 'Laporan/index';
+$route['laporan/transaksi']             	= 'Laporan/addTransaksiPage';
+$route['laporan/transaksiHarian']         	= 'Laporan/laporanHarian';
+$route['laporan/transaksiperiode']			= 'Laporan/addTransaksiPagePeriode';
+$route['laporan/transaksiPerPeriode']   	= 'Laporan/laporanPeriode';
+$route['laporan/transaksiharian_detail']	= 'Laporan/addTransaksiPageHarianDetail';
+$route['laporan/transaksiHarianDetail']   	= 'Laporan/laporanHarianDetail';
+$route['laporan/transaksigriyabayar']     	= 'Laporan/addTransaksiPageGriyaBayar';
+$route['laporan/transaksipertanggal']  		= 'Laporan/transaksi_per_tanggal';
+$route['laporan/transaksiGriyaBayarPerTgl']	= 'Laporan/transaksiGriyaBayarPerTgl';
+$route['laporan/transaksiperuser']  		= 'Laporan/transaksi_per_user';
+$route['laporan/transaksiGriyaBayarPerUser']= 'Laporan/transaksiGriyaBayarPerUser';
+$route['laporan/importdata']  				= 'Laporan/import_data';
+$route['laporan/upload_csv']  				= 'Laporan/upload_csv';
 
 $route['saldo']                         = 'Saldo/index';
 $route['saldo/saldo_isi']               = 'Saldo/isiSaldoPage';
@@ -80,6 +42,38 @@ $route['pinjaman/isi']                  = 'Pinjaman/isiDbsPage';
 $route['pinjaman/list']                 = 'Pinjaman/listDbsPage';
 $route['pinjaman/isi_p']                = 'Pinjaman/isiPinjamanPage';
 $route['pinjaman/list_p']               = 'Pinjaman/listPinjamanPage';
+
+$route['master']                        = 'Master/index';
+$route['master/produk']               	= 'Master/produkPage';
+$route['master/tambah']               	= 'Master/AddProdukPage';
+$route['master/create_produk']          = 'Master/CreateProduk';
+$route['master/edit']          			= 'Master/EditPodukModal';
+$route['master/update_produk']			= 'Master/UpdateProduk';
+$route['master/delete']					= 'Master/DeleteProduk';
+$route['master/jenis']               	= 'Master/jenisPage';
+$route['master/tambah_jenis_produk']    = 'Master/AddJeniskPage';
+$route['master/create_jenis_produk']    = 'Master/CreateJenisProduk';
+$route['master/edit_jenis_produk']    	= 'Master/EditJenisPodukModal';
+$route['master/update_jenis_produk']    = 'Master/UpdateJenisProduk';
+$route['master/delete_jenis']    		= 'Master/DeleteJenis';
+$route['master/vendor']               	= 'Master/vendorPage';
+$route['master/tambah_vendor']          = 'Master/AddVendorPage';
+$route['master/create_vendor']          = 'Master/CreateVendor';
+$route['master/edit_vendor']          	= 'Master/EditVendorModal';
+$route['master/update_vendor']         	= 'Master/UpdateVendor';
+$route['master/delete_vendor']         	= 'Master/DeleteVendor';
+$route['master/biaya']          		= 'Master/BiayaAdminPage';
+$route['master/tambah_biaya']          	= 'Master/AddBiayaAdminPage';
+$route['master/create_biaya_admin']     = 'Master/CreateBiayaAdmin';
+$route['master/edit_biaya']     		= 'Master/EditBiayaAdminModal';
+$route['master/update_biaya_admin']    	= 'Master/UpdateBiaya';
+$route['master/delete_biaya_admin']    	= 'Master/DeleteBiaya';
+$route['master/pengumuman']     		= 'Master/pengumumanPage';
+$route['master/tambah_pengumuman']     	= 'Master/AddPengumumanPage';
+$route['master/create_pengumuman']     	= 'Master/CreatePengumuman';
+$route['master/edit_pengumuman']     	= 'Master/EditPengumumanModal';
+$route['master/update_pengumuman']     	= 'Master/UpdatePengumuman';
+$route['master/delete_pengumuman']     	= 'Master/DeletePengumuman';
 
 $route['error_550']                     = 'Error';
 

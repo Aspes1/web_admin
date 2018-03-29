@@ -99,5 +99,23 @@ class CSVReader {
         return $arr;
     }
 
+    function csvToArrayLaporanPerUser($file)
+    {
+        $row = 1;
+        if (($handle = fopen($file, "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 100000, ",")) !== FALSE) {
+                $num = count($data);
+                //echo "<p> $num fields in line $row: <br /></p>\n";
+                $row++;
+                for ($c=0; $c < $num; $c++) {
+                    if (in_array('TOTAL', $data)) break; //sesuai kebutuhan
+                    $arr[$row][$c] = $data[$c];
+                }
+            }
+            fclose($handle);
+            return $arr;
+        }
+    }
+    
 }
 ?>

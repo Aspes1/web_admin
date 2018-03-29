@@ -19,11 +19,10 @@
   <!-- Main styles for this application -->
   <link href="<?php echo base_url('assets/src/css/style.css') ?>" rel="stylesheet">
   <link href="<?php echo base_url('assets/src/css/custom_css.css') ?>" rel="stylesheet">
-  <link href="<?php echo base_url('assets/src/css/datatables.min.css') ?>" rel="stylesheet">
-  <link href="<?php echo base_url('assets/src/css/jquery.dataTables.min.css') ?>" rel="stylesheet">
+  <link href="<?php echo base_url('assets/src/css/datatables.bootstrap.css') ?>" rel="stylesheet">
   <link href="<?php echo base_url('assets/src/css/jquery-confirm.min.css') ?>" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> -->
   <!-- Styles required by this views -->
 
 </head>
@@ -40,7 +39,7 @@
 
     <ul class="nav navbar-nav d-md-down-none">
       <li class="nav-item px-3">
-        <a class="nav-link" href="javascript:coomingSoon()">Laporan</a>
+        <a class="nav-link" href="laporan">Laporan</a>
       </li>
       <li class="nav-item px-3">
         <a class="nav-link" href="<?php echo base_url('loket');?>">Loket</a>
@@ -58,7 +57,7 @@
         <a class="nav-link" href="<?php echo base_url('admin');?>">Admin Users</a>
       </li>
       <li class="nav-item px-3">
-        <a class="nav-link" href="javascript:coomingSoon()">Master INM</a>
+        <a class="nav-link" href="<?php echo base_url('master');?>">Master INM</a>
       </li>
     </ul>
     <ul class="nav navbar-nav ml-auto">

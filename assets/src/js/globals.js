@@ -64,6 +64,10 @@ var master_page = function()
 {
   console.log('master_page');
   produkList();
+  JenisProdukList();
+  VendorList();
+  BiayaAdminList();
+  PengumumanList();
 }
 
 var saldo_table = function()
@@ -92,6 +96,11 @@ var flatpickrActivation = function()
   $('.toT').flatpickr();
   $('.tgl_isi').flatpickr();
   $('.rekapDate').flatpickr();
+  laporanHarian();
+  laporanPeriode();
+  laporanHarianDetail();
+  laporaGriyaPerTgl();
+  laporaGriyaPerUser();
 }
 
 var hideErrMsg = function()

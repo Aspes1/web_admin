@@ -52,3 +52,24 @@
     text-align:center;
     color:red;
   }
+
+  div.dataTables_paginate {
+    /* margin: 0; */
+    /* white-space: nowrap; */
+    /* text-align: right; */
+    float: right;
+    text-align: right;
+    padding-top: 0.25em;
+  }
+
+  div.dataTables_info {
+    /* padding-top: 8px; */
+    /* white-space: nowrap; */
+    clear: both;
+    float: left;
+    padding-top: 0.755em;
+  }
+
+  #bg-modal{
+    background-color: #e4e5e6;
+  }
