@@ -1751,7 +1751,7 @@ var laporaGriyaPerTgl=function(){
           };
       };
       var dari  = $("input[name=fromT]").val();
-      var sampai= $("input[name=inptSampai]").val();
+      var sampai= $("input[name=toT]").val();
 
       console.log(dari);
 
@@ -1874,7 +1874,7 @@ var laporaGriyaPerUser=function(){
       };
 
       var dari  = $("input[name=fromT]").val();
-      var sampai= $("input[name=inptSampai]").val();
+      var sampai= $("input[name=toT]").val();
 
       var table = $("#tabelTransaksiGriyaBayarPerUser").DataTable({
           "dom": 'Zlfrtip',
@@ -1985,8 +1985,8 @@ var laporaGriyaPerUser=function(){
         var tr = $(this).closest('tr');
         var tdi = tr.find("i.fa");
         var row = table.row(tr);
-        // var nama = row.data().nama;
-
+        var nama = row.data().nama;
+        console.log(nama);
         if (row.child.isShown()) {
             // This row is already open - close it
             row.child.hide();
@@ -2012,8 +2012,5 @@ var laporaGriyaPerUser=function(){
                 });
             }
         }
-        console.log(nama);
-        // console.log(nama);
     });
-
 }

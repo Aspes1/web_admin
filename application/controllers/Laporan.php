@@ -103,7 +103,7 @@ class Laporan extends CI_Controller{
     }
 
     $output = array(
-                    "data" => $this->laporan_model->allLaporan($dari_)->result(),
+                    "data" => $this->laporan_model->allLaporan($dari_, $sampai_)->result(),
                   );
 
     echo json_encode($output);
@@ -119,7 +119,7 @@ class Laporan extends CI_Controller{
     }
     // $dari,$sampai
     $output = array(
-                    "data" => $this->laporan_model->allLaporanPeriode($dari_)->result(),
+                    "data" => $this->laporan_model->allLaporanPeriode($dari_, $sampai_)->result(),
                    );
 
     //output to json format
@@ -151,7 +151,7 @@ class Laporan extends CI_Controller{
     }
 
     $output = array(
-                    "data" => $this->laporan_model->laporan_giry_bayar_per_tanggal($dari_)->result(),
+                    "data" => $this->laporan_model->laporan_giry_bayar_per_tanggal($dari_, $sampai_)->result(),
                    );
 
     echo json_encode($output);
@@ -167,7 +167,7 @@ class Laporan extends CI_Controller{
     }
 
     $output = array(
-                    "data" => $this->laporan_model->laporan_giry_bayar_per_user($dari_)->result(),
+                    "data" => $this->laporan_model->laporan_giry_bayar_per_user($dari_, $sampai_)->result(),
                    );
 
     echo json_encode($output);

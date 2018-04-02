@@ -5,21 +5,22 @@
     </div>
 
     <div class="card-body">
-       
-        <div class="form-group row">
-          <label class="col-md-1 col-form-label" for="text-input">From</label>
-          <div class="col-md-3">
-            <input type="text" id="fromT" name="fromT" class="form-control fromT">
-          </div>
+      <div class="form-group row">
+          <div id="laporan_form" class="form-inline" style="margin-left:10px;">
+          <div class="form-group" >
+                <label for="fromT"class="lf-rg-5px lbl-weight-700">From</label>
+                <input type="text" id="fromT" name="fromT" class="form-control fromT lf-rg-5px">
+              </div>
 
-<!--      			<label class="col-md-1 col-form-label" for="text-input">To</label>
-          <div class="col-md-3">
-            <input type="text" id="toT" name="toT" class="form-control toT">
-          </div>
- -->
-          <div class="col-md-3">
-            <button type="submit" onclick="laporanPeriode()" id="loket_submit" class="btn btn-xs btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-            <button type="reset" onclick="resetDate(event)" id="reset" class="btn btn-xs btn-danger"><i class="fa fa-ban"></i> Reset</button>
+              <div class="form-group" >
+                <label for="fromT"class="lf-rg-5px lbl-weight-700">To</label>
+                <input type="text" id="toT" name="toT" class="form-control fromT lf-rg-5px">
+              </div>
+
+              <div class="form-group">
+                <button type="submit" onclick="laporanPeriode()" id="loket_submit" class="lf-rg-5px btn btn-xs btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                <button type="reset" onclick="resetDate(event)" id="reset" class="btn btn-xs btn-danger"><i class="fa fa-ban"></i> Reset</button>
+              </div>
           </div>
         </div>
 

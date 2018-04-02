@@ -17,7 +17,7 @@ class Laporan_model extends CI_Model{
     return $this->db->get('inm_jenis_produk');
   }
 
-  public function allLaporan($dari){
+  public function allLaporan($dari, $sampai){
 
     $str="SELECT
             Sum(IF( inm_produk.jenis_produk_id = 1, inm_transaksi_detail.lembar, 0)) AS PLN,
@@ -33,14 +33,14 @@ class Laporan_model extends CI_Model{
           INNER JOIN inm_transaksi ON inm_transaksi_detail.transaksi_id = inm_transaksi.id
           INNER JOIN inm_produk ON inm_transaksi_detail.produk_id = inm_produk.id
           INNER JOIN inm_users ON inm_transaksi.user_id = inm_users.id
-          WHERE DATE(inm_transaksi.tgl_transaksi)>='".$dari."'
+          WHERE DATE(inm_transaksi.tgl_transaksi)>='".$dari."' AND DATE(inm_transaksi.tgl_transaksi) <= '".$sampai."'
           GROUP BY
             inm_transaksi.user_id";
             // inm_transaksi.tgl_transaksi,
       return $this->db->query($str);
   }
   
-  public function allLaporanPeriode($dari_){
+  public function allLaporanPeriode($dari_, $sampai_){
 
   $str="SELECT
         Sum(IF(inm_produk.jenis_produk_id = 1,inm_transaksi_detail.lembar,0)) AS PLN,
@@ -55,7 +55,7 @@ class Laporan_model extends CI_Model{
       INNER JOIN inm_produk ON inm_transaksi_detail.produk_id = inm_produk.id
       INNER JOIN inm_users ON inm_transaksi.user_id = inm_users.id
       WHERE
-      DATE(inm_transaksi.tgl_transaksi) >= '".$dari_."'
+      DATE(inm_transaksi.tgl_transaksi) >= '".$dari_."' AND DATE(inm_transaksi.tgl_transaksi) <= '".$sampai_."'
       GROUP BY
         inm_transaksi.tgl_transaksi";
       return $this->db->query($str);
@@ -72,38 +72,38 @@ class Laporan_model extends CI_Model{
 
   }  
 
-  public function laporan_giry_bayar_per_tanggal($dari_){
+  public function laporan_giry_bayar_per_tanggal($dari_, $sampai_){
 
   $str="SELECT
-        Sum(IF(inm_produk.jenis_produk_id = 1,inm_traksaksi_griya.jumlah_transaksi,0)) AS PLN,
-        Sum(IF(inm_produk.jenis_produk_id = 1,inm_traksaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PLN,
-        Sum(IF(inm_produk.jenis_produk_id = 2,inm_traksaksi_griya.jumlah_transaksi,0)) AS PDAM,
-        Sum(IF(inm_produk.jenis_produk_id = 2,inm_traksaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PDAM,
-        inm_traksaksi_griya.tanggal
+        Sum(IF(inm_produk.jenis_produk_id = 1,inm_transaksi_griya.jumlah_transaksi,0)) AS PLN,
+        Sum(IF(inm_produk.jenis_produk_id = 1,inm_transaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PLN,
+        Sum(IF(inm_produk.jenis_produk_id = 2,inm_transaksi_griya.jumlah_transaksi,0)) AS PDAM,
+        Sum(IF(inm_produk.jenis_produk_id = 2,inm_transaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PDAM,
+        inm_transaksi_griya.tanggal
       FROM
-        inm_traksaksi_griya
-      INNER JOIN inm_produk ON inm_traksaksi_griya.produk_id = inm_produk.id
+        inm_transaksi_griya
+      INNER JOIN inm_produk ON inm_transaksi_griya.produk_id = inm_produk.id
       WHERE
-      DATE(inm_traksaksi_griya.tanggal) >= '".$dari_."'
+      DATE(inm_transaksi_griya.tanggal) >= '".$dari_."' AND DATE(inm_transaksi_griya.tanggal) <= '".$sampai_."'
       GROUP BY
-        inm_traksaksi_griya.tanggal";
+        inm_transaksi_griya.tanggal";
       return $this->db->query($str);
   }
 
-  public function laporan_giry_bayar_per_user($dari_){
+  public function laporan_giry_bayar_per_user($dari_, $sampai_){
     $str="SELECT
-            Sum(IF(inm_produk.jenis_produk_id = 1,inm_traksaksi_griya.jumlah_transaksi,0)) AS PLN,
-            Sum(IF(inm_produk.jenis_produk_id = 1,inm_traksaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PLN,
-            Sum(IF(inm_produk.jenis_produk_id = 2,inm_traksaksi_griya.jumlah_transaksi,0)) AS PDAM,
-            Sum(IF(inm_produk.jenis_produk_id = 2,inm_traksaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PDAM,
-            inm_traksaksi_griya.nama
+            Sum(IF(inm_produk.jenis_produk_id = 1,inm_transaksi_griya.jumlah_transaksi,0)) AS PLN,
+            Sum(IF(inm_produk.jenis_produk_id = 1,inm_transaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PLN,
+            Sum(IF(inm_produk.jenis_produk_id = 2,inm_transaksi_griya.jumlah_transaksi,0)) AS PDAM,
+            Sum(IF(inm_produk.jenis_produk_id = 2,inm_transaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PDAM,
+            inm_transaksi_griya.nama
           FROM
-            inm_traksaksi_griya
-          INNER JOIN inm_produk ON inm_traksaksi_griya.produk_id = inm_produk.id
+            inm_transaksi_griya
+          INNER JOIN inm_produk ON inm_transaksi_griya.produk_id = inm_produk.id
           WHERE
-          DATE(inm_traksaksi_griya.tanggal) >= '".$dari_."'
+          DATE(inm_transaksi_griya.tanggal) >= '".$dari_."' AND DATE(inm_transaksi_griya.tanggal) <= '".$sampai_."'
           GROUP BY
-            inm_traksaksi_griya.nama";
+            inm_transaksi_griya.nama";
           return $this->db->query($str);
   }
 
@@ -111,18 +111,18 @@ class Laporan_model extends CI_Model{
   {
 
     $str ="SELECT
-                Sum(IF(inm_produk.jenis_produk_id = 1,inm_traksaksi_griya.jumlah_transaksi,0)) AS PLN,
-                Sum(IF(inm_produk.jenis_produk_id = 1,inm_traksaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PLN,
-                Sum(IF(inm_produk.jenis_produk_id = 2,inm_traksaksi_griya.jumlah_transaksi,0)) AS PDAM,
-                Sum(IF(inm_produk.jenis_produk_id = 2,inm_traksaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PDAM,
-                inm_traksaksi_griya.username
+                Sum(IF(inm_produk.jenis_produk_id = 1,inm_transaksi_griya.jumlah_transaksi,0)) AS PLN,
+                Sum(IF(inm_produk.jenis_produk_id = 1,inm_transaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PLN,
+                Sum(IF(inm_produk.jenis_produk_id = 2,inm_transaksi_griya.jumlah_transaksi,0)) AS PDAM,
+                Sum(IF(inm_produk.jenis_produk_id = 2,inm_transaksi_griya.rupiah_transaksi,0)) AS TotalTagihan_PDAM,
+                inm_transaksi_griya.username
               FROM
-                inm_traksaksi_griya
-              INNER JOIN inm_produk ON inm_traksaksi_griya.produk_id = inm_produk.id
+                inm_transaksi_griya
+              INNER JOIN inm_produk ON inm_transaksi_griya.produk_id = inm_produk.id
               WHERE
-                inm_traksaksi_griya.nama = '".$nama."'
+                inm_transaksi_griya.nama = '".$nama."'
               GROUP BY
-                inm_traksaksi_griya.username";
+                inm_transaksi_griya.username";
 
       return $this->db->query($str);
   }  
@@ -148,14 +148,14 @@ class Laporan_model extends CI_Model{
 
   public function cek_data_transaksi_griya($id, $tgl){
       $this->db->select('*');
-      $this->db->from('inm_traksaksi_griya');
+      $this->db->from('inm_transaksi_griya');
       $this->db->where('produk_id', $id);
       $this->db->where('tanggal', $tgl);
       return $this->db->get();
   }
 
   public function insert_laporan_transaksi_griya($data){
-      $insert = $this->db->insert_batch('inm_traksaksi_griya', $data);
+      $insert = $this->db->insert_batch('inm_transaksi_griya', $data);
       if($insert){
         return true;
       }

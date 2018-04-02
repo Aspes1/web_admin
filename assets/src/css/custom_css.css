@@ -92,4 +92,6 @@
     padding-top: 0.755em;
   }
 
- 
+  .menu-griya > .griya.active {
+    color: red;
+  }
