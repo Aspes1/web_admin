@@ -30,7 +30,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 //server gunakan base pay-inm.co.id:44000/webadmin
 
-$config['base_url'] = 'pay-inm.co.id:44000/webadmin';
+$config['base_url'] = 'http://pay-inm.co.id:44000/webadmin';
 
 /*
 |--------------------------------------------------------------------------
