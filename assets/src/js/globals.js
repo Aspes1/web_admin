@@ -68,6 +68,7 @@ var master_page = function()
   VendorList();
   BiayaAdminList();
   PengumumanList();
+  KomisiList();
 }
 
 var saldo_table = function()

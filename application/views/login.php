@@ -71,6 +71,9 @@
             </div>
           </div>
           <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+          <h4 class="text-center">PT. Interprima Nusantara Mandiri<h4>
+          </br>
+          <img src="<?php echo base_url(); ?>assets/src/img/icon-big.png" class="img-circle img-right" width="200" style="margin-left:auto; margin-right:auto; display:block;">
             <!-- <div class="card-body text-center">
               <div>
                 <h2>Sign up</h2>

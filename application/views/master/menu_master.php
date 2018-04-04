@@ -13,6 +13,9 @@
       <a href="javascript:getPageMaster('biaya')" class="nav-link">Biaya Admin</a>
     </li>
     <li class="nav-item">
+      <a href="javascript:getPageMaster('komisi')" class="nav-link">Komisi</a>
+    </li>
+    <li class="nav-item">
       <a href="javascript:getPageMaster('pengumuman')" class="nav-link">Pengumuman</a>
     </li>
   </ul>

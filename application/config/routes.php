@@ -73,7 +73,10 @@ $route['master/tambah_pengumuman']     	= 'Master/AddPengumumanPage';
 $route['master/create_pengumuman']     	= 'Master/CreatePengumuman';
 $route['master/edit_pengumuman']     	= 'Master/EditPengumumanModal';
 $route['master/update_pengumuman']     	= 'Master/UpdatePengumuman';
-$route['master/delete_pengumuman']     	= 'Master/DeletePengumuman';
+$route['master/komisi']     	        = 'Master/KomisiPage';
+$route['master/tambah_komisi']     	    = 'Master/addKomisiPage';
+$route['master/create_komisi']     	    = 'Master/CreateKomisi';
+$route['master/edit_komisi']     	    = 'Master/EditKomisiModal';
 
 $route['error_550']                     = 'Error';
 

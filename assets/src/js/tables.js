@@ -1246,9 +1246,16 @@ var BiayaAdminList = function(){
           ajax: {"url": base_url+"master/getBiayaAdminJson", "type": "POST"},
 
             columns: [
-                  {"data": "kode_produk"},
+                  {"data": "nama_lengkap"},
+                  {"data": "nama_jenis"},
                   {"data": "nominal_admin_bank", render: $.fn.dataTable.render.number(',', '.', '')},
-                  {"data": "tgl_create"},
+                  {
+                      "data": "tgl_update",
+                      defaultContent: '-',
+                      render: function(d){
+                        return moment(d).format("DD/MMM/YYYY");
+                      }
+                  },
                   {"data": "view"},
 
             ],
@@ -2013,4 +2020,110 @@ var laporaGriyaPerUser=function(){
             }
         }
     });
+}
+
+var KomisiList = function(){
+    $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+    {
+        return {
+            "iStart": oSettings._iDisplayStart,
+            "iEnd": oSettings.fnDisplayEnd(),
+            "iLength": oSettings._iDisplayLength,
+            "iTotal": oSettings.fnRecordsTotal(),
+            "iFilteredTotal": oSettings.fnRecordsDisplay(),
+            "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+            "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+        };
+    };
+  
+    var table = $("#tabelKomisi").DataTable({
+        "dom": 'Zlfrtip',
+        initComplete: function() {
+            var api = this.api();
+            $('#tabelKomisi_filter input')
+                .off('.DT')
+                .on('input.DT', function() {
+                    api.search(this.value).draw();
+            });
+        },
+            oLanguage: {
+              "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+            sProcessing: "loading..."
+        },
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: {"url": base_url+"master/getKomisiJson", "type": "POST"},
+  
+              columns: [
+                    {"data": "nama_lengkap"},
+                    {"data": "nama_jenis"},
+                    {"data": "komisi", render: $.fn.dataTable.render.number(',', '.', '')},
+                    {
+                        "data":function (data, type, dataToSet)
+                        {
+                            return data.range_dari + " - " + data.range_sampai;
+                        }
+                    },
+                    {"data": "tgl_update"},
+                    {"data": "view"},
+              ],
+              // order: [[1, 'desc']],
+              rowCallback: function(row, data, iDisplayIndex) {
+                  var info = this.fnPagingInfo();
+                  var page = info.iPage;
+                  var length = info.iLength;
+                  $('td:eq(0)', row).html();
+              }
+  
+    }); 
+
+          // update pengumuman
+          $('#tabelKomisi').on('click','.editKomisi',function(){
+            var id = $(this).data('id');
+            $('#myModal').modal('show')
+            $.ajax({
+              type: 'get',
+              url:base_url+'master/edit_komisi?id='+id,
+              success: function(result){
+                $('#result').html(result);
+              }
+            });
+        });
+
+        //hapus
+        $('#tabelKomisi').on('click','.hapusKomisi',function(){
+            var id = $(this).data('id');
+            $.confirm({
+                title: 'Confirm!, Hapus data',
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/delete_komisi',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Data berhasil dihapus');
+                                      $('#tabelKomisi').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Data gagal dihapus');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        });    
 }

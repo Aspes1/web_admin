@@ -422,7 +422,8 @@ class Master extends CI_Controller{
           $data = array(
             'kode_produk' => $this->input->post('kode_produk'),
             'nominal_admin_bank' => $this->input->post('biaya_admin'),
-            'tgl_create' => date('Y-m-d h:i:s')
+            'tgl_create' => date('Y-m-d h:i:s'),
+            'tgl_update' => date('Y-m-d h:i:s')
           );
 
               $insert = $this->produk_model->store_biaya_admin($data);
@@ -460,7 +461,7 @@ class Master extends CI_Controller{
           $data = array(
             'kode_produk' => $this->input->post('kode_produk'),
             'nominal_admin_bank' => $this->input->post('biaya_admin'),
-            'tgl_create' => date('Y-m-d h:i:s')
+            'tgl_update' => date('Y-m-d h:i:s')
           );
 
               $update = $this->produk_model->update_biaya_admin($data, $this->input->post('id'));
@@ -583,21 +584,116 @@ class Master extends CI_Controller{
       }            
   }
 
-  public function DeletePengumuman()
-  {
-      $id = $this->input->post('id');
-      $delete = $this->produk_model->delete_pengumuman($id);
-      if($delete)
-      {
-          $output['msg'] = 'success';
-          echo json_encode($output);
-      }
-      else
-      {
-          $output['msg'] = 'failed';
-          echo json_encode($output);            
-      }  
-  }
+    public function DeletePengumuman()
+    {
+        $id = $this->input->post('id');
+        $delete = $this->produk_model->delete_pengumuman($id);
+        if($delete)
+        {
+            $output['msg'] = 'success';
+            echo json_encode($output);
+        }
+        else
+        {
+            $output['msg'] = 'failed';
+            echo json_encode($output);            
+        }  
+    }
   /*------ end master pengumuman ------*/
 
+  public function getKomisiJson(){
+    header('Content-Type: application/json');
+    echo $this->produk_model->getTabelKomisi();
+  }
+
+  public function KomisiPage(){
+    $this->load->view('master/list_komisi');
+  }
+
+  public function addKomisiPage(){
+    $data['produk'] = $this->produk_model->get_produk_for_komisi();
+    $this->load->view('master/add_komisi', $data);
+  }
+
+  public function CreateKomisi(){
+    $this->form_validation->set_rules('produk', 'Produk', 'required');
+    $this->form_validation->set_rules('komisi', 'Komisi', 'required');
+    $this->form_validation->set_rules('range_dari', 'Range Dari', 'required');
+    $this->form_validation->set_rules('range_sampai', 'Range Sampai', 'required');
+    if($this->form_validation->run() == FALSE)
+    {
+        $output['title'] = 'error';
+        $output['msg'] = validation_errors();
+        echo json_encode($output);
+    }
+    else{
+        $data = array(
+            'id_produk' => $this->input->post('produk'),
+            'komisi' => $this->input->post('komisi'),
+            'range_dari' => $this->input->post('range_dari'),
+            'range_sampai' => $this->input->post('range_sampai'),
+            'tgl_create' => date('Y-m-d h:i:s'),
+            'tgl_update' => date('Y-m-d h:i:s')
+        );
+        
+        //cek produk yg sudah set komisinya
+        $cek = $this->produk_model->cek_komisi($this->input->post('produk'));
+        if($cek){
+            $output['msg'] = '1';
+            echo json_encode($output);
+        }
+        else{
+            $insert = $this->produk_model->store_komisi($data);
+            if($insert){
+                $output['msg'] = 'success';
+                echo json_encode($output);
+            }
+            else{
+                $output['msg'] = 'failed';
+                echo json_encode($output);
+            }
+        }
+    }
+    
+    }
+
+    public function EditKomisiModal(){
+        $id = $this->input->get('id');
+        $data['komisi'] = $this->produk_model->get_komisi($id);
+        $this->load->view('master/modal_edit_komisi', $data);
+    }
+
+    public function update_komisi(){
+        $data = array(
+            'komisi' => $this->input->post('komisi'),
+            'range_dari' => $this->input->post('range_dari'),
+            'range_sampai' => $this->input->post('range_sampai'),
+            'tgl_update' => date('Y-m-d h:i:s')
+        );
+
+        $update = $this->produk_model->update_komisi($data, $this->input->post('idkomisi'));
+        if($update){
+            $output['msg'] = 'success';
+            echo json_encode($output);
+        }
+        else{
+            $output['msg'] = 'failed';
+            echo json_encode($output);
+        }
+    }
+
+    public function delete_komisi(){
+        $id = $this->input->post('id');
+        $delete = $this->produk_model->delete_komisi($id);
+        if($delete)
+        {
+            $output['msg'] = 'success';
+            echo json_encode($output);
+        }
+        else
+        {
+            $output['msg'] = 'failed';
+            echo json_encode($output);            
+        }  
+    }
 }

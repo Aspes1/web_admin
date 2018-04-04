@@ -1591,3 +1591,123 @@ var resetDate = function (event){
     $("#fromT").val('');
     console.log('ssss');
 }
+
+var submit_komisi = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#komisi_form')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Input data !!',
+      buttons: {
+          confirm: function () {
+            if(FormKomisi()){
+              $.ajax({
+                  url:base_url+'master/create_komisi',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal disimpan');
+                      }
+                      if(datas.msg == 'success') {
+                        $.alert('Data berhasil disimpan');
+                        clearFromKomisi();
+                      }
+                      if(datas.msg == '1'){
+                        $.alert('Produk ini sudah di set komisinya');
+                        clearFromKomisi();  
+                      }
+                      if(datas.title == 'error'){
+                        $.alert(datas.msg);
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });    
+}
+
+var edit_komisi = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#form_edit_komisi')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Update data !!',
+      buttons: {
+          confirm: function () {
+            if(FormKomisi()){
+              $.ajax({
+                  url:base_url+'master/update_komisi',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal diupdate');
+                      }
+                      if(datas.msg == 'success') {
+                        $('#myModal').modal('hide')
+                        $.alert('Data berhasil diupdate');
+                        $('#tabelKomisi').DataTable().ajax.reload();
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });    
+}
+
+var FormKomisi = function(){
+  if($("#produk").val() == "" || $("#komisi").val() == "" || $("#range_dari").val() == "" || $("#range_sampai").val() == ""){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+
+var clearFromKomisi = function(){
+  $("#produk").val("");
+  $("#komisi").val("");
+  $("#range_dari").val("");
+  $("#range_sampai").val("");
+}
+
+var resetKomisi = function(event){
+  event.preventDefault();
+  $.confirm({
+    title: 'Confirm!',
+    content: 'Reset Form ?',
+    buttons: {
+        confirm: function () {
+          clearFromKomisi();
+        },
+        cancel: function () {
+        },
+    }
+  });  
+}
+
+var changenumber = function(){
+  var number = $("#range_sampai").val();
+  if(number == 0){
+    document.getElementById("range_sampai").value = 1000;
+  }
+}
