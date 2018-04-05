@@ -78,6 +78,8 @@ $route['master/tambah_komisi']     	    = 'Master/addKomisiPage';
 $route['master/create_komisi']     	    = 'Master/CreateKomisi';
 $route['master/edit_komisi']     	    = 'Master/EditKomisiModal';
 
+$route['storageupload']       = 'Testuploadstorage/index';
+
 $route['error_550']                     = 'Error';
 
 $route['default_controller'] = $route['login'];

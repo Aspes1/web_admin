@@ -9,5 +9,6 @@ return array(
     'org\\bovigo\\vfs' => array($vendorDir . '/mikey179/vfsStream/src/main/php'),
     'Svg\\' => array($vendorDir . '/phenx/php-svg-lib/src'),
     'Sabberworm\\CSS' => array($vendorDir . '/sabberworm/php-css-parser/lib'),
+    'Rize\\UriTemplate' => array($vendorDir . '/rize/uri-template/src'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
 );
