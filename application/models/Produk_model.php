@@ -9,43 +9,15 @@ class Produk_model extends CI_Model{
     $this->load->database();
   }
 
-<<<<<<< HEAD
-  public function getTabelProduk()
-  {
-      $this->datatables->select('nama_lengkap, nama_singkat, inm_jenis_produk.nama_jenis as jenis,
-=======
   /* ----- start function model produk ----- */
   public function getTabelProduk()
   {
       $this->datatables->select('inm_produk.id as id, nama_lengkap, nama_singkat, inm_jenis_produk.nama_jenis as jenis,
->>>>>>> am
        inm_vendor.nama_vendor as vendor, inm_status_produk.nama_status as status');
       $this->datatables->from('inm_produk');
       $this->datatables->join('inm_jenis_produk', 'inm_produk.jenis_produk_id=inm_jenis_produk.id');
       $this->datatables->join('inm_vendor', 'inm_produk.vendor_id=inm_vendor.kode_vendor');
       $this->datatables->join('inm_status_produk', 'inm_produk.status_id=inm_status_produk.id');
-<<<<<<< HEAD
-      return $this->datatables->generate();
-  }
-
-  public function getAllJenisProduk()
-  {
-      $this->db->select('id,nama_jenis');
-      $this->db->from('inm_jenis_produk');
-      $query =  $this->db->get();
-      return $query->result_array();
-  }
-
-  public function getAllVendor()
-  {
-      $this->db->select('id,nama_vendor');
-      $this->db->from('inm_vendor');
-      $query =  $this->db->get();
-      return $query->result_array();
-  }
-
-}
-=======
       $this->datatables->add_column('view', '<center>
       <a href="javascript:void(0);" class="editProduk btn btn-warning btn-sm" data-target="#myModal" data-id="$1">Edit</a>
       <a href="javascript:void(0);" class="hapusProduk btn btn-danger btn-sm" data-id="$1">Hapus</a>
@@ -380,4 +352,3 @@ class Produk_model extends CI_Model{
 
 
 }
->>>>>>> am

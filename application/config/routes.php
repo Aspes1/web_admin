@@ -75,6 +75,8 @@ $route['master/edit_pengumuman']     	= 'Master/EditPengumumanModal';
 $route['master/update_pengumuman']     	= 'Master/UpdatePengumuman';
 $route['master/delete_pengumuman']     	= 'Master/DeletePengumuman';
 
+$route['storageupload']       = 'Testuploadstorage/index';
+
 $route['error_550']                     = 'Error';
 
 $route['default_controller'] = $route['login'];
