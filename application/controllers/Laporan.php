@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use Google\Cloud\Storage\StorageClient;
+use League\Flysystem\Filesystem;
+use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
+
 class Laporan extends CI_Controller{
 
   public function __construct()
@@ -232,8 +236,7 @@ class Laporan extends CI_Controller{
   }
 
   public function upload_csv()
-  {
-
+  {    
       $config['upload_path']          = './uploads/csv_griya/';
       $config['allowed_types']        = 'csv';
       $config['max_size']             = 90000000;
@@ -256,6 +259,24 @@ class Laporan extends CI_Controller{
           $file_name = $upload_data['file_name'];
           $path = './uploads/csv_griya/';
           $file = $path.''.$file_name;
+
+          $storageClient = new StorageClient([
+            'projectId'   => 'ascendant-volt-161906',
+            'keyFilePath' => APPPATH. '/libraries/json_key.json',
+          ]);
+        
+          $bucket     = $storageClient->bucket('payinm_db');
+    
+          $adapter    = new GoogleStorageAdapter($storageClient, $bucket);
+          $filesystem = new Filesystem($adapter);
+              
+          $stream = fopen($file, 'r+'); 
+          $filesystem->writeStream('backups/'.$file_name, $stream);
+
+          $exists = $filesystem->has('backups/'.$file_name);
+          // print_r($exists);
+
+          // unlink('./uploads/csv_griya/'.$file_name);
 
           $daritgl_ = substr($file_name, 53, 8);
           $sampaitgl_ = substr($file_name, 62, 8);
@@ -322,10 +343,6 @@ class Laporan extends CI_Controller{
               $new_arr = $dataArr;
             }
           }
-
-          // echo "<pre>";
-          // print_r($dataArr);
-          // echo "</pre>";
 
           $no = 0;
           $insert = array();
@@ -406,10 +423,6 @@ class Laporan extends CI_Controller{
             }
           }
 
-          // echo "<pre>";
-          // print_r($insert);
-          // echo "</pre>";
-
           if($hasil == 0){
             $insertdata = $this->laporan_model->insert_laporan_transaksi_griya($insert);
             if($insertdata){
@@ -426,6 +439,9 @@ class Laporan extends CI_Controller{
             $output['msg'] = 'File sudah pernah diupload';
           }
           echo json_encode($output);
+
+          unlink('./uploads/csv_griya/'.$file_name);
+          
       }
   }
 }
