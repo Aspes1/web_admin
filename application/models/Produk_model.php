@@ -355,37 +355,38 @@ class Produk_model extends CI_Model{
   /* ----- end function model pengumuman ----- */
 
     public function getTabelKomisi(){
-            $this->datatables->select('inm_komisi.id as id, inm_komisi.tgl_update as tgl_update, inm_produk.nama_lengkap as nama_lengkap,
-                                        inm_jenis_produk.nama_jenis as nama_jenis, inm_komisi.range_dari as range_dari, inm_komisi.range_sampai as range_sampai,
-                                        inm_komisi.komisi as komisi');
-            $this->datatables->from('inm_komisi');
-            $this->datatables->join('inm_produk', 'inm_komisi.id_produk=inm_produk.id');
-            $this->datatables->join('inm_jenis_produk', 'inm_jenis_produk.id=inm_produk.jenis_produk_id');
-            $this->datatables->add_column('view', '<center>
-            <a href="javascript:void(0);" class="editKomisi btn btn-warning btn-sm" data-target="#myModal" data-id="$1">Edit</a>
-            <a href="javascript:void(0);" class="hapusKomisi btn btn-danger btn-sm" data-id="$1">Hapus</a>
-            </center>','id');
-            return $this->datatables->generate();    
+        $this->datatables->select('inm_komisi.id as id, inm_komisi.tgl_update as tgl_update, inm_produk.nama_lengkap as nama_lengkap,
+                                    inm_jenis_produk.nama_jenis as nama_jenis, inm_komisi.range_dari as range_dari, inm_komisi.range_sampai as range_sampai,
+                                    inm_komisi.komisi as komisi, inm_komisi.status_pinjaman as status');
+        $this->datatables->from('inm_komisi');
+        $this->datatables->join('inm_produk', 'inm_komisi.id_produk=inm_produk.id');
+        $this->datatables->join('inm_jenis_produk', 'inm_jenis_produk.id=inm_produk.jenis_produk_id');
+        $this->datatables->add_column('view', '<center>
+        <a href="javascript:void(0);" class="editKomisi btn btn-warning btn-sm" data-target="#myModal" data-id="$1">Edit</a>
+        <a href="javascript:void(0);" class="hapusKomisi btn btn-danger btn-sm" data-id="$1">Hapus</a>
+        </center>','id');
+        return $this->datatables->generate();    
     }
 
     public function get_produk_for_komisi(){
-            $this->db->select('a.id, b.nama_vendor, a.nama_lengkap');
-            $this->db->join('inm_vendor b', 'a.vendor_id = b.id');
-            $this->db->from('inm_produk a');
-            return $this->db->get()->result();
+        $this->db->select('a.id, b.nama_vendor, a.nama_lengkap');
+        $this->db->join('inm_vendor b', 'a.vendor_id = b.id');
+        $this->db->from('inm_produk a');
+        return $this->db->get()->result();
     }
 
-    public function cek_komisi($idproduk){
-            $this->db->select('*');
-            $this->db->from('inm_komisi');
-            $this->db->where('id_produk', $idproduk);
-            $row = $this->db->get()->num_rows();
-            if($row > 0){
-                return true;
-            }
-            else{
-                return false;
-            }
+    public function cek_komisi($idproduk, $komisi){
+        $this->db->select('*');
+        $this->db->from('inm_komisi');
+        $this->db->where('id_produk', $idproduk);
+        $this->db->where('komisi', $komisi);
+        $row = $this->db->get()->num_rows();
+        if($row > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public function store_komisi($data){

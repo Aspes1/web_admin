@@ -14,7 +14,8 @@
               <th>Nama Produk</th>
               <th>Jenis Produk</th>
               <th>Komisi</th>
-              <th>Range</th>
+              <th>Tingkatan</th>
+              <th>Status Pinjaman</th>
               <th width="200">Tanggal Update</th>
               <th width="100" style="text-align:center">Action</th>
             </tr>

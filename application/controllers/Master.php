@@ -627,17 +627,32 @@ class Master extends CI_Controller{
         echo json_encode($output);
     }
     else{
-        $data = array(
-            'id_produk' => $this->input->post('produk'),
-            'komisi' => $this->input->post('komisi'),
-            'range_dari' => $this->input->post('range_dari'),
-            'range_sampai' => $this->input->post('range_sampai'),
-            'tgl_create' => date('Y-m-d h:i:s'),
-            'tgl_update' => date('Y-m-d h:i:s')
-        );
-        
-        //cek produk yg sudah set komisinya
-        $cek = $this->produk_model->cek_komisi($this->input->post('produk'));
+        if($this->input->post('range_sampai') == '>'){
+            $data = array(
+                'id_produk' => $this->input->post('produk'),
+                'komisi' => $this->input->post('komisi'),
+                'range_dari' => $this->input->post('range_dari'),
+                'range_sampai' => 1000000,
+                'tgl_create' => date('Y-m-d h:i:s'),
+                'tgl_update' => date('Y-m-d h:i:s'),
+                'jenis_komisi' => $this->input->post('jeniskomisi'),
+                'status_pinjaman' => $this->input->post('statuspinjaman')
+            );                
+        }
+        else{
+            $data = array(
+                'id_produk' => $this->input->post('produk'),
+                'komisi' => $this->input->post('komisi'),
+                'range_dari' => $this->input->post('range_dari'),
+                'range_sampai' => $this->input->post('range_sampai'),
+                'tgl_create' => date('Y-m-d h:i:s'),
+                'tgl_update' => date('Y-m-d h:i:s'),
+                'jenis_komisi' => $this->input->post('jeniskomisi'),
+                'status_pinjaman' => $this->input->post('statuspinjaman')
+            );
+        }        
+        //cek produk yg sudah diset range nya
+        $cek = $this->produk_model->cek_komisi($this->input->post('produk'), $this->input->post('komisi'));
         if($cek){
             $output['msg'] = '1';
             echo json_encode($output);

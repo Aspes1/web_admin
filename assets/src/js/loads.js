@@ -1617,7 +1617,7 @@ var submit_komisi = function(event){
                         clearFromKomisi();
                       }
                       if(datas.msg == '1'){
-                        $.alert('Produk ini sudah di set komisinya');
+                        $.alert('Komisi ' + $("#komisi").val() + ' untuk produk ini sudah ada');
                         clearFromKomisi();  
                       }
                       if(datas.title == 'error'){
@@ -1688,6 +1688,8 @@ var clearFromKomisi = function(){
   $("#komisi").val("");
   $("#range_dari").val("");
   $("#range_sampai").val("");
+  $("#jeniskomisi").val("");
+  $("#statuspinjaman").val("");
 }
 
 var resetKomisi = function(event){
@@ -1705,9 +1707,9 @@ var resetKomisi = function(event){
   });  
 }
 
-var changenumber = function(){
-  var number = $("#range_sampai").val();
-  if(number == 0){
-    document.getElementById("range_sampai").value = 1000;
-  }
-}
+// var changenumber = function(){
+//   var number = $("#range_sampai").val();
+//   if(number == '>'){
+//     document.getElementById("range_sampai").value = 1000000;
+//   }
+// }

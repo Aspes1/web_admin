@@ -2062,9 +2062,18 @@ var KomisiList = function(){
                     {
                         "data":function (data, type, dataToSet)
                         {
-                            return data.range_dari + " - " + data.range_sampai;
+                            if(data.range_dari == 0 && data.range_sampai == 0){
+                                return "Flat";
+                            }
+                            if(data.range_sampai == 1000000){
+                                return ">" + data.range_dari;
+                            }
+                            else{
+                                return data.range_dari + " - " + data.range_sampai;
+                            }
                         }
                     },
+                    {"data": "status"},
                     {"data": "tgl_update"},
                     {"data": "view"},
               ],

@@ -124,7 +124,7 @@ class User_model extends CI_Model{
       $this->datatables->join('inm_users_status', 'inm_users.status_id=inm_users_status.id');
       $this->datatables->add_column('icon', '
       <a href="javascript:void(0);" class="info" data-id="$1" data-username="$2">
-      <i class="fa fa-plus-square" aria-hidden="true"></i>
+      <i class="fa fa-caret-right" aria-hidden="true"></i>
       </a>', 'id,username');
       $this->datatables->add_column('view', '<center>
       <a href="javascript:void(0);" class="resetMac btn btn-info btn-sm" data-id="$1" data-username="$2">Reset MAC</a>
