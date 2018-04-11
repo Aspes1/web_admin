@@ -689,6 +689,10 @@ $("#add_produk").ready(function() {
   loadVendor();
 });
 
+$("#page_komisi").ready(function(){
+  LaporanKomisi();
+});
+
 var loadJenisProduk = function()
 {
   $.ajax({
@@ -1589,6 +1593,7 @@ var isFormNotFile = function()
 var resetDate = function (event){
     event.preventDefault();
     $("#fromT").val('');
+    $("#toT").val('');
     console.log('ssss');
 }
 

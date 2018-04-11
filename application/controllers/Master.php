@@ -639,6 +639,18 @@ class Master extends CI_Controller{
                 'status_pinjaman' => $this->input->post('statuspinjaman')
             );                
         }
+        elseif($this->input->post('range_dari') == 0 && $this->input->post('range_sampai') == 0 ){
+            $data = array(
+                'id_produk' => $this->input->post('produk'),
+                'komisi' => $this->input->post('komisi'),
+                'range_dari' => $this->input->post('range_dari'),
+                'range_sampai' => $this->input->post('range_sampai'),
+                'tgl_create' => date('Y-m-d h:i:s'),
+                'tgl_update' => date('Y-m-d h:i:s'),
+                'jenis_komisi' => 'Flat',
+                'status_pinjaman' => $this->input->post('statuspinjaman')
+            );                            
+        }
         else{
             $data = array(
                 'id_produk' => $this->input->post('produk'),
@@ -647,7 +659,7 @@ class Master extends CI_Controller{
                 'range_sampai' => $this->input->post('range_sampai'),
                 'tgl_create' => date('Y-m-d h:i:s'),
                 'tgl_update' => date('Y-m-d h:i:s'),
-                'jenis_komisi' => $this->input->post('jeniskomisi'),
+                'jenis_komisi' => 'Tingkatan',
                 'status_pinjaman' => $this->input->post('statuspinjaman')
             );
         }        
@@ -679,12 +691,34 @@ class Master extends CI_Controller{
     }
 
     public function update_komisi(){
-        $data = array(
-            'komisi' => $this->input->post('komisi'),
-            'range_dari' => $this->input->post('range_dari'),
-            'range_sampai' => $this->input->post('range_sampai'),
-            'tgl_update' => date('Y-m-d h:i:s')
-        );
+        if($this->input->post('range_sampai') == '>'){
+            $data = array(
+                'komisi' => $this->input->post('komisi'),
+                'range_dari' => $this->input->post('range_dari'),
+                'range_sampai' => 1000000,
+                'tgl_update' => date('Y-m-d h:i:s'),
+                'status_pinjaman' => $this->input->post('statuspinjaman')
+            );
+        }
+        elseif($this->input->post('range_dari') == 0 && $this->input->post('range_sampai') == 0){
+            $data = array(
+                'komisi' => $this->input->post('komisi'),
+                'range_dari' => $this->input->post('range_dari'),
+                'range_sampai' => $this->input->post('range_sampai'),
+                'tgl_update' => date('Y-m-d h:i:s'),
+                'jenis_komisi' => 'Flat',
+                'status_pinjaman' => $this->input->post('statuspinjaman'),
+            );
+        }
+        else{
+            $data = array(
+                'komisi' => $this->input->post('komisi'),
+                'range_dari' => $this->input->post('range_dari'),
+                'range_sampai' => $this->input->post('range_sampai'),
+                'tgl_update' => date('Y-m-d h:i:s'),
+                'status_pinjaman' => $this->input->post('statuspinjaman')
+            );
+        }
 
         $update = $this->produk_model->update_komisi($data, $this->input->post('idkomisi'));
         if($update){

@@ -73,14 +73,19 @@ $route['master/tambah_pengumuman']     	= 'Master/AddPengumumanPage';
 $route['master/create_pengumuman']     	= 'Master/CreatePengumuman';
 $route['master/edit_pengumuman']     	= 'Master/EditPengumumanModal';
 $route['master/update_pengumuman']     	= 'Master/UpdatePengumuman';
+$route['master/delete_pengumuman']     	= 'Master/DeletePengumuman';
 $route['master/komisi']     	        = 'Master/KomisiPage';
 $route['master/tambah_komisi']     	    = 'Master/addKomisiPage';
 $route['master/create_komisi']     	    = 'Master/CreateKomisi';
 $route['master/edit_komisi']     	    = 'Master/EditKomisiModal';
 
-$route['storageupload']       = 'Testuploadstorage/index';
+$route['komisi']                = 'Komisi/index';
+$route['komisi/daftar_komisi']  = 'Komisi/DaftarKomisi';
+$route['komisi/hitungkomisi']   = 'Komisi/getJsonLaporanKomisi';
 
-$route['error_550']                     = 'Error';
+$route['storageupload'] = 'Testuploadstorage/index';
+
+$route['error_550'] = 'Error';
 
 $route['default_controller'] = $route['login'];
 $route['404_override'] = '';

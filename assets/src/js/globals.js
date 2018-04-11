@@ -6,6 +6,7 @@ var _route_admin       = 'admin';
 var _route_master      = 'master';
 var _route_mutasi      = 'mutasi';
 var _route_pinjaman    = 'pinjaman';
+var _route_komisi      = 'komisi';
 
 var _cover_transaksi   = '#isi';
 
@@ -42,6 +43,11 @@ function getPageMutasi(str){
 function getPagePinjaman(str){
   var routes = _route_pinjaman + '/' + str;
   toLoadSecondPage(routes, _cover_transaksi, pinjaman_page);
+}
+
+function getPageKomisi(str){
+  var routes = _route_komisi + '/' + str;
+  toLoadSecondPage(routes, _cover_transaksi, komisi_page);
 }
 
 var pinjaman_page = function()
@@ -89,6 +95,11 @@ var admin_page = function()
 var ignore = function ()
 {
   console.log('Page Changing');
+}
+
+var komisi_page = function(){
+  flatpickrActivation();
+  LaporanKomisi();
 }
 
 var flatpickrActivation = function()

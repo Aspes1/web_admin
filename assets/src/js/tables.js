@@ -727,6 +727,7 @@ var produkList = function() {
                   {"data": "nama_lengkap"},
                   {"data": "nama_singkat"},
                   {"data": "jenis"},
+                  {"data": "kode_produk"},
                   {"data": "vendor"},
                   {"data": "status"},
                   {"data": "view"}
@@ -759,7 +760,6 @@ var produkList = function() {
             var id = $(this).data('id');
             $.confirm({
                 title: 'Confirm!, Hapus data',
-                content: id,
                 buttons: {
                     confirm: {
                         text: 'Confirm',
@@ -1072,7 +1072,6 @@ var JenisProdukList = function(){
             var id = $(this).data('id');
             $.confirm({
                 title: 'Confirm!, Hapus data',
-                content: id,
                 buttons: {
                     confirm: {
                         text: 'Confirm',
@@ -1139,16 +1138,9 @@ var VendorList = function(){
           ajax: {"url": base_url+"master/getVendorJson", "type": "POST"},
 
             columns: [
-                  // {
-                  //     "data": null,
-                  //     render: function (data, type, row, meta) {
-                  //         return meta.row + meta.settings._iDisplayStart + 1;
-                  //     }
-                  // },
                   {"data": "nama_vendor"},
                   {"data": "kode_vendor"},
                   {"data": "view"},
-
             ],
             // order: [[1, 'desc']],
             rowCallback: function(row, data, iDisplayIndex) {
@@ -1178,7 +1170,6 @@ var VendorList = function(){
             var nama = $(this).data('nama');
             $.confirm({
                 title: 'Confirm!, Hapus data',
-                content: nama,
                 buttons: {
                     confirm: {
                         text: 'Confirm',
@@ -2135,4 +2126,80 @@ var KomisiList = function(){
                 }
             });
         });    
+}
+
+var LaporanKomisi=function(){
+    if ($.fn.DataTable.isDataTable('#tableCountKomisi')) {
+        $('#tableCountKomisi').DataTable().destroy();
+    }
+
+    $(document).ready(function(){
+        // Setup datatables
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+      {
+          return {
+              "iStart": oSettings._iDisplayStart,
+              "iEnd": oSettings.fnDisplayEnd(),
+              "iLength": oSettings._iDisplayLength,
+              "iTotal": oSettings.fnRecordsTotal(),
+              "iFilteredTotal": oSettings.fnRecordsDisplay(),
+              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+          };
+      };
+
+      var dari  = $("input[name=inptDari]").val();
+      var sampai = $("input[name=inptSampai]").val();
+
+      console.log(dari);
+
+      var table = $("#tableCountKomisi").DataTable({
+          "dom": 'Zlfrtip',
+          initComplete: function() {
+              var api = this.api();
+              $('#tableCountKomisi_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+              oLanguage: {
+                  "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+                  sProcessing: "loading..."
+              },
+              bInfo: true,
+              bPaginate: true,
+              processing: true,
+              serverSide: true,
+              ajax: {
+                  "url": base_url+"komisi/hitungkomisi",
+                  "type": "POST",
+                  "data": { dari: dari, sampai: sampai },               
+                },
+                columns: [
+                    {"data": "nama_user"},
+                    {"data": "nama_lengkap"},
+                    {
+                        "data": "tgl_transaksi",
+                        defaultContent: '-',
+                        render: function(d){
+                          return moment(d).format("MMM/YYYY");
+                        }
+                      
+                    },
+                    {"data": "lembar"},
+                    {
+                        "data": "komisi",
+                        render: $.fn.dataTable.render.number( '.', ',', 0 ),
+                    },
+                ],
+                rowCallback: function(row, data, iDisplayIndex) {
+                    var info = this.fnPagingInfo();
+                    var page = info.iPage;
+                    var length = info.iLength;
+                    $('td:eq(0)', row).html();
+                }
+
+        });
+    });
 }

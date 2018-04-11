@@ -13,6 +13,7 @@
               <th>Nama Produk</th>
               <th>Singkatan</th>
               <th>Jenis Produk</th>
+              <th>Kode Produk</th>
               <th>Vendor</th>
               <th>Status</th>
               <th width="100">Action</th>

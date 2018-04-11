@@ -21,18 +21,7 @@
                 ?>            
             </select>
         </div>        
-      </div>
-
-      <div class="form-group row" id="bg-jeniskomisi">
-        <label class="col-md-2 col-form-label" for="text-input">Jenis Komisi</label>
-        <div class="col-md-4">
-            <select class="form-control" id="jeniskomisi" name="jeniskomisi" onchange="changekomisi(event);">
-                <option value="">Select</option>
-                <option value="Tingkatan">Tingkatan</option>
-                <option value="Flat">Flat</option>                
-            </select>
-        </div>
-      </div>  
+      </div> 
 
       <div class="form-group row">
         <label class="col-md-2 col-form-label" for="text-input">Status Pinjaman</label>
@@ -59,7 +48,7 @@
         </div>
         <div class="col-md-2">
             <input type="text" id="range_sampai" name="range_sampai" class="form-control" placeholder="Sampai">
-            <span style="font-size:10px;">* Jika tingkatan paling besar dari yang terakhir masukkan tanda '>'</span>
+            <!-- <span style="font-size:10px;">* Jika tingkatan paling besar dari yang terakhir masukkan tanda '>'</span> -->
             <!-- <input type="hidden" id="range_sampai" name="range_sampai" class="form-control"> -->
         </div>
       </div>          

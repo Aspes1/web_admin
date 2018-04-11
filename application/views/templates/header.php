@@ -55,6 +55,9 @@
         <a class="nav-link" href="<?php echo base_url('pinjaman');?>">Pinjaman</a>
       </li>
       <li class="nav-item px-3">
+        <a class="nav-link" href="<?php echo base_url('komisi');?>">Komisi</a>
+      </li>
+      <li class="nav-item px-3">
         <a class="nav-link" href="<?php echo base_url('admin');?>">Admin Users</a>
       </li>
       <li class="nav-item px-3">

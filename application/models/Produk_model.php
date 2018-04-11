@@ -13,7 +13,7 @@ class Produk_model extends CI_Model{
     public function getTabelProduk()
     {
         $this->datatables->select('inm_produk.id as id, nama_lengkap, nama_singkat, inm_jenis_produk.nama_jenis as jenis,
-        inm_vendor.nama_vendor as vendor, inm_status_produk.nama_status as status');
+        inm_vendor.nama_vendor as vendor, inm_status_produk.nama_status as status, inm_produk.kode_produk as kode_produk');
         $this->datatables->from('inm_produk');
         $this->datatables->join('inm_jenis_produk', 'inm_produk.jenis_produk_id=inm_jenis_produk.id');
         $this->datatables->join('inm_vendor', 'inm_produk.vendor_id=inm_vendor.kode_vendor');
@@ -400,7 +400,7 @@ class Produk_model extends CI_Model{
     }
 
     public function get_komisi($id){
-        $this->db->select('a.id, b.nama_lengkap, c.nama_jenis, nama_vendor, a.komisi, a.range_dari, a.range_sampai');
+        $this->db->select('a.id, b.nama_lengkap, c.nama_jenis, nama_vendor, a.komisi, a.range_dari, a.range_sampai, a.jenis_komisi, a.status_pinjaman');
         $this->db->join('inm_produk b', 'a.id_produk = b.id');
         $this->db->join('inm_jenis_produk c', 'b.jenis_produk_id = c.id');
         $this->db->join('inm_vendor d', 'b.vendor_id = d.id');
