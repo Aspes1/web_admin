@@ -81,27 +81,7 @@
           <textarea id="keterangan" name="keterangan" rows="1" class="form-control"><?php echo $product->keterangan; ?></textarea>
         </div>
       </div>
-
-      <div class="form-group row">
-        <label class="col-md-3 col-form-label" for="text-input">Status</label>
-        <div class="col-md-9">
-          <select class="form-control" name="status" id="status">
-            <option value=''>Select</option>
-            <?php
-              foreach($status as $result)
-              {
-                if($result->id == $product->status_id){
-                  echo "<option value='".$result->id."' selected>".$result->nama_status."</option>";
-                }
-                else{
-                  echo "<option value='".$result->id."'>".$result->nama_status."</option>";
-                }
-              }
-            ?>
-          </select>
-        </div>
-      </div>
-
+      
     </div>
     </form>
 

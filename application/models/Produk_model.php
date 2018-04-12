@@ -13,16 +13,17 @@ class Produk_model extends CI_Model{
     public function getTabelProduk()
     {
         $this->datatables->select('inm_produk.id as id, nama_lengkap, nama_singkat, inm_jenis_produk.nama_jenis as jenis,
-        inm_vendor.nama_vendor as vendor, inm_status_produk.nama_status as status, inm_produk.kode_produk as kode_produk');
+        inm_vendor.nama_vendor as vendor, inm_status_produk.nama_status as status, inm_produk.status_id as status_id, inm_produk.kode_produk as kode_produk');
         $this->datatables->from('inm_produk');
         $this->datatables->join('inm_jenis_produk', 'inm_produk.jenis_produk_id=inm_jenis_produk.id');
         $this->datatables->join('inm_vendor', 'inm_produk.vendor_id=inm_vendor.kode_vendor');
         $this->datatables->join('inm_status_produk', 'inm_produk.status_id=inm_status_produk.id');
-        $this->datatables->add_column('view', '<center>
-        <a href="javascript:void(0);" class="editProduk btn btn-warning btn-sm" data-target="#myModal" data-id="$1">Edit</a>
-        <a href="javascript:void(0);" class="hapusProduk btn btn-danger btn-sm" data-id="$1">Hapus</a>
-        </center>','id');
-        $this->datatables->where('inm_produk.status_id', 1);
+        // $this->datatables->add_column('view', '<center>
+        // <a href="javascript:void(0);" class="editProduk btn btn-warning btn-sm" data-target="#myModal" data-id="$1">Edit</a>
+        // <a href="javascript:void(0);" class="hapusProduk btn btn-danger btn-sm" data-id="$1">Hapus</a>
+        // <a href="javascript:void(0);" class="blockProduk btn btn-success btn-sm" data-id="$1">Block</a>
+        // </center>','id');
+        $this->datatables->where('inm_produk.status_id !=', 3);
         return $this->datatables->generate();
     }
 
@@ -92,6 +93,23 @@ class Produk_model extends CI_Model{
     public function delete_produk($id)
     {
         $this->db->set('status_id', 3);
+        $this->db->where('id', $id);
+        $succ = $this->db->update('inm_produk');
+        if($succ){ return true; }
+    }
+
+    public function block_produk($id)
+    {
+        $this->db->set('status_id', 2);
+        $this->db->where('id', $id);
+        $succ = $this->db->update('inm_produk');
+        if($succ){ return true; }
+        else{ return false; }
+    }
+
+    public function aktif_produk($id)
+    {
+        $this->db->set('status_id', 1);
         $this->db->where('id', $id);
         $succ = $this->db->update('inm_produk');
         if($succ){ return true; }

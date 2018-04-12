@@ -724,13 +724,36 @@ var produkList = function() {
           ajax: {"url": base_url+"master/getProdukJson", "type": "POST"},
 
             columns: [
-                  {"data": "nama_lengkap"},
-                  {"data": "nama_singkat"},
-                  {"data": "jenis"},
-                  {"data": "kode_produk"},
-                  {"data": "vendor"},
-                  {"data": "status"},
-                  {"data": "view"}
+                {"data": "kode_produk"},
+                {"data": "nama_lengkap"},
+                {"data": "nama_singkat"},
+                {"data": "jenis"},
+                {"data": "vendor"},
+                {"data": "status"},
+                {
+                    "data": function(data, type, dataToSet)
+                    {
+                        if(data.status_id == 1){
+                            return '<center>' +
+                                        '<a href="javascript:void(0);" data-id="'+data.id+'" class="editProduk btn btn-warning btn-sm">Edit</a>' +
+                                        ' ' +
+                                        '<a href="javascript:void(0);" data-id="'+data.id+'" class="hapusProduk btn btn-danger btn-sm">Hapus</a>' +
+                                        ' ' +
+                                        '<a href="javascript:void(0);" data-id="'+data.id+'" class="blockProduk btn btn-secondary btn-sm">Block</a>' +
+                                    '</center>';
+                        }
+                        if(data.status_id == 2){
+                            return '<center>' +
+                                        '<a href="javascript:void(0);" data-id="'+data.id+'" class="editProduk btn btn-warning btn-sm">Edit</a>' +
+                                        ' ' +
+                                        '<a href="javascript:void(0);" data-id="'+data.id+'" class="hapusProduk btn btn-danger btn-sm">Hapus</a>' +
+                                        ' ' +
+                                        '<a href="javascript:void(0);" data-id="'+data.id+'" class="aktifProduk btn btn-success btn-sm">Aktif</a>' +
+                                    '</center>';
+                        }
+                    }
+                }
+                // {"data": "view"}
             ],
             //order: [[1, 'desc']],
             rowCallback: function(row, data, iDisplayIndex) {
@@ -789,8 +812,79 @@ var produkList = function() {
                     },
                 }
             });
-        });        
+        });
 
+        // block produk
+        $('#tabelProduk').on('click','.blockProduk',function(){
+            var id = $(this).data('id');
+            $.confirm({
+                title: 'Confirm!, Non Aktifkan Produk',
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/block',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Data berhasil di non aktifkan');
+                                      $('#tabelProduk').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Data gagal di non aktifkan');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        }); 
+
+        // block produk
+        $('#tabelProduk').on('click','.aktifProduk',function(){
+            var id = $(this).data('id');
+            $.confirm({
+                title: 'Confirm!, Aktifkan Produk',
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/aktifkan',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Data berhasil di aktifkan');
+                                      $('#tabelProduk').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Data gagal di aktifkan');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        }); 
 }
 
 var mutasiList = function() {
@@ -1904,7 +1998,8 @@ var laporaGriyaPerUser=function(){
                           orderClasses: false,
                           defaultContent: '-',
                           render: function ( data, type, row, meta ) {
-                                  return '<a href="javascript:void(0);" data-nama="'+ data +'" title="Detail"><i class="fa fa-caret-right" aria-hidden="true"></i></a>';
+                                return '<a href="javascript:void(0);" data-nama="'+ data +'" title="Detail">' + 
+                                '<i class="fa fa-caret-right" aria-hidden="true"></i></a>';
                           },
                           className: "details-control"
                       },
