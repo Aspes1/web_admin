@@ -52,34 +52,48 @@ $route['master/update_produk']			= 'Master/UpdateProduk';
 $route['master/delete']					= 'Master/DeleteProduk';
 $route['master/block']					= 'Master/BlockProduk';
 $route['master/aktifkan']				= 'Master/AktifProduk';
+
 $route['master/jenis']               	= 'Master/jenisPage';
 $route['master/tambah_jenis_produk']    = 'Master/AddJeniskPage';
 $route['master/create_jenis_produk']    = 'Master/CreateJenisProduk';
 $route['master/edit_jenis_produk']    	= 'Master/EditJenisPodukModal';
 $route['master/update_jenis_produk']    = 'Master/UpdateJenisProduk';
 $route['master/delete_jenis']    		= 'Master/DeleteJenis';
+
 $route['master/vendor']               	= 'Master/vendorPage';
 $route['master/tambah_vendor']          = 'Master/AddVendorPage';
 $route['master/create_vendor']          = 'Master/CreateVendor';
 $route['master/edit_vendor']          	= 'Master/EditVendorModal';
 $route['master/update_vendor']         	= 'Master/UpdateVendor';
 $route['master/delete_vendor']         	= 'Master/DeleteVendor';
+
 $route['master/biaya']          		= 'Master/BiayaAdminPage';
 $route['master/tambah_biaya']          	= 'Master/AddBiayaAdminPage';
 $route['master/create_biaya_admin']     = 'Master/CreateBiayaAdmin';
 $route['master/edit_biaya']     		= 'Master/EditBiayaAdminModal';
 $route['master/update_biaya_admin']    	= 'Master/UpdateBiaya';
 $route['master/delete_biaya_admin']    	= 'Master/DeleteBiaya';
+
 $route['master/pengumuman']     		= 'Master/pengumumanPage';
 $route['master/tambah_pengumuman']     	= 'Master/AddPengumumanPage';
 $route['master/create_pengumuman']     	= 'Master/CreatePengumuman';
 $route['master/edit_pengumuman']     	= 'Master/EditPengumumanModal';
 $route['master/update_pengumuman']     	= 'Master/UpdatePengumuman';
 $route['master/delete_pengumuman']     	= 'Master/DeletePengumuman';
+
 $route['master/komisi']     	        = 'Master/KomisiPage';
 $route['master/tambah_komisi']     	    = 'Master/addKomisiPage';
 $route['master/create_komisi']     	    = 'Master/CreateKomisi';
 $route['master/edit_komisi']     	    = 'Master/EditKomisiModal';
+
+$route['master/daftar_harga']     	    = 'Master/DaftarHarga';
+$route['master/tambah_daftar_harga']    = 'Master/TambahDaftarHarga';
+$route['master/create_daftar_harga']    = 'Master/CreateDaftarHarga';
+$route['master/edit_harga']             = 'Master/EditHarga';
+$route['master/update_daftar_harga']    = 'Master/UpdateHarga';
+$route['master/delete_harga']           = 'Master/DeleteHarga';
+$route['master/block_harga']            = 'Master/BlockHarga';
+$route['master/aktif_harga']            = 'Master/AktifHarga';
 
 $route['komisi']                = 'Komisi/index';
 $route['komisi/daftar_komisi']  = 'Komisi/DaftarKomisi';

@@ -75,6 +75,7 @@ var master_page = function()
   BiayaAdminList();
   PengumumanList();
   KomisiList();
+  DaftarHarga();
 }
 
 var saldo_table = function()

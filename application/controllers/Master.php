@@ -770,4 +770,122 @@ class Master extends CI_Controller{
             echo json_encode($output);            
         }  
     }
+
+    public function DaftarHarga(){
+        $this->load->view('master/list_daftar_harga');
+    }
+
+    public function getDaftarHargaJson(){
+        //data user by JSON object
+        header('Content-Type: application/json');
+        echo $this->produk_model->getTabelDaftarHarga();
+    }
+
+    public function TambahDaftarHarga(){
+        $data['vendor'] = $this->produk_model->all_vendor();
+        $data['produk'] = $this->produk_model->get_produk_for_daftar_harga();
+        $this->load->view('master/add_daftar_harga', $data);
+    }
+
+    public function CreateDaftarHarga(){
+        $this->form_validation->set_rules('kode_produk', 'Nama Produk', 'required');
+        $this->form_validation->set_rules('harga_vendor', 'Harga Vendor', 'required');
+        $this->form_validation->set_rules('harga_inm', 'Harga INM', 'required');
+        $this->form_validation->set_rules('markup', 'Markup', 'required');
+        if($this->form_validation->run() == FALSE)
+        {
+            $output['title'] = 'error';
+            $output['msg'] = validation_errors();
+            echo json_encode($output);
+        }
+        else{
+            $data = array(
+                'kode_produk' => $this->input->post('kode_produk'),
+                'vendor_id' => $this->input->post('vendor_id'),
+                'harga_vendor' => $this->input->post('harga_vendor'),
+                'harga_jual' => $this->input->post('harga_inm'),
+                'markup' => $this->input->post('markup'),
+                'harga_terakhir' => $this->input->post('harga_vendor'),
+                'tgl_create' => date('Y-m-d h:i:s'),
+                'tgl_update' => date('Y-m-d h:i:s'),
+                'status_id' => 'Aktif',
+                'admin_id' => $this->session->userdata('adminId'),
+            );
+
+            $insert = $this->produk_model->store_daftar_harga($data);
+            if($insert){
+                $output['msg'] = 'success';
+                echo json_encode($output);                    
+            }
+            else{
+                $output['msg'] = 'failed';
+                echo json_encode($output);                    
+            }
+        }
+        
+    }
+
+    public function EditHarga(){
+        $id = $this->input->get('id');
+        $data['harga'] = $this->produk_model->get_daftar_harga($id);
+        $this->load->view('master/modal_edit_harga', $data);        
+    }
+
+    public function UpdateHarga(){
+        $data = array(
+            'harga_vendor' => $this->input->post('harga_vendor'),
+            'harga_jual' => $this->input->post('harga_inm'),
+            'markup' => $this->input->post('markup'),
+        );
+        $update = $this->produk_model->update_daftar_harga($data, $this->input->post('id'));
+        if($update){
+            $output['msg'] = 'success';
+            echo json_encode($output);                    
+        }
+        else{
+            $output['msg'] = 'failed';
+            echo json_encode($output);                    
+        }
+    }
+
+    public function DeleteHarga(){
+        $id = $this->input->post('id');
+        $delete = $this->produk_model->delete_daftar_harga($id);
+        if($delete){
+            $output['msg'] = 'success';
+            echo json_encode($output);                    
+        }
+        else{
+            $output['msg'] = 'failed';
+            echo json_encode($output);                    
+        }
+    }
+
+    public function BlockHarga(){
+        $id = $this->input->post('id');
+        $block = $this->produk_model->block_daftar_harga($id);
+        if($block){
+            $output['msg'] = 'success';
+            echo json_encode($output);                    
+        }
+        else{
+            $output['msg'] = 'failed';
+            echo json_encode($output);                    
+        }
+    }
+
+    public function AktifHarga(){
+        $id = $this->input->post('id');
+        $aktif = $this->produk_model->aktif_daftar_harga($id);
+        if($aktif){
+            $output['msg'] = 'success';
+            echo json_encode($output);                    
+        }
+        else{
+            $output['msg'] = 'failed';
+            echo json_encode($output);                    
+        }
+    }
+    
+
 }

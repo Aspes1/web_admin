@@ -387,7 +387,7 @@ class Produk_model extends CI_Model{
     }
 
     public function get_produk_for_komisi(){
-        $this->db->select('a.id, b.nama_vendor, a.nama_lengkap');
+        $this->db->select('a.id, b.nama_vendor, a.nama_lengkap, a.kode_produk');
         $this->db->join('inm_vendor b', 'a.vendor_id = b.id');
         $this->db->from('inm_produk a');
         return $this->db->get()->result();
@@ -447,5 +447,90 @@ class Produk_model extends CI_Model{
         else{
             return false;
         }  
+    }
+
+    public function getTabelDaftarHarga(){
+        $this->datatables->select('inm_daftar_harga.id as id, inm_produk.kode_produk as kode_produk, inm_produk.nama_lengkap as nama_lengkap,
+        inm_vendor.nama_vendor as nama_vendor, inm_daftar_harga.harga_vendor as harga_vendor, inm_daftar_harga.harga_jual as harga_jual,
+        inm_daftar_harga.harga_terakhir as harga_terakhir, inm_daftar_harga.markup as markup, inm_daftar_harga.tgl_update as tgl_update, 
+        inm_daftar_harga.status_id as status_id ');
+        $this->datatables->from('inm_daftar_harga');
+        $this->datatables->join('inm_produk', 'inm_daftar_harga.kode_produk=inm_produk.kode_produk');
+        $this->datatables->join('inm_vendor', 'inm_daftar_harga.vendor_id=inm_vendor.id');
+        // $this->datatables->where('inm_produk.status_id !=', 3);
+        return $this->datatables->generate();
+    }
+
+    public function get_produk_for_daftar_harga(){
+        $this->db->select('a.id, b.nama_vendor, a.nama_lengkap, a.kode_produk');
+        $this->db->join('inm_vendor b', 'a.vendor_id = b.id');
+        $this->db->from('inm_produk a');
+        $this->db->where_in('a.jenis_produk_id', array('4', '5'));
+        return $this->db->get()->result();
+    }
+
+    public function store_daftar_harga($data){
+        $insert = $this->db->insert('inm_daftar_harga', $data);
+        if($insert){
+            return true;
+        }
+        else{
+            return false;
+        }        
+    }
+
+    public function get_daftar_harga($id){
+        $this->db->select('a.id, b.nama_lengkap, c.nama_vendor, a.harga_vendor, a.harga_jual, a.markup');
+        $this->db->join('inm_produk b', 'a.kode_produk = b.kode_produk');
+        $this->db->join('inm_vendor c', 'a.vendor_id = c.id');
+        $this->db->from('inm_daftar_harga a');
+        $this->db->where('a.id', $id);
+        return $this->db->get()->row();
+    }
+
+    public function update_daftar_harga($data, $id){
+        $this->db->where('id', $id);
+        $update = $this->db->update('inm_daftar_harga', $data);
+        if($update){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function delete_daftar_harga($id){
+        $this->db->where('id', $id);
+        $delete = $this->db->delete('inm_daftar_harga');
+        if($delete){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function block_daftar_harga($id){
+        $this->db->set('status_id', 'Block');
+        $this->db->where('id', $id);
+        $block = $this->db->update('inm_daftar_harga');
+        if($block){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function aktif_daftar_harga($id){
+        $this->db->set('status_id', 'Aktif');
+        $this->db->where('id', $id);
+        $aktif = $this->db->update('inm_daftar_harga');
+        if($aktif){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

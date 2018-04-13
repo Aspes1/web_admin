@@ -57,10 +57,10 @@
               foreach($vendor as $result)
               {
                 if($result->id == $product->vendor_id){
-                  echo "<option value='".$result->id."' selected>".$result->nama_vendor."</option>";
+                  echo "<option value='".$result->id."' selected>".strtoupper($result->nama_vendor)."</option>";
                 }
                 else{
-                  echo "<option value='".$result->id."'>".$result->nama_vendor."</option>";
+                  echo "<option value='".$result->id."'>".strtoupper($result->nama_vendor)."</option>";
                 }
               }
             ?>

@@ -685,8 +685,8 @@ var resetAdminForm = function (event){
 // =========================== open add Produk Menu =========================== //
 $("#add_produk").ready(function() {
   produkList();
-  loadJenisProduk();
-  loadVendor();
+  // loadJenisProduk();
+  // loadVendor();
 });
 
 $("#page_komisi").ready(function(){
@@ -1646,7 +1646,7 @@ var edit_komisi = function(event){
   var formData = new FormData($('#form_edit_komisi')[0]);
   $.confirm({
       title: 'Confirm!',
-      content: 'Update data !!',
+      content: 'Update Harga !!',
       buttons: {
           confirm: function () {
             if(FormKomisi()){
@@ -1718,3 +1718,119 @@ var resetKomisi = function(event){
 //     document.getElementById("range_sampai").value = 1000000;
 //   }
 // }
+
+var submit_harga_produk = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#form_daftar_harga')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Input data !!',
+      buttons: {
+          confirm: function () {
+            if(FormDaftarHarga()){
+              console.log('kosong');
+              $.ajax({
+                  url:base_url+'master/create_daftar_harga',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal disimpan');
+                      }
+                      if(datas.msg == 'success') {
+                        $.alert('Data berhasil disimpan');
+                        clearFormDaftarHarga();
+                      }
+                      if(datas.title == 'error'){
+                        $.alert(datas.msg);
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });    
+}
+
+var edit_harga_produk = function(event){
+  event.preventDefault();
+  var formData = new FormData($('#form_edit_daftar_harga')[0]);
+  $.confirm({
+      title: 'Confirm!',
+      content: 'Update data !!',
+      buttons: {
+          confirm: function () {
+            if(FormDaftarHarga()){
+              console.log('kosong');
+              $.ajax({
+                  url:base_url+'master/update_daftar_harga',
+                  method:'POST',
+                  data:formData,
+                  contentType:false,
+                  processData:false,
+                  dataType:"json",
+                  success:function(datas){
+                      if(datas.msg == 'failed') {
+                        $.alert('Data gagal diupdate');
+                      }
+                      if(datas.msg == 'success') {
+                        $('#myModal').modal('hide')
+                        $.alert('Data berhasil diupdate');
+                        $('#tabelDaftarHarga').DataTable().ajax.reload();
+                      }
+                  }
+              });
+            }
+            else {
+              $.alert('Ada form yang belum diisi');
+            }
+          },
+          cancel: function () {
+          },
+      }
+  });    
+}
+
+var FormDaftarHarga = function(){
+  if($("#kode_produk").val() == "" || 
+    $("#harga_inm").val() == "" || 
+    $("#markup").val() == "" || 
+    $("#vendor_id").val() == "" || 
+    $("#harga_vendor").val() == ""){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+
+var clearFormDaftarHarga = function(){
+  $("#kode_produk").val("");
+  $("#harga_inm").val("");
+  $("#markup").val("");
+  $("#vendor_id").val("");
+  $("#harga_vendor").val("");
+}
+
+var resetDaftarHarga = function(event){
+  event.preventDefault();
+  $.confirm({
+    title: 'Confirm!',
+    content: 'Reset Form ?',
+    buttons: {
+        confirm: function () {
+          clearFormDaftarHarga();
+        },
+        cancel: function () {
+        },
+    }
+  });  
+}

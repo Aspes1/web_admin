@@ -728,7 +728,11 @@ var produkList = function() {
                 {"data": "nama_lengkap"},
                 {"data": "nama_singkat"},
                 {"data": "jenis"},
-                {"data": "vendor"},
+                {
+                    "data": "vendor",
+                    orderClasses: false,
+                    className:"vendor"
+                },
                 {"data": "status"},
                 {
                     "data": function(data, type, dataToSet)
@@ -850,7 +854,7 @@ var produkList = function() {
             });
         }); 
 
-        // block produk
+        // aktifkan produk
         $('#tabelProduk').on('click','.aktifProduk',function(){
             var id = $(this).data('id');
             $.confirm({
@@ -1232,7 +1236,10 @@ var VendorList = function(){
           ajax: {"url": base_url+"master/getVendorJson", "type": "POST"},
 
             columns: [
-                  {"data": "nama_vendor"},
+                  {
+                      "data": "nama_vendor",
+                      className:"vendor"
+                  },
                   {"data": "kode_vendor"},
                   {"data": "view"},
             ],
@@ -2173,7 +2180,7 @@ var KomisiList = function(){
   
     }); 
 
-          // update pengumuman
+          // update komisi
           $('#tabelKomisi').on('click','.editKomisi',function(){
             var id = $(this).data('id');
             $('#myModal').modal('show')
@@ -2297,4 +2304,215 @@ var LaporanKomisi=function(){
 
         });
     });
+}
+
+var DaftarHarga = function() {
+
+    $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+    {
+        return {
+            "iStart": oSettings._iDisplayStart,
+            "iEnd": oSettings.fnDisplayEnd(),
+            "iLength": oSettings._iDisplayLength,
+            "iTotal": oSettings.fnRecordsTotal(),
+            "iFilteredTotal": oSettings.fnRecordsDisplay(),
+            "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+            "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+        };
+    };
+  
+    var table = $("#tabelDaftarHarga").DataTable({
+        "dom": 'Zlfrtip',
+        initComplete: function() {
+            var api = this.api();
+            $('#tabelDaftarHarga_filter input')
+                .off('.DT')
+                .on('input.DT', function() {
+                    api.search(this.value).draw();
+            });
+        },
+            oLanguage: {
+              "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+            sProcessing: "loading..."
+        },
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: {"url": base_url+"master/getDaftarHargaJson", "type": "POST"},
+  
+              columns: [
+                    {"data": "kode_produk"},
+                    {"data": "nama_lengkap"},
+                    {
+                        "data": "nama_vendor",
+                        className:"vendor"
+                    },
+                    {
+                        "data": "harga_vendor",
+                        render: $.fn.dataTable.render.number( '.', ',', 0 ),
+                    },
+                    {
+                        "data": "harga_jual",
+                        render: $.fn.dataTable.render.number( '.', ',', 0 ),
+                    },
+                    {
+                        "data": "markup",
+                        render: $.fn.dataTable.render.number( '.', ',', 0 ),
+                    },
+                    {"data": "tgl_update"},
+                    {
+                        "data": function(data, type, dataToSet)
+                        {
+                            if(data.status_id == 'Aktif'){
+                                return '<center>' +
+                                            '<a href="javascript:void(0);" data-id="'+data.id+'" class="editHarga btn btn-warning btn-sm">Edit</a>' +
+                                            ' ' +
+                                            '<a href="javascript:void(0);" data-id="'+data.id+'" class="hapusHarga btn btn-danger btn-sm">Hapus</a>' +
+                                            ' ' +
+                                            '<a href="javascript:void(0);" data-id="'+data.id+'" class="blockHarga btn btn-secondary btn-sm">Block</a>' +
+                                        '</center>';
+                            }
+                            if(data.status_id == 'Block'){
+                                return '<center>' +
+                                            '<a href="javascript:void(0);" data-id="'+data.id+'" class="editHarga btn btn-warning btn-sm">Edit</a>' +
+                                            ' ' +
+                                            '<a href="javascript:void(0);" data-id="'+data.id+'" class="hapusHarga btn btn-danger btn-sm">Hapus</a>' +
+                                            ' ' +
+                                            '<a href="javascript:void(0);" data-id="'+data.id+'" class="aktifHarga btn btn-success btn-sm">Aktif</a>' +
+                                        '</center>';
+                            }
+                        }
+                    }
+                  // {"data": "view"}
+              ],
+              //order: [[1, 'desc']],
+              rowCallback: function(row, data, iDisplayIndex) {
+                  var info = this.fnPagingInfo();
+                  var page = info.iPage;
+                  var length = info.iLength;
+                  $('td:eq(0)', row).html();
+              }
+  
+    });
+
+        // update produk
+        $('#tabelDaftarHarga').on('click','.editHarga',function(){
+            var id = $(this).data('id');
+            $('#myModal').modal('show')
+            $.ajax({
+              type: 'get',
+              url:base_url+'master/edit_harga?id='+id,
+              success: function(result){
+                $('#result').html(result);
+              }
+            });
+        });    
+
+        //hapus
+        $('#tabelDaftarHarga').on('click','.hapusHarga',function(){
+            var id = $(this).data('id');
+            $.confirm({
+                title: 'Confirm!, Hapus Harga',
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/delete_harga',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Data berhasil dihapus');
+                                      $('#tabelDaftarHarga').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Data gagal dihapus');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        });            
+
+        //block
+        $('#tabelDaftarHarga').on('click','.blockHarga',function(){
+            var id = $(this).data('id');
+            $.confirm({
+                title: 'Confirm!, Block Harga',
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/block_harga',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Harga berhasil diblock');
+                                      $('#tabelDaftarHarga').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Harga gagal diblock');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        });
+
+        //aktif
+        $('#tabelDaftarHarga').on('click','.aktifHarga',function(){
+            var id = $(this).data('id');
+            $.confirm({
+                title: 'Confirm!, Aktif Harga',
+                buttons: {
+                    confirm: {
+                        text: 'Confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            if(id){
+                              $.ajax({
+                                  type:'POST',
+                                  url:base_url+'master/aktif_harga',
+                                  data:'id='+id,
+                                  dataType:"json",
+                                  success:function(datas){
+                                    if(datas.msg == 'success'){
+                                      $.alert('Harga berhasil diaktifkan');
+                                      $('#tabelDaftarHarga').DataTable().ajax.reload();
+                                    }
+                                    if(datas.msg == 'failed'){
+                                      $.alert('Harga gagal diaktifkan');
+                                    }
+                                  }
+                              });
+                            }
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        });
 }

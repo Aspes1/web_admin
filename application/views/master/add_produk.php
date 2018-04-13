@@ -21,7 +21,7 @@
             <?php
               foreach($vendor as $result)
               {
-                echo "<option value='".$result->id."'>".$result->nama_vendor."</option>";
+                echo "<option value='".$result->id."'>".strtoupper($result->nama_vendor)."</option>";
               }
             ?>
           </select>

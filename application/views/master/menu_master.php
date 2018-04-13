@@ -4,6 +4,9 @@
       <a href="javascript:getPageMaster('produk')" class="nav-link active">Produk</a>
     </li>
     <li class="nav-item">
+      <a href="javascript:getPageMaster('daftar_harga')" class="nav-link">Daftar Harga Produk</a>
+    </li>
+    <li class="nav-item">
       <a href="javascript:getPageMaster('jenis')" class="nav-link">Jenis Produk</a>
     </li>
     <li class="nav-item">

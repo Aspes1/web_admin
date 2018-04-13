@@ -64,6 +64,8 @@
   }
   body{
     background-color: #ffffff;
+    /* text-transform: uppercase;
+    font-size: 13px; */
   }
 
   .lf-rg-5px{
@@ -94,4 +96,8 @@
 
   .menu-griya > .griya.active {
     color: red;
+  }
+
+  #tabelProduk td.vendor, #tabelDaftarHarga td.vendor, #tabelVendor td.vendor {
+    text-transform: uppercase;
   }
