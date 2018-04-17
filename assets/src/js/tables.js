@@ -722,10 +722,13 @@ var produkList = function() {
           serverSide: true,
           destroy: true,
           ajax: {"url": base_url+"master/getProdukJson", "type": "POST"},
-
+          "order": [[ 1, "asc" ]],
             columns: [
                 {"data": "kode_produk"},
-                {"data": "nama_lengkap"},
+                {
+                    "data": "nama_lengkap",
+                    className:"vendor"
+                },
                 {"data": "nama_singkat"},
                 {"data": "jenis"},
                 {
@@ -2339,14 +2342,20 @@ var DaftarHarga = function() {
             serverSide: true,
             destroy: true,
             ajax: {"url": base_url+"master/getDaftarHargaJson", "type": "POST"},
+            "order": [[ 1, "asc" ]],
   
               columns: [
                     {"data": "kode_produk"},
-                    {"data": "nama_lengkap"},
+                    {
+                        "data": "nama_lengkap",
+
+                    },
                     {
                         "data": "nama_vendor",
                         className:"vendor"
                     },
+                    {"data": "kode_produk_vendor"},
+                    {"data": "nominal_pulsa"},
                     {
                         "data": "harga_vendor",
                         render: $.fn.dataTable.render.number( '.', ',', 0 ),
@@ -2368,8 +2377,10 @@ var DaftarHarga = function() {
                                             '<a href="javascript:void(0);" data-id="'+data.id+'" class="editHarga btn btn-warning btn-sm">Edit</a>' +
                                             ' ' +
                                             '<a href="javascript:void(0);" data-id="'+data.id+'" class="hapusHarga btn btn-danger btn-sm">Hapus</a>' +
+                                            // ' ' +
+                                            // '<a href="javascript:void(0);" data-id="'+data.id+'" class="blockHarga btn btn-secondary btn-sm">Block</a>' +
                                             ' ' +
-                                            '<a href="javascript:void(0);" data-id="'+data.id+'" class="blockHarga btn btn-secondary btn-sm">Block</a>' +
+                                            '<a href="javascript:void(0);" data-kode="'+data.kode_produk_vendor+'" class="upgradeHarga btn btn-success btn-sm">Update Harga</a>' +
                                         '</center>';
                             }
                             if(data.status_id == 'Block'){
@@ -2377,8 +2388,10 @@ var DaftarHarga = function() {
                                             '<a href="javascript:void(0);" data-id="'+data.id+'" class="editHarga btn btn-warning btn-sm">Edit</a>' +
                                             ' ' +
                                             '<a href="javascript:void(0);" data-id="'+data.id+'" class="hapusHarga btn btn-danger btn-sm">Hapus</a>' +
+                                            // ' ' +
+                                            // '<a href="javascript:void(0);" data-id="'+data.id+'" class="aktifHarga btn btn-success btn-sm">Aktif</a>' +
                                             ' ' +
-                                            '<a href="javascript:void(0);" data-id="'+data.id+'" class="aktifHarga btn btn-success btn-sm">Aktif</a>' +
+                                            '<a href="javascript:void(0);" data-kode="'+data.kode_produk_vendor+'" class="upgradeHarga btn btn-success btn-sm">Update Harga</a>' +
                                         '</center>';
                             }
                         }
@@ -2515,4 +2528,41 @@ var DaftarHarga = function() {
                 }
             });
         });
+
+        //upgrade harga
+        $('#tabelDaftarHarga').on('click','.upgradeHarga',function(){
+            var kode = $(this).data('kode');
+            $.alert(kode);
+            // $.confirm({
+            //     title: 'Confirm!, Aktif Harga',
+            //     buttons: {
+            //         confirm: {
+            //             text: 'Confirm',
+            //             btnClass: 'btn-blue',
+            //             keys: ['enter', 'shift'],
+            //             action: function(){
+            //                 if(id){
+            //                   $.ajax({
+            //                       type:'POST',
+            //                       url:base_url+'master/aktif_harga',
+            //                       data:'id='+id,
+            //                       dataType:"json",
+            //                       success:function(datas){
+            //                         if(datas.msg == 'success'){
+            //                           $.alert('Harga berhasil diaktifkan');
+            //                           $('#tabelDaftarHarga').DataTable().ajax.reload();
+            //                         }
+            //                         if(datas.msg == 'failed'){
+            //                           $.alert('Harga gagal diaktifkan');
+            //                         }
+            //                       }
+            //                   });
+            //                 }
+            //             }
+            //         },
+            //         cancel: function () {
+            //         },
+            //     }
+            // });
+        });        
 }

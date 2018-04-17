@@ -10,12 +10,12 @@
         <table id="tabelProduk" class="table-striped table-sm table table-bordered table-condensed table-hover " cellspacing="0" width="100%">
             <thead style="background-color:#bfe7bf">
               <tr>
-                <th>Kode Produk</th>
-                <th>Nama Produk</th>
-                <th>Singkatan</th>
-                <th>Jenis Produk</th>
-                <th>Vendor</th>
-                <th>Status</th>
+                <th width="100">Kode Produk</th>
+                <th >Nama Produk</th>
+                <th width="90">Singkatan</th>
+                <th width="100">Jenis Produk</th>
+                <th width="80">Vendor</th>
+                <th width="70">Status</th>
                 <th width="150" style="text-align:center">Action</th>
               </tr>
             </thead>

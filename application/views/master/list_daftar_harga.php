@@ -13,11 +13,13 @@
                     <th>Kode Produk</th>
                     <th>Nama Produk</th>
                     <th>Vendor</th>
+                    <th>Kode Produk Vendor</th>
+                    <th>Nominal</th>
                     <th>Harga Vendor</th>
-                    <th>Harga INM</th>
-                    <th>Markup</th>
+                    <th>Harga Jual</th>
+                    <th>Profit</th>
                     <th>Tanggal Update</th>
-                    <th width="150" style="text-align:center">Action</th>
+                    <th width="180" style="text-align:center">Action</th>
                 </tr>
                 </thead>
             </table>

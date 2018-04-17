@@ -143,7 +143,7 @@ class Master extends CI_Controller{
                 'kode_produk' => $this->input->post('kd_produk'),
                 'kode_produk_vendor' => $this->input->post('kd_vendor'),
                 'keterangan' => $this->input->post('keterangan'),
-                'status_id' => $this->input->post('status'),
+                // 'status_id' => $this->input->post('status'),
             );
 
                 $insert = $this->produk_model->update_produk($data, $this->input->post('idproduk'));
@@ -336,7 +336,7 @@ class Master extends CI_Controller{
         else
         {
             $data = array(
-                'nama_vendor' => $this->input->post('nama_vendor'),
+                'nama_vendor' => strtolower($this->input->post('nama_vendor')),
                 'kode_vendor' => $this->input->post('kode_vendor'),
             );
             
@@ -802,6 +802,7 @@ class Master extends CI_Controller{
             $data = array(
                 'kode_produk' => $this->input->post('kode_produk'),
                 'vendor_id' => $this->input->post('vendor_id'),
+                'nominal' => $this->input->post('nominal'),
                 'harga_vendor' => $this->input->post('harga_vendor'),
                 'harga_jual' => $this->input->post('harga_inm'),
                 'markup' => $this->input->post('markup'),
@@ -833,9 +834,12 @@ class Master extends CI_Controller{
 
     public function UpdateHarga(){
         $data = array(
+            'nominal' => $this->input->post('nominal'),
             'harga_vendor' => $this->input->post('harga_vendor'),
             'harga_jual' => $this->input->post('harga_inm'),
             'markup' => $this->input->post('markup'),
+            'tgl_update' => date('Y-m-d h:i:s'),
+            'admin_id' => $this->session->userdata('adminId'),
         );
         $update = $this->produk_model->update_daftar_harga($data, $this->input->post('id'));
         if($update){

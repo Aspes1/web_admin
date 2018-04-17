@@ -1800,11 +1800,8 @@ var edit_harga_produk = function(event){
 }
 
 var FormDaftarHarga = function(){
-  if($("#kode_produk").val() == "" || 
-    $("#harga_inm").val() == "" || 
-    $("#markup").val() == "" || 
-    $("#vendor_id").val() == "" || 
-    $("#harga_vendor").val() == ""){
+  if($("#kode_produk").val() == "" || $("#harga_inm").val() == "" || $("#markup").val() == "" || $("#vendor_id").val() == "" || 
+    $("#harga_vendor").val() == "" || $("#nominal").val() == ""){
     return false;
   }
   else{
@@ -1818,6 +1815,7 @@ var clearFormDaftarHarga = function(){
   $("#markup").val("");
   $("#vendor_id").val("");
   $("#harga_vendor").val("");
+  $("#nominal").val("");
 }
 
 var resetDaftarHarga = function(event){
@@ -1833,4 +1831,26 @@ var resetDaftarHarga = function(event){
         },
     }
   });  
+}
+
+var profitfunction = function (){
+  var hargabeli = $("#harga_vendor").val();
+  var profit = $("#markup").val();
+  var hargajual = parseInt(hargabeli) + parseInt(profit);
+  if(isNaN(hargabeli)){
+    hargabeli = 0.0;
+  }
+  if(isNaN(profit)){
+    profit = 0.0;
+  }
+  if(isNaN(hargajual)){
+    hargajual = 0.0;
+  }
+  if(profit == ""){
+    $("#harga_inm").val(hargabeli);  
+  }
+  else{
+    // document.getElementById("harga_inm").value = hargajual;
+    $("#harga_inm").val(hargajual);
+  }
 }

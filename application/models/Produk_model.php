@@ -453,11 +453,12 @@ class Produk_model extends CI_Model{
         $this->datatables->select('inm_daftar_harga.id as id, inm_produk.kode_produk as kode_produk, inm_produk.nama_lengkap as nama_lengkap,
         inm_vendor.nama_vendor as nama_vendor, inm_daftar_harga.harga_vendor as harga_vendor, inm_daftar_harga.harga_jual as harga_jual,
         inm_daftar_harga.harga_terakhir as harga_terakhir, inm_daftar_harga.markup as markup, inm_daftar_harga.tgl_update as tgl_update, 
-        inm_daftar_harga.status_id as status_id ');
+        inm_daftar_harga.status_id as status_id, inm_produk.kode_produk_vendor as kode_produk_vendor, inm_daftar_harga.nominal as nominal_pulsa');
         $this->datatables->from('inm_daftar_harga');
         $this->datatables->join('inm_produk', 'inm_daftar_harga.kode_produk=inm_produk.kode_produk');
         $this->datatables->join('inm_vendor', 'inm_daftar_harga.vendor_id=inm_vendor.id');
         // $this->datatables->where('inm_produk.status_id !=', 3);
+        // $this->datatables->order_by('inm_produk.nama_lengkap');
         return $this->datatables->generate();
     }
 
@@ -480,7 +481,7 @@ class Produk_model extends CI_Model{
     }
 
     public function get_daftar_harga($id){
-        $this->db->select('a.id, b.nama_lengkap, c.nama_vendor, a.harga_vendor, a.harga_jual, a.markup');
+        $this->db->select('a.id, b.nama_lengkap, c.nama_vendor, a.harga_vendor, a.harga_jual, a.markup, a.nominal');
         $this->db->join('inm_produk b', 'a.kode_produk = b.kode_produk');
         $this->db->join('inm_vendor c', 'a.vendor_id = c.id');
         $this->db->from('inm_daftar_harga a');

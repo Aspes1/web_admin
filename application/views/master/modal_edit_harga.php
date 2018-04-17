@@ -13,29 +13,35 @@
                         <input type="text" value="<?php echo $harga->nama_lengkap; ?>" class="form-control" readonly>
                     </div>
 
-                    <label class="col-md-2 col-form-label" for="text-input">Harga INM</label>
-                    <div class="col-md-4">
-                        <input type="text" name="harga_inm" id="harga_inm" value="<?php echo $harga->harga_jual; ?>" class="form-control">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-2 col-form-label" for="text-input" class="form-control">Nama Vendor</label>
-                    <div class="col-md-4">
-                        <input type="text" value="<?php echo strtoupper($harga->nama_vendor); ?>" class="form-control" readonly>
-                    </div>
-
-                    <label class="col-md-2 col-form-label" for="text-input">Markup</label>
-                    <div class="col-md-4">
-                        <input type="text" name="markup" id="markup" value="<?php echo $harga->markup; ?>" class="form-control">
-                    </div>
-                </div>             
-
-                <div class="form-group row">
                     <label class="col-md-2 col-form-label" for="text-input">Harga Vendor</label>
                     <div class="col-md-4">
                         <input type="text" name="harga_vendor" id="harga_vendor" value="<?php echo $harga->harga_vendor; ?>" class="form-control">
                     </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label" for="text-input" class="form-control">Vendor</label>
+                    <div class="col-md-4">
+                        <input type="text" value="<?php echo strtoupper($harga->nama_vendor); ?>" class="form-control" readonly>
+                    </div>
+
+                    <label class="col-md-2 col-form-label" for="text-input">Profit</label>
+                    <div class="col-md-4">
+                        <input type="text" name="markup" id="markup" value="<?php echo $harga->markup; ?>" class="form-control" onkeyup="profitfunction()">
+                    </div>
+                </div>             
+
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label" for="text-input">Nominal</label>
+                    <div class="col-md-4">
+                        <input type="text" name="nominal" id="nominal" value="<?php echo $harga->nominal; ?>" class="form-control">
+                    </div>
+
+                    <label class="col-md-2 col-form-label" for="text-input">Harga Jual</label>
+                    <div class="col-md-4">
+                        <input type="text" name="harga_inm" id="harga_inm" value="<?php echo $harga->harga_jual; ?>" class="form-control">
+                    </div>                              
                 </div>
 
                 <!-- <div class="form-group row">
@@ -50,7 +56,7 @@
                     <div class="col-md-5">
                         <input type="text" name="markup" id="markup" value="<?php echo $harga->markup; ?>" class="form-control">
                     </div>
-                </div>                 -->
+                </div> -->
 
             </div>
         </form>
