@@ -13,6 +13,7 @@ class Laporan extends CI_Controller{
     ini_set('max_execution_time', 86400);
     $this->load->library('datatables');
     $this->load->model('laporan_model');
+    date_default_timezone_set('Asia/Jakarta');
     if($this->session->userdata('isLog') == FALSE)
     {
         $this->session->set_flashdata('need_login','Anda harus login terlebih dahulu.');
@@ -276,7 +277,7 @@ class Laporan extends CI_Controller{
           $exists = $filesystem->has('backups/'.$file_name);
           // print_r($exists);
 
-          // unlink('./uploads/csv_griya/'.$file_name);
+          unlink('./uploads/csv_griya/'.$file_name);
 
           $daritgl_ = substr($file_name, 53, 8);
           $sampaitgl_ = substr($file_name, 62, 8);
@@ -441,7 +442,290 @@ class Laporan extends CI_Controller{
           echo json_encode($output);
 
           unlink('./uploads/csv_griya/'.$file_name);
-          
+         
       }
+  }
+
+  public function TransaksiBukopin(){
+    // $data['produkbukopin'] = $this->laporan_model->get_name_product_bukopin();
+    $datas['contents'] = 'laporan/transaksi_bukopin_per_tanggal';
+    $this->load->view('laporan/page_transaksi_bukopin', $datas);
+  }
+
+  public function LoadTrxPertglBukopin(){
+    $dari_   = $this->input->post('dari');
+    $sampai_ = $this->input->post('sampai');
+
+    if(($dari_==null||$dari_=='') && ($sampai_==null || $sampai_=='')){
+      $dari_ = date('Y-m-d');
+      $sampai_ = date('Y-m-d');
+    }
+
+    $output = array('data' => $this->laporan_model->get_trx_per_tgl_bukopin($dari_, $sampai_)->result());
+    echo json_encode($output);
+  }
+
+  public function LoadTrxPerUserBukopin(){
+    $dari_   = $this->input->post('dari');
+    $sampai_ = $this->input->post('sampai');
+
+    if(($dari_==null||$dari_=='') && ($sampai_==null || $sampai_=='')){
+      $dari_ = date('Y-m-d');
+      $sampai_ = date('Y-m-d');
+    }
+
+    $output = array('data' => $this->laporan_model->get_trx_per_user_bukopin($dari_, $sampai_)->result());
+    echo json_encode($output);
+  }
+
+  public function DetailTrxLoketBukopin(){
+    $dari_   = $this->input->post('dari');
+    $sampai_ = $this->input->post('sampai');
+    $loket = $this->input->post('nama', TRUE);
+
+        $data = $this->laporan_model->get_detail_trx_loket_bukopin($loket,$dari_, $sampai_);
+        $names = $this->laporan_model->get_nama_produk();
+        $output["tablenya"] =
+          "<table cellpadding='5' cellspacing='0' style='background-color:#f8f8f8'>
+            <tr style='background-color:#bfe7bf'>
+              <th width='180'>Tgl. Transaksi</th>
+              <th width='400'>Produk</th>
+              <th width='150'>No. Pelanggan</th>
+              <th width='50'>Lembar</th>
+              <th width='100' class='text-right'>Biaya Admin</th>
+              <th width='100' class='text-right'>Tigihan</th>
+              <th width='100' class='text-right'>Total</th>
+            </tr>";
+            foreach($data as $row){
+              $output['tablenya'] .= "
+                <tr>
+                  <td>".$row->tgl_transaksi."</td>
+                  <td>".$row->nama_produk."</td>
+                  <td>".$row->no_pelanggan."</td>
+                  <td>".$row->lembar."</td>
+                  <td align='right'>".number_format($row->biaya_admin, 0, ",", ".")."</td>
+                  <td align='right'>".number_format($row->nilai, 0, ",", ".")."</td>
+                  <td align='right'>".number_format($row->total, 0, ",", ".")."</td>
+                </tr>";
+            }
+            $output['tablenya'] .= "</table>";
+
+        echo json_encode($output);
+  }
+
+  public function TransaksiPerTglBukopin(){
+    $data['contents'] = 'laporan/transaksi_bukopin_per_tanggal';
+    $this->load->view('laporan/page_transaksi_bukopin', $data);
+  }
+
+  public function TransaksiPerUserBukopin(){
+    $data['contents'] = 'laporan/transaksi_bukopin_per_user';
+    $this->load->view('laporan/page_transaksi_bukopin', $data);
+  }
+
+  public function ImportFile(){
+    $data['contents'] = 'laporan/import_data_bukopin';
+    $this->load->view('laporan/page_transaksi_bukopin', $data);
+  }
+
+  public function upload_file_bukopin(){
+    $this->load->helper("file");
+    $config['upload_path']          = './uploads/bukopin/';
+    $config['allowed_types']        = 'xlsx|xls';
+    $config['max_size']             = 1000;
+    $new_name                       = time().$_FILES["userfile"]['name'];
+    $config['file_name']            = $new_name;
+
+    $this->load->library('upload', $config);
+
+      if (!$this->upload->do_upload('userfile'))
+      {
+          $error = $this->upload->display_errors();
+          $output['title'] = 'failed';
+          $output['msg'] = $error;
+          echo json_encode($output);
+      }
+
+      else{
+          $upload_data = $this->upload->data();
+          $file_name = $upload_data['file_name'];
+          $path = './uploads/bukopin/';
+          $file = $path.''.$file_name;
+
+          $storageClient = new StorageClient([
+            'projectId'   => 'ascendant-volt-161906',
+            'keyFilePath' => APPPATH. '/libraries/json_key.json',
+          ]);
+        
+          $bucket     = $storageClient->bucket('payinm_db');
+    
+          $adapter    = new GoogleStorageAdapter($storageClient, $bucket);
+          $filesystem = new Filesystem($adapter);
+              
+          $stream = fopen($file, 'r+'); 
+          $filesystem->writeStream('backups/'.$file_name, $stream);
+
+          $exists = $filesystem->has('backups/'.$file_name);
+          // print_r($exists);
+          
+          $this->load->library('Excel_reader');
+
+          //tentukan file
+          $this->excel_reader->setOutputEncoding('230787');
+          // $file = $upload_data['full_path'];
+          $this->excel_reader->read($file);
+          error_reporting(E_ALL ^ E_NOTICE);
+
+          // array data
+          $data = $this->excel_reader->sheets[0];
+
+          $cTable = $this->getRecordColumnTitle($data['cells'][6]);
+          $rdTable = $this->setDataRowExcel($data['cells']);
+          $mydata = $this->ExploreExcel($rdTable, $cTable);
+
+          $tgl_laporan = $data['cells'][3][6];
+          $findtgl = $this->splitFormatDueDate($data['cells'][3][6]);
+          $databukopin = $this->laporan_model->cek_data_bukopin($findtgl);
+          if($databukopin->num_rows() > 0){
+            $output['title'] = 'failed';
+            $output['msg'] = 'File sudah diupload';
+          }
+          else{
+            foreach ($mydata as $k => $v) 
+            {
+                $tmp_data = array();
+                $loket = $k;
+                for ($i=0; $i < count($v); $i++) { 
+                    array_push($tmp_data, $this->setDataInsert($loket, $v[$i], $tgl_laporan));
+                }
+                // echo "<br>";
+                // echo "<pre>";
+                // print_r($tmp_data);
+                // echo "</pre>";
+                $insert = $this->laporan_model->insert_laporan_bukopin($tmp_data);
+            }
+            if($insert){
+              $output['title'] = 'success';
+              $output['msg'] = 'Sukses upload file';  
+            }
+            else{
+              $output['title'] = 'fail';
+              $output['msg'] = 'Gagal upload file';
+            }
+          }
+      }
+      echo json_encode($output);
+      unlink('./uploads/bukopin/'.$file_name);
+  }
+
+  protected function convertStrDateTime($s){
+    $s = str_replace('/','-',$s);
+    return date('Y-m-d', strtotime($s));
+  }
+
+  private function splitFormatDueDate($format)
+  {
+      $s = explode('-', $format);
+      return array(
+        'from_date' => $this->convertStrDateTime(trim($s[0])),
+        "to_date"   => $this->convertStrDateTime(trim($s[1]))
+      );
+  }
+
+  private function setDataInsert($loket, $data, $tgllap)
+  {
+      $tgllap = $this->splitFormatDueDate($tgllap);
+
+      $data = array(
+          "loket"         => $loket,
+          "nama_produk"   => $data['JENIS_TRANSAKSI'],
+          "no_pelanggan"  => $data['NO_PELANGGAN'],
+          "lembar"        => 1,
+          "harga_modal"   => $data['HARGA_MODAL'],
+          "biaya_admin"   => $data['BIAYA_ADMIN'],
+          "nilai"         => $data['NILAI'],
+          "total"         => $data['TOTAL'],
+          "tgl_transaksi" => date_format(date_create($data['TGL_JAM']), 'Y-m-d H:i:s'),
+          "tgl_dari"      => $tgllap['from_date'],
+          "tgl_sampai"    => $tgllap['to_date']
+      );
+      return $data;
+  }
+
+  private function setDataRowExcel($data)
+  {
+      $tmp = array();
+      $i=0;
+      foreach ($data as $k => $v) 
+      {
+          if($k >= 7){
+            $tmp[$i] = $v;
+            $i++;
+          }
+      }
+      return $tmp;
+  }
+
+  private function getRecordColumnTitle($data)
+  {
+      $column = array();
+      foreach ($data as $v) 
+      {
+          $split = explode(" ", $v);
+          $combine = implode("_", $split);
+          array_push($column, $combine);
+      }
+      return $column;
+  }
+
+  private function splitName($name){
+      return trim(explode(":", $name)[1]);
+  }
+
+  private function getDefaultArray($d)
+  {
+      $t = array();
+      for ($i=0; $i < count($d); $i++) 
+      { 
+          if(count($d[$i]) == 1 && strpos($d[$i][1], 'LOKET') !== false)
+              $t[$this->splitName($d[$i][1])] = array();
+      }
+      return $t;
+  }
+
+  public function ExploreExcel($data, $column)
+  {
+      $tmp = $this->getDefaultArray($data);
+      $logname = '';
+
+      //forlop
+      for ($i=0; $i < count($data); $i++) 
+      { 
+          if(strpos($data[$i][1], 'LOKET') !== false)
+          {
+              $logname = $this->splitName($data[$i][1]);
+              continue;
+          }
+          else if(strpos($data[$i][1], 'SUB TOTAL') !== false)
+          {
+              continue;
+          }
+          else if(strpos($data[$i][1], 'GRAND TOTAL') !== false){
+              continue;
+          }
+          else
+          {
+              $tmp[$logname][] = array(
+                  $column[0] => $data[$i][1],
+                  $column[1] => $data[$i][2],
+                  $column[2] => $data[$i][3],
+                  $column[3] => $data[$i][4],
+                  $column[4] => $data[$i][5],
+                  $column[5] => $data[$i][6],
+                  $column[6] => $data[$i][7]
+              );	
+          }
+      }
+      return $tmp;
   }
 }

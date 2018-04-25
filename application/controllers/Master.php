@@ -891,5 +891,7 @@ class Master extends CI_Controller{
         }
     }
     
-
+    public function AddProdukIRS(){
+        $this->load->view('master/add_produk_irs');
+    }
 }

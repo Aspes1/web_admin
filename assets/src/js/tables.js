@@ -39,6 +39,10 @@ var formatgriya = function (d) {
     return '<div>'+d.tablenya+'</div>';
 }
 
+var detail_bukopin = function (d){
+    return '<div>'+d.tablenya+'</div>';
+}
+
 var inputMutasi = function (id) {
     var text = '<form method="post" id="rekon_mutasi" enctype="multipart/form-data" class="form-horizontal">';
     text += '<div class="row"><div class="col-md-8">';
@@ -1872,7 +1876,7 @@ var laporaGriyaPerTgl=function(){
                   sProcessing: "loading..."
               },
               bInfo: false,
-              bPaginate: true,
+              bPaginate: false,
               processing: true,
               serverSide: true,
               ajax: {
@@ -1993,7 +1997,7 @@ var laporaGriyaPerUser=function(){
                   sProcessing: "loading..."
               },
               bInfo: false,
-              bPaginate: true,
+              bPaginate: false,
               processing: true,
               serverSide: true,
               ajax: {
@@ -2565,4 +2569,469 @@ var DaftarHarga = function() {
             //     }
             // });
         });        
+}
+
+var TablePerTglBukopin = function(){
+    if ($.fn.DataTable.isDataTable('#tabelTransaksiPerTglBukopin')) {
+        $('#tabelTransaksiPerTglBukopin').DataTable().destroy();
+    }
+
+    $(document).ready(function(){
+        // Setup datatables
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+      {
+          return {
+              "iStart": oSettings._iDisplayStart,
+              "iEnd": oSettings.fnDisplayEnd(),
+              "iLength": oSettings._iDisplayLength,
+              "iTotal": oSettings.fnRecordsTotal(),
+              "iFilteredTotal": oSettings.fnRecordsDisplay(),
+              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+          };
+      };
+      var dari  = $("input[name=fromT]").val();
+      var sampai= $("input[name=toT]").val();
+
+      console.log(dari);
+
+      var tablePeriode = $("#tabelTransaksiPerTglBukopin").DataTable({
+          "dom": 'Zlfrtip',
+          initComplete: function() {
+              var api = this.api();
+              $('#tabelTransaksiPerTglBukopin_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+              oLanguage: {
+                  "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+                  sProcessing: "loading..."
+              },
+              bInfo: false,
+              bPaginate: false,
+              processing: true,
+              serverSide: true,
+              scrollX: true,
+              ajax: {
+                  "url": base_url+"laporan/load_trx_per_tgl_bukopin",
+                  "type": "POST",
+                  "data": { dari: dari, sampai: sampai },
+                },
+                columns: [
+                    {
+                        "data": function(data, type, dataToSet) {
+                            return data.tgl_dari + " - " + data.tgl_sampai;
+                        },
+                        defaultContent: '-'
+                    },
+                    {
+                        "data": "lembar_BPJS_Kesehatan",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_BPJS_Kesehatan",
+                        defaultContent: '-',
+                        className: "sum",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                    },
+                    {
+                        "data": "lembar_PDAM_TIRTAULI_PEMATANGSIANTAR",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PDAM_TIRTAULI_PEMATANGSIANTAR",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PDAM_TIRTA_UMBU",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PDAM_TIRTA_UMBU",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PDAM_TIRTANADI",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PDAM_TIRTANADI",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PDAM_TIRTA_BULIAN",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PDAM_TIRTA_BULIAN",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PLN_Non_Taglis",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PLN_Non_Taglis",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PLN_Postpaid",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PLN_Postpaid",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_Pulsa_Listrik",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_Pulsa_Listrik",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_Telkom",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_Telkom",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_V_Pulsa_Telkomsel",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_V_Pulsa_Telkomsel",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+
+                ],
+                "footerCallback": function(row, data, start, end, display) {
+                    // console.log('in footerCallback');
+                    // var api = this.api(),;
+
+                    var api = this.api(),
+                    intVal = function (i) {
+                      return typeof i === 'string' ?
+                        i.replace(/[. Rp]|(\.\d{2})/g, "") * 1 :
+                        typeof i === 'number' ?
+                          i : 0;
+                    };
+
+
+                  api.columns('.sum', { page: 'current' }).every(function () {
+                    var sum = api
+                        .cells( null, this.index(), { page: 'current'} )
+                        .render('display')
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                          }, 0);
+                    // console.log(this.index() +' '+ sum); //alert(sum);
+                    var numFormat = $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ).display;
+
+                    if(this.index()==2||this.index()==4||this.index()==6||this.index()==8||this.index()==10
+                    ||this.index()==12||this.index()==14||this.index()==16||this.index()==18||this.index()==20){
+                        $(this.footer()).html(numFormat(sum));
+                    }else{
+                        $(this.footer()).html(sum);
+                    }
+                });
+
+                }
+                // rowCallback: function(row, data, iDisplayIndex) {
+                //     var info = this.fnPagingInfo();
+                //     var page = info.iPage;
+                //     var length = info.iLength;
+                //     $('td:eq(0)', row).html();
+                // }
+
+      });
+
+    });
+}
+
+var TablePerUserBukopin = function(){
+    if ($.fn.DataTable.isDataTable('#tabelTransaksiPerUserBukopin')) {
+        $('#tabelTransaksiPerUserBukopin').DataTable().destroy();
+    }
+
+    $(document).ready(function(){
+        // Setup datatables
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+      {
+          return {
+              "iStart": oSettings._iDisplayStart,
+              "iEnd": oSettings.fnDisplayEnd(),
+              "iLength": oSettings._iDisplayLength,
+              "iTotal": oSettings.fnRecordsTotal(),
+              "iFilteredTotal": oSettings.fnRecordsDisplay(),
+              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+          };
+      };
+      var dari  = $("input[name=fromT]").val();
+      var sampai= $("input[name=toT]").val();
+
+      console.log(dari);
+
+      var tablePeriode = $("#tabelTransaksiPerUserBukopin").DataTable({
+          "dom": 'Zlfrtip',
+          initComplete: function() {
+              var api = this.api();
+              $('#tabelTransaksiPerUserBukopin_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+              oLanguage: {
+                  "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+                  sProcessing: "loading..."
+              },
+              bInfo: false,
+              bPaginate: false,
+              processing: true,
+              serverSide: true,
+              scrollX: true,
+              ajax: {
+                  "url": base_url+"laporan/load_trx_per_user_bukopin",
+                  "type": "POST",
+                  "data": { dari: dari, sampai: sampai },
+                },
+                columns: [
+                    {
+                        data: "loket",
+                        defaultContent: '-',
+                        render: function ( data, type, row, meta ) {
+                              return '<a href="javascript:void(0);" data-loket="'+ data +'" title="Detail">' + 
+                              '<i class="fa fa-caret-right" aria-hidden="true"></i></a>';
+                        },
+                        className: "details-control"
+                    },
+                    {
+                        "data": "loket",
+                        defaultContent: '-'
+                    },
+                    {
+                        "data": "lembar_BPJS_Kesehatan",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_BPJS_Kesehatan",
+                        defaultContent: '-',
+                        className: "sum",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                    },
+                    {
+                        "data": "lembar_PDAM_TIRTAULI_PEMATANGSIANTAR",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PDAM_TIRTAULI_PEMATANGSIANTAR",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PDAM_TIRTA_UMBU",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PDAM_TIRTA_UMBU",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PDAM_TIRTANADI",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PDAM_TIRTANADI",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PDAM_TIRTA_BULIAN",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PDAM_TIRTA_BULIAN",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PLN_Non_Taglis",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PLN_Non_Taglis",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_PLN_Postpaid",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_PLN_Postpaid",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_Pulsa_Listrik",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_Pulsa_Listrik",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_Telkom",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_Telkom",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "lembar_V_Pulsa_Telkomsel",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "rupiah_V_Pulsa_Telkomsel",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+
+                ],
+                "footerCallback": function(row, data, start, end, display) {
+                    // console.log('in footerCallback');
+                    // var api = this.api(),;
+
+                    var api = this.api(),
+                    intVal = function (i) {
+                      return typeof i === 'string' ?
+                        i.replace(/[. Rp]|(\.\d{2})/g, "") * 1 :
+                        typeof i === 'number' ?
+                          i : 0;
+                    };
+
+
+                  api.columns('.sum', { page: 'current' }).every(function () {
+                    var sum = api
+                        .cells( null, this.index(), { page: 'current'} )
+                        .render('display')
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                          }, 0);
+                    // console.log(this.index() +' '+ sum); //alert(sum);
+                    var numFormat = $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ).display;
+
+                    if(this.index()==3||this.index()==5||this.index()==7||this.index()==9||this.index()==11
+                    ||this.index()==13||this.index()==15||this.index()==17||this.index()==19||this.index()==21){
+                        $(this.footer()).html(numFormat(sum));
+                    }else{
+                        $(this.footer()).html(sum);
+                    }
+                });
+
+                }
+                // rowCallback: function(row, data, iDisplayIndex) {
+                //     var info = this.fnPagingInfo();
+                //     var page = info.iPage;
+                //     var length = info.iLength;
+                //     $('td:eq(0)', row).html();
+                // }
+
+      });
+
+    });
+
+    $('#tabelTransaksiPerUserBukopin tbody').on('click', 'td.details-control', function () {
+        var dari  = $("input[name=fromT]").val();
+        var sampai= $("input[name=toT]").val();
+        var table = $('#tabelTransaksiPerUserBukopin').DataTable();
+        var tr = $(this).closest('tr');
+        var tdi = tr.find("i.fa");
+        var row = table.row(tr);
+        var nama = row.data().loket;
+        // console.log(dari);
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+            tdi.first().removeClass('fa-caret-down');
+            tdi.first().addClass('fa-caret-right');
+        }
+        else {
+            var nama = row.data().loket;
+            if(nama){
+                $.ajax({
+                    type:'POST',
+                    url:base_url+'laporan/detail_trx_loket_bukopin',
+                    data:'nama='+nama+'&dari='+dari+'&sampai='+sampai,
+                    dataType:'json',
+                    success:function(res){
+                      row.child(detail_bukopin(res)).show();
+                      //console.log(res.nama);
+                      tr.addClass('shown');
+                      tdi.first().removeClass('fa-caret-right');
+                      tdi.first().addClass('fa-caret-down');
+                    }
+                });
+            }
+        }
+    });    
 }

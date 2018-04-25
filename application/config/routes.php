@@ -23,6 +23,14 @@ $route['laporan/transaksiGriyaBayarPerUser']= 'Laporan/transaksiGriyaBayarPerUse
 $route['laporan/importdata']  				= 'Laporan/import_data';
 $route['laporan/upload_csv']  				= 'Laporan/upload_csv';
 
+$route['laporan/transaksibukopin']  		        = 'Laporan/TransaksiBukopin';
+$route['laporan/transaksi_per_tanggal_bukopin']     = 'Laporan/TransaksiPerTglBukopin';
+$route['laporan/transaksi_per_user_bukopin']        = 'Laporan/TransaksiPerUserBukopin';
+$route['laporan/importdata']                        = 'Laporan/ImportFile';
+$route['laporan/load_trx_per_tgl_bukopin']          = 'Laporan/LoadTrxPertglBukopin';
+$route['laporan/load_trx_per_user_bukopin']         = 'Laporan/LoadTrxPerUserBukopin';
+$route['laporan/detail_trx_loket_bukopin']          = 'Laporan/DetailTrxLoketBukopin';
+
 $route['saldo']                         = 'Saldo/index';
 $route['saldo/saldo_isi']               = 'Saldo/isiSaldoPage';
 $route['saldo/saldo_list']              = 'Saldo/listSaldoPage';
@@ -52,6 +60,8 @@ $route['master/update_produk']			= 'Master/UpdateProduk';
 $route['master/delete']					= 'Master/DeleteProduk';
 $route['master/block']					= 'Master/BlockProduk';
 $route['master/aktifkan']				= 'Master/AktifProduk';
+
+$route['master/tambah_produk_irs']      = 'Master/AddProdukIRS';
 
 $route['master/jenis']               	= 'Master/jenisPage';
 $route['master/tambah_jenis_produk']    = 'Master/AddJeniskPage';

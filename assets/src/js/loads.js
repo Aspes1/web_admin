@@ -1854,3 +1854,82 @@ var profitfunction = function (){
     $("#harga_inm").val(hargajual);
   }
 }
+
+$("#import_file_bukopin").ready(function() {
+  $(document).on('submit', '#form_file_bukopin', function(event){
+    event.preventDefault();
+    var formData = new FormData($('#form_file_bukopin')[0]);
+    $.confirm({
+        title: 'Confirm!, Upload File',
+        content: 'Submit data... ??',
+        buttons: {
+            confirm: {
+                text: 'Confirm',
+                btnClass: 'btn-blue',
+                keys: ['enter', 'shift'],
+                action: function(){
+                    if(NotEmpty()){
+                        $('#loading-image').show();
+                        $('#submit_bukopin').hide();
+                       $.ajax({
+                           url:base_url+'laporan/upload_file_bukopin',
+                           method:'POST',
+                           data:formData,
+                           contentType:false,
+                           processData:false,
+                           dataType:"json",
+                           success:function(html){
+                             if (html.title == 'success'){
+                                $.alert(html.msg);
+                                $('#loading-image').hide();
+                                $('#submit_bukopin').show();
+                                $('#userfile').val('');
+
+                             }
+                             if (html.title == 'failed') {
+                              $.alert(html.msg);
+                              $('#loading-image').hide();
+                              $('#submit_bukopin').show();
+                              $('#userfile').val('');
+                             }
+                           if (html.title == 'fail') {
+                            $.alert(html.msg);
+                            $('#loading-image').hide();
+                            $('#submit_bukopin').show();
+                            $('#userfile').val('');
+                         }
+                   }
+                       });
+                    }
+                   else {
+                       $.alert('Ada form yang belum diisi');
+                   }
+                }
+            },
+            cancel: function () {
+            },
+        }
+    });
+
+  });
+});
+
+var checkExtension3 = function () {
+  var file = document.querySelector("#userfile");
+  if ( /\.(xlsx|xls)$/i.test(file.files[0].name) === false ) {
+    $('#userfile').val('');
+    $.alert("Bukan file xlsx|xls");
+  }
+}
+
+var NotEmpty = function()
+{
+  var userfile = $('#userfile').val();
+
+  if(userfile == ""){
+    return false;
+  }
+  else {
+    return true;
+  }
+}

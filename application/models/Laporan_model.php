@@ -105,6 +105,12 @@ class Laporan_model extends CI_Model{
           GROUP BY
             inm_transaksi_griya.nama";
           return $this->db->query($str);
+            
+          // $hasil=array();
+          // $hasil['query']=$this->db->query($str);
+          // $hasil['table']=$this->db->query($str);
+          
+          // return $hasil; 
   }
 
   public function getExtraInfo($nama)
@@ -164,4 +170,99 @@ class Laporan_model extends CI_Model{
       }
   }
 
+  public function insert_laporan_bukopin($data){
+      $insert = $this->db->insert_batch('inm_transaksi_bukopin', $data);
+      if($insert){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+  
+    public function cek_data_bukopin($tgl){
+      $this->db->select('*');
+      $this->db->from('inm_transaksi_bukopin');
+      // $this->db->where('produk_id', $id);
+      $this->db->where('tgl_dari', $tgl['from_date']);
+      $this->db->where('tgl_sampai', $tgl['to_date']);
+      return $this->db->get();
+  }
+
+  public function get_name_product_bukopin(){
+      $this->db->select('*');
+      $this->db->from('inm_transaksi_bukopin');
+      $this->db->group_by('nama_produk');
+      $this->db->order_by('nama_produk', 'ASC');
+      return $this->db->get()->result();
+  }
+
+  public function get_trx_per_tgl_bukopin($from, $to){
+    $str ="SELECT
+            inm_transaksi_bukopin.tgl_dari AS tgl_dari, inm_transaksi_bukopin.tgl_sampai AS tgl_sampai,
+            Sum(IF(nama_produk = 'BPJS Kesehatan', lembar, 0)) AS lembar_BPJS_Kesehatan,
+            Sum(IF(nama_produk = 'BPJS Kesehatan', total, 0)) AS rupiah_BPJS_Kesehatan,
+            Sum(IF(nama_produk = 'PDAM TIRTAULI KOTA PEMATANGSIANTAR', lembar, 0)) AS lembar_PDAM_TIRTAULI_PEMATANGSIANTAR,
+            Sum(IF(nama_produk = 'PDAM TIRTAULI KOTA PEMATANGSIANTAR', total, 0)) AS rupiah_PDAM_TIRTAULI_PEMATANGSIANTAR,
+            Sum(IF(nama_produk = 'PDAM TIRTA UMBU KAB. NIAS', lembar, 0)) AS lembar_PDAM_TIRTA_UMBU,
+            Sum(IF(nama_produk = 'PDAM TIRTA UMBU KAB. NIAS', total, 0)) AS rupiah_PDAM_TIRTA_UMBU,
+            Sum(IF(nama_produk = 'PDAM TIRTANADI', lembar, 0)) AS lembar_PDAM_TIRTANADI,
+            Sum(IF(nama_produk = 'PDAM TIRTANADI', total, 0)) AS rupiah_PDAM_TIRTANADI,
+            Sum(IF(nama_produk = 'PDAM TIRTA BULIAN TB.TINGGI SUMUT', lembar, 0)) AS lembar_PDAM_TIRTA_BULIAN,
+            Sum(IF(nama_produk = 'PDAM TIRTA BULIAN TB.TINGGI SUMUT', total, 0)) AS rupiah_PDAM_TIRTA_BULIAN,
+            Sum(IF(nama_produk = 'PLN Non Taglis', lembar, 0)) AS lembar_PLN_Non_Taglis,
+            Sum(IF(nama_produk = 'PLN Non Taglis', total, 0)) AS rupiah_PLN_Non_Taglis,
+            Sum(IF(nama_produk = 'PLN Postpaid', lembar, 0)) AS lembar_PLN_Postpaid,
+            Sum(IF(nama_produk = 'PLN Postpaid', total, 0)) AS rupiah_PLN_Postpaid,
+            Sum(IF(nama_produk = 'Pulsa Listrik', lembar, 0)) AS lembar_Pulsa_Listrik,
+            Sum(IF(nama_produk = 'Pulsa Listrik', total, 0)) AS rupiah_Pulsa_Listrik,
+            Sum(IF(nama_produk = 'Telkom', lembar, 0)) AS lembar_Telkom,
+            Sum(IF(nama_produk = 'Telkom', total, 0)) AS rupiah_Telkom,
+            Sum(IF(nama_produk = 'V Pulsa Telkomsel', lembar, 0)) AS lembar_V_Pulsa_Telkomsel,
+            Sum(IF(nama_produk = 'V Pulsa Telkomsel', total, 0)) AS rupiah_V_Pulsa_Telkomsel
+          FROM inm_transaksi_bukopin
+          WHERE inm_transaksi_bukopin.tgl_dari >= '".$from."' AND inm_transaksi_bukopin.tgl_sampai <= '".$to."'
+          GROUP BY
+          inm_transaksi_bukopin.tgl_dari,
+          inm_transaksi_bukopin.tgl_sampai";
+    return $this->db->query($str); 
+  }
+
+  public function get_trx_per_user_bukopin($from, $to){
+    $str ="SELECT
+            inm_transaksi_bukopin.loket AS loket,
+            Sum(IF(nama_produk = 'BPJS Kesehatan', lembar, 0)) AS lembar_BPJS_Kesehatan,
+            Sum(IF(nama_produk = 'BPJS Kesehatan', total, 0)) AS rupiah_BPJS_Kesehatan,
+            Sum(IF(nama_produk = 'PDAM TIRTAULI KOTA PEMATANGSIANTAR', lembar, 0)) AS lembar_PDAM_TIRTAULI_PEMATANGSIANTAR,
+            Sum(IF(nama_produk = 'PDAM TIRTAULI KOTA PEMATANGSIANTAR', total, 0)) AS rupiah_PDAM_TIRTAULI_PEMATANGSIANTAR,
+            Sum(IF(nama_produk = 'PDAM TIRTA UMBU KAB. NIAS', lembar, 0)) AS lembar_PDAM_TIRTA_UMBU,
+            Sum(IF(nama_produk = 'PDAM TIRTA UMBU KAB. NIAS', total, 0)) AS rupiah_PDAM_TIRTA_UMBU,
+            Sum(IF(nama_produk = 'PDAM TIRTANADI', lembar, 0)) AS lembar_PDAM_TIRTANADI,
+            Sum(IF(nama_produk = 'PDAM TIRTANADI', total, 0)) AS rupiah_PDAM_TIRTANADI,
+            Sum(IF(nama_produk = 'PDAM TIRTA BULIAN TB.TINGGI SUMUT', lembar, 0)) AS lembar_PDAM_TIRTA_BULIAN,
+            Sum(IF(nama_produk = 'PDAM TIRTA BULIAN TB.TINGGI SUMUT', total, 0)) AS rupiah_PDAM_TIRTA_BULIAN,
+            Sum(IF(nama_produk = 'PLN Non Taglis', lembar, 0)) AS lembar_PLN_Non_Taglis,
+            Sum(IF(nama_produk = 'PLN Non Taglis', total, 0)) AS rupiah_PLN_Non_Taglis,
+            Sum(IF(nama_produk = 'PLN Postpaid', lembar, 0)) AS lembar_PLN_Postpaid,
+            Sum(IF(nama_produk = 'PLN Postpaid', total, 0)) AS rupiah_PLN_Postpaid,
+            Sum(IF(nama_produk = 'Pulsa Listrik', lembar, 0)) AS lembar_Pulsa_Listrik,
+            Sum(IF(nama_produk = 'Pulsa Listrik', total, 0)) AS rupiah_Pulsa_Listrik,
+            Sum(IF(nama_produk = 'Telkom', lembar, 0)) AS lembar_Telkom,
+            Sum(IF(nama_produk = 'Telkom', total, 0)) AS rupiah_Telkom,
+            Sum(IF(nama_produk = 'V Pulsa Telkomsel', lembar, 0)) AS lembar_V_Pulsa_Telkomsel,
+            Sum(IF(nama_produk = 'V Pulsa Telkomsel', total, 0)) AS rupiah_V_Pulsa_Telkomsel
+          FROM inm_transaksi_bukopin
+          WHERE inm_transaksi_bukopin.tgl_dari >= '".$from."' AND inm_transaksi_bukopin.tgl_sampai <= '".$to."'
+          GROUP BY inm_transaksi_bukopin.loket";
+    return $this->db->query($str); 
+  }
+
+  public function get_detail_trx_loket_bukopin($loket, $dari, $sampai){
+    $this->db->select("*");
+    $this->db->from("inm_transaksi_bukopin");
+    $this->db->where("loket", $loket);
+    $this->db->where("tgl_dari >=", $dari);
+    $this->db->where("tgl_sampai <=", $sampai);
+    return $this->db->get()->result();
+  }
 }

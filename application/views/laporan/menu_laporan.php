@@ -12,5 +12,8 @@
     <li class="nav-item">
       <a href="javascript:getPageLaporan('transaksigriyabayar')" class="nav-link">Transaksi Griya</a>
     </li>
+    <li class="nav-item">
+      <a href="javascript:getPageLaporan('transaksibukopin')" class="nav-link">Transaksi Bukopin</a>
+    </li>
   </ul>
 </div>

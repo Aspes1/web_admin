@@ -23,8 +23,8 @@
         <table id="tabelTransaksiGriyaBayarPerUser" class="table-sm table table-bordered table-condensed table-hover " cellspacing="0" width="100%">
         <thead style="background-color:#bfe7bf">
             <tr>
-              <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px;width:108px;">#</th>
-              <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px">Loket</th>
+              <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px;width:20px;"></th>
+              <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px;width:100px">Loket</th>
               <th colspan="2" class="text-center" style="height:10px">Total PDAM</th>
               <th colspan="2" class="text-center" style="height:10px">Total PLN</th>
             </tr>

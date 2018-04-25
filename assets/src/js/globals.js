@@ -114,6 +114,8 @@ var flatpickrActivation = function()
   laporanHarianDetail();
   laporaGriyaPerTgl();
   laporaGriyaPerUser();
+  TablePerTglBukopin();
+  TablePerUserBukopin();
 }
 
 var hideErrMsg = function()

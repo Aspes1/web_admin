@@ -3,7 +3,9 @@
     <div class="card-header">
       <a href="javascript:getPageMaster('produk')"><strong>Daftar Produk</strong></a>
       |
-      <a href="javascript:getPageMaster('tambah')"><strong>Input Produk</strong></a>
+      <a href="javascript:getPageMaster('tambah')"><strong>Tambah Produk</strong></a>
+      |
+      <a href="javascript:getPageMaster('tambah_produk_irs')"><strong>Tambah Produk IRS</strong></a>
     </div>
 
     <form action="" method="post" id="produk_form" enctype="multipart/form-data" class="form-horizontal">

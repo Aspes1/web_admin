@@ -19,19 +19,25 @@
           </div>
         </div>
 
-        <table id="tabelTransaksiGriyaPerTgl" class="table-striped table-sm table table-bordered table-condensed table-hover " cellspacing="0" width="100%">
+        <table id="tabelTransaksiGriyaPerTgl" class="table-striped table-sm table table-bordered table-condensed table-hover table-scroll" cellspacing="0" width="100%">
         <thead style="background-color:#bfe7bf">
         <!-- <thead> -->
           <tr>
-            <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px">Tanggal</th>
-            <th colspan="2" class="text-center" style="height:10px">Total PDAM</th>
+            <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px; width:150px;">Tanggal</th>
+            <th colspan="2" class="text-center" style="height:10px;">Total PDAM</th>
             <th colspan="2" class="text-center" style="height:10px">Total PLN</th>
+            <!-- <th colspan="2" class="text-center" style="height:10px">Total PBJS</th>
+            <th colspan="2" class="text-center" style="height:10px">Total PBJS</th> -->
           </tr>
           <tr>
-            <th class="text-center" style="height:10px">Jumlah</th>
-            <th class="text-center" style="height:10px">Rupiah</th>
-            <th class="text-center" style="height:10px">Jumlah</th>
-            <th class="text-center" style="height:10px">Rupiah</th>
+            <th class="text-center" style="height:10px; width:150px;">Jumlah</th>
+            <th class="text-center" style="height:10px; width:150px;">Rupiah</th>
+            <th class="text-center" style="height:10px; width:150px;">Jumlah</th>
+            <th class="text-center" style="height:10px; width:150px;">Rupiah</th>
+            <!-- <th class="text-center" style="height:10px; width:150px;">Jumlah</th>
+            <th class="text-center" style="height:10px; width:150px;">Rupiah</th>
+            <th class="text-center" style="height:10px; width:150px;">Jumlah</th>
+            <th class="text-center" style="height:10px; width:150px;">Rupiah</th> -->
           </tr>
         </thead>
         <tfoot>
@@ -49,8 +55,6 @@
 
                   </th>
                   <th>
-
-                  </th>
               </tr>
           </tfoot>
       </table>
