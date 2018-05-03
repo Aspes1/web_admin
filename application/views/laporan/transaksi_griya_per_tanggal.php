@@ -1,3 +1,4 @@
+<?php $CI =& get_instance(); $CI->load->model('Laporan_model'); $produk = $this->laporan_model->get_produk_griya()->result(); ?>
     <div class="card-body">
 
       <div class="form-group row">
@@ -24,23 +25,23 @@
         <!-- <thead> -->
           <tr>
             <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px; width:150px;">Tanggal</th>
-            <th colspan="2" class="text-center" style="height:10px;">Total PDAM</th>
-            <th colspan="2" class="text-center" style="height:10px">Total PLN</th>
-            <!-- <th colspan="2" class="text-center" style="height:10px">Total PBJS</th>
-            <th colspan="2" class="text-center" style="height:10px">Total PBJS</th> -->
+            <?php
+              foreach ($produk as $result) {
+                echo "<th colspan='2' class='text-center' style='vertical-align:middle; height:10px; width:200px;'>".$result->nama_produk."</th>";
+                if($result->id > 3) break;
+              }
+            ?>
           </tr>
           <tr>
-            <th class="text-center" style="height:10px; width:150px;">Jumlah</th>
-            <th class="text-center" style="height:10px; width:150px;">Rupiah</th>
-            <th class="text-center" style="height:10px; width:150px;">Jumlah</th>
-            <th class="text-center" style="height:10px; width:150px;">Rupiah</th>
-            <!-- <th class="text-center" style="height:10px; width:150px;">Jumlah</th>
-            <th class="text-center" style="height:10px; width:150px;">Rupiah</th>
-            <th class="text-center" style="height:10px; width:150px;">Jumlah</th>
-            <th class="text-center" style="height:10px; width:150px;">Rupiah</th> -->
+            <?php
+              for ($i=1; $i < 5; $i++) { 
+                echo "<th class='text-center' style='height:10px'; width:150px;>Jumlah</th>";
+                echo "<th class='text-center' style='height:10px'; width:150px;>Rupiah</th>";
+              }
+            ?>
           </tr>
         </thead>
-        <tfoot>
+        <!-- <tfoot>
               <tr>
                   <th>
                     TOTAL
@@ -56,7 +57,7 @@
                   </th>
                   <th>
               </tr>
-          </tfoot>
+          </tfoot> -->
       </table>
         <!-- </div> -->
         <!-- <div> -->

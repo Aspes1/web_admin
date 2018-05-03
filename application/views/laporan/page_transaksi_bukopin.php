@@ -5,7 +5,7 @@
       |
       <a href="javascript:getPageLaporan('transaksi_per_user_bukopin')" class="griya"><strong>Transaksi Per User</strong></a>
       |
-      <a href="javascript:getPageLaporan('importdata')" class="griya"><strong>Upload Data</strong></a>
+      <a href="javascript:getPageLaporan('importfilebukopin')" class="griya"><strong>Upload Data</strong></a>
     </div>
 
     <?php $this->load->view($contents); ?>

@@ -3,6 +3,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Produk_model extends CI_Model{
 
+    public $TBL_PRODUK = 'inm_produk';
+    public $TBL_VENDOR = 'inm_vendor';
+    public $TBL_DAFTAR_HARGA = 'inm_daftar_harga';
+    public $TBL_JENIS_PRODUK = 'inm_jenis_produk';
+
+    /** VARIABLE STATIC NAME */
+    public $VENDOR_ID_IRS = 3;
+    public $JENIS_PRODUK_ID_IRS = 4;
+    public $DEFAULT_STATUS_PRODUCT = 'Aktif';
+
+    public $INM_STATUS_PRODUK_AKTIF = 1;
+    public $INM_STATUS_PRODUK_BLOCK = 2;
+    public $INM_STATUS_PRODUK_HAPUS = 3;
+    public $DEFAULT_STATUS_KONEKSI  = 0;
+
     public function __construct()
     {
         parent::__construct();
@@ -418,7 +433,7 @@ class Produk_model extends CI_Model{
     }
 
     public function get_komisi($id){
-        $this->db->select('a.id, b.nama_lengkap, c.nama_jenis, nama_vendor, a.komisi, a.range_dari, a.range_sampai, a.jenis_komisi, a.status_pinjaman');
+        $this->db->select('a.id, b.nama_lengkap, c.nama_jenis, nama_vendor, a.komisi, a.range_dari, a.range_sampai, a.status_pinjaman');
         $this->db->join('inm_produk b', 'a.id_produk = b.id');
         $this->db->join('inm_jenis_produk c', 'b.jenis_produk_id = c.id');
         $this->db->join('inm_vendor d', 'b.vendor_id = d.id');
@@ -534,4 +549,112 @@ class Produk_model extends CI_Model{
             return false;
         }
     }
+
+
+    /** IRS */
+    public function setDataProduct($data)
+    {
+        $arrays = array(
+            'jenis_produk_id'    => $data['jenis_id'],
+            'vendor_id'          => $data['vendor_id'],
+            'nama_singkat'       => $data['nama_singkat'],
+            'nama_lengkap'       => $data['nama_lengkap'],
+            'kode_produk'        => $data['kode_produk'],
+            'kode_produk_vendor' => $data['kode_vendor'],
+            'keterangan'         => $data['keterangan'],
+            'status_id'          => $data['status_id'],
+            'status_koneksi'     => $data['status_koneksi']
+        );
+        return $arrays;
+    }
+
+    public function setDataProductPrices($data)
+    {
+        $arrays = array(
+            'kode_produk'    => $data['kode_produk'],
+            'vendor_id'      => $data['vendor_id'],
+            'harga_vendor'   => $data['harga_vendor'],
+            'harga_jual'     => $data['harga_jual'],
+            'markup'         => $data['markup'],
+            'nominal'        => $data['nominal'],
+            'harga_terakhir' => $data['harga_terakhir'],
+            'tgl_create'     => $data['create_date'],
+            'tgl_update'     => $data['update_date'],
+            'status_id'      => $data['default_status'],
+            'admin_id'       => $data['admin_id'],
+        );
+
+        return $arrays;
+    }
+
+    /** MODEL TO HANDLE FOR IRS */
+    public function getMaxCodeInProductIRSByType($id)
+    {
+        $this->db->select('MAX(kode_produk) AS kode_produk')
+                 ->from($this->TBL_PRODUK)
+                 ->where('jenis_produk_id',$id);
+        $select = $this->db->get();
+        return ($select->num_rows() > 0) ? $select->row()->kode_produk : 0;
+    }
+
+    public function getProductByType($product_type)
+    {
+        $select = $this->db->where('jenis_produk_id', $id)->get($this->TBL_PRODUK);
+        return ($select->num_rows() > 0) ? $select->result_array() : 0;
+    }
+
+    public function checkProductIRSByArray($nominal, $keterangan)
+    {
+        $this->db->select('*')->from($this->TBL_PRODUK.' p');
+        $this->db->join($this->TBL_DAFTAR_HARGA.' dh', 'p.vendor_id = dh.vendor_id');
+        $this->db->where('p.vendor_id', 3);
+        $this->db->where('dh.nominal', $nominal);
+
+        $select = $this->db->get();
+
+        if($select->num_rows() > 0)
+        {
+            $bools = false;
+            foreach ($select->result_array() as $v) {
+                if (strpos($v['keterangan'], $keterangan) !== false) {
+                    $bools = true;
+                    break;
+                }
+            }
+
+            return $bools;
+        }
+
+        return "0";
+    }
+
+    /** MODEL TO HANDLE VENDOR */
+    public function insertData($table, $data)
+    {
+        $insert = $this->db->insert($table, $data);
+        if($insert)
+            return true;
+        return false;
+    }
+
+    public function addIRSToProductBase($insert_data)
+    {
+        $insert_data['default_status']  = $this->DEFAULT_STATUS_PRODUCT;
+        $insert_data['vendor_id']       = $this->VENDOR_ID_IRS;
+        $insert_data['jenis_id']        = $this->JENIS_PRODUK_ID_IRS;
+        $insert_data['status_koneksi']  = $this->DEFAULT_STATUS_KONEKSI;
+        $insert_data['status_id']       = $this->INM_STATUS_PRODUK_AKTIF;
+
+        $insert_product = $this->insertData($this->TBL_PRODUK, $this->setDataProduct($insert_data));
+        if($insert_product == true){
+            $insert_harga = $this->insertData($this->TBL_DAFTAR_HARGA, $this->setDataProductPrices($insert_data));
+            return ($insert_harga == true) ? true : 'Insert Data Ke Tabel Harga Gagal';  
+        }
+
+        return 'Insert Data Ke Tabel Produk Gagal';
+
+    }
+
+    
+
 }

@@ -44,6 +44,9 @@
   <script src="<?php echo base_url('assets/src/js/loads.js') ?>"></script>
   <script src="<?php echo base_url('assets/src/js/tables.js') ?>"></script>
   <script src="<?php echo base_url('assets/src/js/globals.js') ?>"></script>
+  <?php if(isset($myscripts)) {?>
+  <script src="<?php echo base_url($myscripts); ?>"></script>
+  <?php } ?>
   <script>var base_url = '<?php echo base_url() ?>';</script>
 
   <!-- qz.io scripts  -->
@@ -51,6 +54,7 @@
   <script type="text/javascript" src="<?php echo base_url('assets/src/js/qz/dependencies/sha-256.min.js') ?>"></script>
   <script type="text/javascript" src="<?php echo base_url('assets/src/js/qz/qz-tray.js') ?>"></script>
 
+  
 
 </body>
 </html>

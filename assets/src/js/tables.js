@@ -1879,6 +1879,7 @@ var laporaGriyaPerTgl=function(){
               bPaginate: false,
               processing: true,
               serverSide: true,
+              scrollX: true,
               ajax: {
                   "url": base_url+"laporan/transaksiGriyaBayarPerTgl",
                   "type": "POST",
@@ -1893,27 +1894,49 @@ var laporaGriyaPerTgl=function(){
                           // },
                       },
                       {
-                        "data": "PDAM",
+                        "data": "Jumlah BPJS Kesehatan",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "TotalTagihan_PDAM",
+                        "data": "Rupiah BPJS Kesehatan",
                         defaultContent: '-',
                         className: "sum",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                     },
                       {
-                          "data": "PLN",
+                          "data": "Jumlah Asuransi",
                           defaultContent: '-',
                           className: "sum"
                       },
                       {
-                          "data": "TotalTagihan_PLN",
+                          "data": "Rupiah Asuransi",
                           render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                           defaultContent: '-',
                           className: "sum"
-                      }
+                      },
+                       {
+                          "data": "Jumlah Al Ijarah Finance",
+                          defaultContent: '-',
+                          className: "sum"
+                      },
+                      {
+                          "data": "Rupiah Al Ijarah Finance",
+                          render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                          defaultContent: '-',
+                          className: "sum"
+                      },
+                      {
+                        "data": "Jumlah BAF",
+                        defaultContent: '-',
+                        className: "sum"
+                    },
+                    {
+                        "data": "Rupiah BAF",
+                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                        defaultContent: '-',
+                        className: "sum"
+                    },
 
                 ],
                 "footerCallback": function(row, data, start, end, display) {
@@ -2023,23 +2046,23 @@ var laporaGriyaPerUser=function(){
                           // className: "details-control"
                       },
                       {
-                        data: "PDAM",
+                        data: "Jumlah BPJS Kesehatan",
                         defaultContent: '-',
                         className: "sum"
                       },
                       {
-                        "data": "TotalTagihan_PDAM",
+                        "data": "Rupiah BPJS Kesehatan",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                       },
                       {
-                          "data": "PLN",
+                          "data": "Jumlah Asuransi",
                           defaultContent: '-',
                           className: "sum"
                       },
                       {
-                          "data": "TotalTagihan_PLN",
+                          "data": "Rupiah Asuransi",
                           render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                           defaultContent: '-',
                           className: "sum"
@@ -2536,7 +2559,20 @@ var DaftarHarga = function() {
         //upgrade harga
         $('#tabelDaftarHarga').on('click','.upgradeHarga',function(){
             var kode = $(this).data('kode');
-            $.alert(kode);
+            var url = base_url + 'master/single/update/harga/irs';
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify( { "kode_produk_vendor" : kode } ),
+                success: function( response ){
+                    console.log(response);
+                }
+            });
+
+
             // $.confirm({
             //     title: 'Confirm!, Aktif Harga',
             //     buttons: {
@@ -2627,115 +2663,115 @@ var TablePerTglBukopin = function(){
                         defaultContent: '-'
                     },
                     {
-                        "data": "lembar_BPJS_Kesehatan",
+                        "data": "Lembar BPJS Kesehatan",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_BPJS_Kesehatan",
+                        "data": "Total BPJS Kesehatan",
                         defaultContent: '-',
                         className: "sum",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                     },
                     {
-                        "data": "lembar_PDAM_TIRTAULI_PEMATANGSIANTAR",
+                        "data": "Lembar PDAM TIRTA BULIAN TB.TINGGI SUMUT",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PDAM_TIRTAULI_PEMATANGSIANTAR",
+                        "data": "Total PDAM TIRTA BULIAN TB.TINGGI SUMUT",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PDAM_TIRTA_UMBU",
+                        "data": "Lembar PDAM TIRTA UMBU KAB. NIAS",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PDAM_TIRTA_UMBU",
+                        "data": "Total PDAM TIRTA UMBU KAB. NIAS",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PDAM_TIRTANADI",
+                        "data": "Lembar PDAM TIRTAULI KOTA PEMATANGSIANTAR",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PDAM_TIRTANADI",
+                        "data": "Total PDAM TIRTAULI KOTA PEMATANGSIANTAR",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PDAM_TIRTA_BULIAN",
+                        "data": "Lembar PLN Postpaid",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PDAM_TIRTA_BULIAN",
+                        "data": "Total PLN Postpaid",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PLN_Non_Taglis",
+                        "data": "Lembar Pulsa Listrik",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PLN_Non_Taglis",
+                        "data": "Total Pulsa Listrik",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PLN_Postpaid",
+                        "data": "Lembar Telkom",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PLN_Postpaid",
+                        "data": "Total Telkom",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
-                    {
-                        "data": "lembar_Pulsa_Listrik",
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "rupiah_Pulsa_Listrik",
-                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "lembar_Telkom",
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "rupiah_Telkom",
-                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "lembar_V_Pulsa_Telkomsel",
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "rupiah_V_Pulsa_Telkomsel",
-                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
-                        defaultContent: '-',
-                        className: "sum"
-                    },
+                    // {
+                    //     "data": "Lembar Pulsa Listrik",
+                    //     defaultContent: '-',
+                    //     className: "sum"
+                    // },
+                    // {
+                    //     "data": "Total Pulsa Listrik",
+                    //     render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                    //     defaultContent: '-',
+                    //     className: "sum"
+                    // },
+                    // {
+                    //     "data": "Lembar Telkom",
+                    //     defaultContent: '-',
+                    //     className: "sum"
+                    // },
+                    // {
+                    //     "data": "Total Telkom",
+                    //     render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                    //     defaultContent: '-',
+                    //     className: "sum"
+                    // },
+                    // {
+                    //     "data": "Lembar V Pulsa Telkomsel",
+                    //     defaultContent: '-',
+                    //     className: "sum"
+                    // },
+                    // {
+                    //     "data": "Total V Pulsa Telkomsel",
+                    //     render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
+                    //     defaultContent: '-',
+                    //     className: "sum"
+                    // },
 
                 ],
                 "footerCallback": function(row, data, start, end, display) {
@@ -2790,45 +2826,42 @@ var TablePerUserBukopin = function(){
     $(document).ready(function(){
         // Setup datatables
         $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
-      {
-          return {
-              "iStart": oSettings._iDisplayStart,
-              "iEnd": oSettings.fnDisplayEnd(),
-              "iLength": oSettings._iDisplayLength,
-              "iTotal": oSettings.fnRecordsTotal(),
-              "iFilteredTotal": oSettings.fnRecordsDisplay(),
-              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
-              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
-          };
-      };
-      var dari  = $("input[name=fromT]").val();
-      var sampai= $("input[name=toT]").val();
-
-      console.log(dari);
-
-      var tablePeriode = $("#tabelTransaksiPerUserBukopin").DataTable({
-          "dom": 'Zlfrtip',
-          initComplete: function() {
-              var api = this.api();
-              $('#tabelTransaksiPerUserBukopin_filter input')
-                  .off('.DT')
-                  .on('input.DT', function() {
-                      api.search(this.value).draw();
-              });
-          },
-              oLanguage: {
-                  "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
-                  sProcessing: "loading..."
-              },
-              bInfo: false,
-              bPaginate: false,
-              processing: true,
-              serverSide: true,
-              scrollX: true,
-              ajax: {
-                  "url": base_url+"laporan/load_trx_per_user_bukopin",
-                  "type": "POST",
-                  "data": { dari: dari, sampai: sampai },
+        {
+            return {
+                "iStart": oSettings._iDisplayStart,
+                "iEnd": oSettings.fnDisplayEnd(),
+                "iLength": oSettings._iDisplayLength,
+                "iTotal": oSettings.fnRecordsTotal(),
+                "iFilteredTotal": oSettings.fnRecordsDisplay(),
+                "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+                "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+            };
+        };
+            var dari  = $("input[name=fromT]").val();
+            var sampai= $("input[name=toT]").val();
+            var tablePeriode = $("#tabelTransaksiPerUserBukopin").DataTable({
+            "dom": 'Zlfrtip',
+            initComplete: function() {
+                var api = this.api();
+                $('#tabelTransaksiPerUserBukopin_filter input')
+                    .off('.DT')
+                    .on('input.DT', function() {
+                        api.search(this.value).draw();
+                });
+            },
+                oLanguage: {
+                    "sUrl": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Indonesian.json",
+                    sProcessing: "loading..."
+                },
+                bInfo: false,
+                bPaginate: false,
+                processing: true,
+                serverSide: true,
+                scrollX: true,
+                ajax: {
+                    "url": base_url+"laporan/load_trx_per_user_bukopin",
+                    "type": "POST",
+                    "data": { dari: dari, sampai: sampai },
                 },
                 columns: [
                     {
@@ -2845,111 +2878,78 @@ var TablePerUserBukopin = function(){
                         defaultContent: '-'
                     },
                     {
-                        "data": "lembar_BPJS_Kesehatan",
+                        "data": "Lembar BPJS Kesehatan",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_BPJS_Kesehatan",
+                        "data": "Total BPJS Kesehatan",
                         defaultContent: '-',
                         className: "sum",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                     },
                     {
-                        "data": "lembar_PDAM_TIRTAULI_PEMATANGSIANTAR",
+                        "data": "Lembar PDAM TIRTA BULIAN TB.TINGGI SUMUT",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PDAM_TIRTAULI_PEMATANGSIANTAR",
+                        "data": "Total PDAM TIRTA BULIAN TB.TINGGI SUMUT",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PDAM_TIRTA_UMBU",
+                        "data": "Lembar PDAM TIRTA UMBU KAB. NIAS",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PDAM_TIRTA_UMBU",
+                        "data": "Total PDAM TIRTA UMBU KAB. NIAS",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PDAM_TIRTANADI",
+                        "data": "Lembar PDAM TIRTAULI KOTA PEMATANGSIANTAR",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PDAM_TIRTANADI",
+                        "data": "Total PDAM TIRTAULI KOTA PEMATANGSIANTAR",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PDAM_TIRTA_BULIAN",
+                        "data": "Lembar PLN Postpaid",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PDAM_TIRTA_BULIAN",
+                        "data": "Total PLN Postpaid",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PLN_Non_Taglis",
+                        "data": "Lembar Pulsa Listrik",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PLN_Non_Taglis",
+                        "data": "Total Pulsa Listrik",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "lembar_PLN_Postpaid",
+                        "data": "Lembar Telkom",
                         defaultContent: '-',
                         className: "sum"
                     },
                     {
-                        "data": "rupiah_PLN_Postpaid",
-                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "lembar_Pulsa_Listrik",
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "rupiah_Pulsa_Listrik",
-                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "lembar_Telkom",
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "rupiah_Telkom",
-                        render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "lembar_V_Pulsa_Telkomsel",
-                        defaultContent: '-',
-                        className: "sum"
-                    },
-                    {
-                        "data": "rupiah_V_Pulsa_Telkomsel",
+                        "data": "Total Telkom",
                         render: $.fn.dataTable.render.number( '.', ',', 0,'Rp ' ),
                         defaultContent: '-',
                         className: "sum"
@@ -3024,11 +3024,11 @@ var TablePerUserBukopin = function(){
                     data:'nama='+nama+'&dari='+dari+'&sampai='+sampai,
                     dataType:'json',
                     success:function(res){
-                      row.child(detail_bukopin(res)).show();
-                      //console.log(res.nama);
-                      tr.addClass('shown');
-                      tdi.first().removeClass('fa-caret-right');
-                      tdi.first().addClass('fa-caret-down');
+                        row.child(detail_bukopin(res)).show();
+                        //console.log(res.nama);
+                        tr.addClass('shown');
+                        tdi.first().removeClass('fa-caret-right');
+                        tdi.first().addClass('fa-caret-down');
                     }
                 });
             }

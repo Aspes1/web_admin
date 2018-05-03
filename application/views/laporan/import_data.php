@@ -5,7 +5,7 @@
         <div class="form-group row">
             <label class="col-md-1 col-form-label" for="text-input">Upload file</label>
             <div class="col-md-4">
-                <input type="file" id="file_csv" name="file_csv" class="form-control" onchange="checkExtension2()">
+                <input type="file" id="file_csv" name="file_csv" class="form-control" onchange="checkExtension2();">
           </div>
         </div>
         <div class="form-group row">

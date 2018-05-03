@@ -52,6 +52,7 @@ class Laporan extends CI_Controller{
 
   public function transaksi_per_tanggal()
   {
+      // $data['produkgriya'] = $this->laporan_model->get_produk_griya()->result();
       $data['contents'] = 'laporan/transaksi_griya_per_tanggal';
       $this->load->view('laporan/page_transaksi_griya', $data);
   }
@@ -149,32 +150,27 @@ class Laporan extends CI_Controller{
   public function transaksiGriyaBayarPerTgl(){
     $dari_   = $this->input->post('dari');
     $sampai_ = $this->input->post('sampai');
+    $produk = $this->laporan_model->get_produk_griya()->result();
 
     if(($dari_==null||$dari_=='') && ($sampai_==null || $sampai_=='')){
       $dari_=date('Y-m-d');
       $sampai_=date('Y-m-d');
     }
 
-    $output = array(
-                    "data" => $this->laporan_model->laporan_giry_bayar_per_tanggal($dari_, $sampai_)->result(),
-                   );
-
+    $output = array("data" => $this->laporan_model->laporan_giry_bayar_per_tanggal($dari_, $sampai_, $produk)->result());
     echo json_encode($output);
   }
 
   public function transaksiGriyaBayarPerUser(){
     $dari_   = $this->input->post('dari');
     $sampai_ = $this->input->post('sampai');
+    $produk = $this->laporan_model->get_produk_griya()->result();
 
     if(($dari_==null||$dari_=='') && ($sampai_==null || $sampai_=='')){
       $dari_=date('Y-m-d');
       $sampai_=date('Y-m-d');
     }
-
-    $output = array(
-                    "data" => $this->laporan_model->laporan_giry_bayar_per_user($dari_, $sampai_)->result(),
-                   );
-
+    $output = array("data" => $this->laporan_model->laporan_giry_bayar_per_user($dari_, $sampai_, $produk)->result());
     echo json_encode($output);
   }  
 
@@ -236,7 +232,7 @@ class Laporan extends CI_Controller{
         echo json_encode($output);
   }
 
-  public function upload_csv()
+  public function UploadCsv()
   {    
       $config['upload_path']          = './uploads/csv_griya/';
       $config['allowed_types']        = 'csv';
@@ -277,7 +273,7 @@ class Laporan extends CI_Controller{
           $exists = $filesystem->has('backups/'.$file_name);
           // print_r($exists);
 
-          unlink('./uploads/csv_griya/'.$file_name);
+          // unlink('./uploads/csv_griya/'.$file_name);
 
           $daritgl_ = substr($file_name, 53, 8);
           $sampaitgl_ = substr($file_name, 62, 8);
@@ -314,33 +310,8 @@ class Laporan extends CI_Controller{
           for ($i=0; $i < count($dataArr); $i++) {
             foreach($dataArr[$i] as $key => $value){
 
-              if(isset($dataArr[$i]['Jumlah PLN Paskabayar'])){
-                $dataArr[$i]['Jumlah PLN POSTPAID'] = $dataArr[$i]['Jumlah PLN Paskabayar'];
-                unset($dataArr[$i]['Jumlah PLN Paskabayar']);
-              }
-              if(isset($dataArr[$i]['Rupiah PLN Paskabayar'])){
-                $dataArr[$i]['Rupiah PLN POSTPAID'] = $dataArr[$i]['Rupiah PLN Paskabayar'];
-                unset($dataArr[$i]['Rupiah PLN Paskabayar']);
-              }
-              if(isset($dataArr[$i]['Jumlah PLN Prabayar'])){
-                $dataArr[$i]['Jumlah PLN PREPAID'] = $dataArr[$i]['Jumlah PLN Prabayar'];
-                unset($dataArr[$i]['Jumlah PLN Prabayar']);
-              }
-              if(isset($dataArr[$i]['Rupiah PLN Prabayar'])){
-                $dataArr[$i]['Rupiah PLN PREPAID'] = $dataArr[$i]['Rupiah PLN Prabayar'];
-                unset($dataArr[$i]['Rupiah PLN Prabayar']);
-              }
-              if(isset($dataArr[$i]['Jumlah PLN Nontaglis'])){
-                $dataArr[$i]['Jumlah PLN NONTAGLIS'] = $dataArr[$i]['Jumlah PLN Nontaglis'];
-                unset($dataArr[$i]['Jumlah PLN Nontaglis']);
-              }
-              if(isset($dataArr[$i]['Rupiah PLN Nontaglis'])){
-                $dataArr[$i]['Rupiah PLN NONTAGLIS'] = $dataArr[$i]['Rupiah PLN Nontaglis'];
-                unset($dataArr[$i]['Rupiah PLN Nontaglis']);
-              }
               $dataArr[$i]['Tanggal'] = $daritgl;
               // $dataArr[$i]['Ke Tanggal'] = $sampaitgl;
-
               $new_arr = $dataArr;
             }
           }
@@ -364,18 +335,18 @@ class Laporan extends CI_Controller{
               {
                 // scrap all data;
                 if(substr($key,0,6) == 'Jumlah'){
-                  $produk_inm = $this->laporan_model->get_produk_inm(substr($key, +7));
+                  $produk_inm = $this->laporan_model->get_produk_griya2(substr($key, +7));
                   if($produk_inm->num_rows() > 0){
                       $id = $produk_inm->row()->id;
                       $tgl = date('Y-m-d', strtotime($new_arr[$i]['Tanggal']));
                       $griya = $this->laporan_model->cek_data_transaksi_griya($id, $tgl);
                       if($griya->num_rows() == 0 ){
-                        $insert[$no]['username'] = $dataArr[$i]['Child'];
+                        $insert[$no]['username'] = $new_arr[$i]['Child'];
                         $insert[$no]['nama'] = $this->session->userdata('namaLOket');
                         $insert[$no]['group_id'] = $this->session->userdata('group'); //child yg pertama diambil sebagai group_id
                         $insert[$no]['produk_id'] = $produk_inm->row()->id;
-                        $insert[$no]['jumlah_transaksi'] = $new_arr[$i]['Jumlah '.$produk_inm->row()->nama_lengkap];
-                        $insert[$no]['rupiah_transaksi'] = $new_arr[$i]['Rupiah '.$produk_inm->row()->nama_lengkap];
+                        $insert[$no]['jumlah_transaksi'] = $new_arr[$i]['Jumlah '.$produk_inm->row()->nama_produk];
+                        $insert[$no]['rupiah_transaksi'] = $new_arr[$i]['Rupiah '.$produk_inm->row()->nama_produk];
                         $insert[$no]['tanggal'] = $tgl;
                         $no++;
                         $hasil = 0;
@@ -396,18 +367,18 @@ class Laporan extends CI_Controller{
 
                 //scap all data;
                 if(substr($key,0,6) == 'Jumlah'){
-                  $produk_inm = $this->laporan_model->get_produk_inm(substr($key, +7));
+                  $produk_inm = $this->laporan_model->get_produk_griya2(substr($key, +7));
                   if($produk_inm->num_rows() > 0){
                       $id = $produk_inm->row()->id;
                       $tgl = date('Y-m-d', strtotime($new_arr[$i]['Tanggal']));
                       $griya = $this->laporan_model->cek_data_transaksi_griya($id, $tgl);
                       if($griya->num_rows() == 0 ){
-                        $insert[$no]['username'] = $dataArr[$i]['Child'];
+                        $insert[$no]['username'] = $new_arr[$i]['Child'];
                         $insert[$no]['nama'] = $this->session->userdata('namaLOket');
-                        $insert[$no]['group_id'] = $dataArr[$i]['Child']; //child yg pertama diambil sebagai group_id
+                        $insert[$no]['group_id'] = $new_arr[$i]['Child']; //child yg pertama diambil sebagai group_id
                         $insert[$no]['produk_id'] = $produk_inm->row()->id;
-                        $insert[$no]['jumlah_transaksi'] = $new_arr[$i]['Jumlah '.$produk_inm->row()->nama_lengkap];
-                        $insert[$no]['rupiah_transaksi'] = $new_arr[$i]['Rupiah '.$produk_inm->row()->nama_lengkap];
+                        $insert[$no]['jumlah_transaksi'] = $new_arr[$i]['Jumlah '.$produk_inm->row()->nama_produk];
+                        $insert[$no]['rupiah_transaksi'] = $new_arr[$i]['Rupiah '.$produk_inm->row()->nama_produk];
                         $insert[$no]['tanggal'] = $tgl;
                         $no++;
                         $hasil = 0;
@@ -423,7 +394,7 @@ class Laporan extends CI_Controller{
 
             }
           }
-
+        
           if($hasil == 0){
             $insertdata = $this->laporan_model->insert_laporan_transaksi_griya($insert);
             if($insertdata){
@@ -453,6 +424,7 @@ class Laporan extends CI_Controller{
   }
 
   public function LoadTrxPertglBukopin(){
+    $produk = $this->laporan_model->get_name_product_bukopin();
     $dari_   = $this->input->post('dari');
     $sampai_ = $this->input->post('sampai');
 
@@ -461,11 +433,15 @@ class Laporan extends CI_Controller{
       $sampai_ = date('Y-m-d');
     }
 
-    $output = array('data' => $this->laporan_model->get_trx_per_tgl_bukopin($dari_, $sampai_)->result());
+    $output = array('data' => $this->laporan_model->get_trx_per_tgl_bukopin('2018-04-20', '2018-04-20', $produk)->result_array());
+    // echo "<pre>";
+    // print_r($output);
+    // echo "</pre>";
     echo json_encode($output);
   }
 
   public function LoadTrxPerUserBukopin(){
+    $produk = $this->laporan_model->get_name_product_bukopin();
     $dari_   = $this->input->post('dari');
     $sampai_ = $this->input->post('sampai');
 
@@ -474,7 +450,7 @@ class Laporan extends CI_Controller{
       $sampai_ = date('Y-m-d');
     }
 
-    $output = array('data' => $this->laporan_model->get_trx_per_user_bukopin($dari_, $sampai_)->result());
+    $output = array('data' => $this->laporan_model->get_trx_per_user_bukopin('2018-04-20', '2018-04-20', $produk)->result());
     echo json_encode($output);
   }
 
@@ -484,7 +460,7 @@ class Laporan extends CI_Controller{
     $loket = $this->input->post('nama', TRUE);
 
         $data = $this->laporan_model->get_detail_trx_loket_bukopin($loket,$dari_, $sampai_);
-        $names = $this->laporan_model->get_nama_produk();
+        // $names = $this->laporan_model->get_nama_produk();
         $output["tablenya"] =
           "<table cellpadding='5' cellspacing='0' style='background-color:#f8f8f8'>
             <tr style='background-color:#bfe7bf'>
@@ -500,7 +476,7 @@ class Laporan extends CI_Controller{
               $output['tablenya'] .= "
                 <tr>
                   <td>".$row->tgl_transaksi."</td>
-                  <td>".$row->nama_produk."</td>
+                  <td>".$row->produk_id."</td>
                   <td>".$row->no_pelanggan."</td>
                   <td>".$row->lembar."</td>
                   <td align='right'>".number_format($row->biaya_admin, 0, ",", ".")."</td>
@@ -514,6 +490,7 @@ class Laporan extends CI_Controller{
   }
 
   public function TransaksiPerTglBukopin(){
+    // $data['produk'] = $this->laporan_model->get_name_product_bukopin();
     $data['contents'] = 'laporan/transaksi_bukopin_per_tanggal';
     $this->load->view('laporan/page_transaksi_bukopin', $data);
   }
@@ -523,12 +500,12 @@ class Laporan extends CI_Controller{
     $this->load->view('laporan/page_transaksi_bukopin', $data);
   }
 
-  public function ImportFile(){
+  public function ImportFileBukopin(){
     $data['contents'] = 'laporan/import_data_bukopin';
     $this->load->view('laporan/page_transaksi_bukopin', $data);
   }
 
-  public function upload_file_bukopin(){
+  public function UploadFileBukopin(){
     $this->load->helper("file");
     $config['upload_path']          = './uploads/bukopin/';
     $config['allowed_types']        = 'xlsx|xls';
@@ -586,6 +563,7 @@ class Laporan extends CI_Controller{
           $tgl_laporan = $data['cells'][3][6];
           $findtgl = $this->splitFormatDueDate($data['cells'][3][6]);
           $databukopin = $this->laporan_model->cek_data_bukopin($findtgl);
+          // $produkbukopin = $this->laporan_model->get_produk_bukopin();
           if($databukopin->num_rows() > 0){
             $output['title'] = 'failed';
             $output['msg'] = 'File sudah diupload';
@@ -614,6 +592,9 @@ class Laporan extends CI_Controller{
             }
           }
       }
+      // echo "<pre>";
+      // print_r($mydata);
+      // echo "</pre>";
       echo json_encode($output);
       unlink('./uploads/bukopin/'.$file_name);
   }
@@ -635,10 +616,20 @@ class Laporan extends CI_Controller{
   private function setDataInsert($loket, $data, $tgllap)
   {
       $tgllap = $this->splitFormatDueDate($tgllap);
-
+      $cekdata = $this->laporan_model->get_produk_bukopin($data['JENIS_TRANSAKSI']);
+      if($cekdata > 0 ){
+        $id = $this->laporan_model->get_produk_id_bukopin($data['JENIS_TRANSAKSI']);
+      }
+      else{
+        $dataproduk = array('nama_produk' => $data['JENIS_TRANSAKSI']);
+        $insert = $this->laporan_model->insert_produk_bukopin($dataproduk);
+        if($insert){
+          $id = $this->laporan_model->get_produk_id_bukopin($data['JENIS_TRANSAKSI']);
+        }
+      }
       $data = array(
           "loket"         => $loket,
-          "nama_produk"   => $data['JENIS_TRANSAKSI'],
+          "produk_id"     => $id['id'],
           "no_pelanggan"  => $data['NO_PELANGGAN'],
           "lembar"        => 1,
           "harga_modal"   => $data['HARGA_MODAL'],

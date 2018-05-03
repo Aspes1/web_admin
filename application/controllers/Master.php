@@ -1,5 +1,5 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . '/controllers/services/Irs_services.php';
 
 class Master extends CI_Controller{
 
@@ -27,6 +27,7 @@ class Master extends CI_Controller{
         $data['title']      = 'Menu Master';
         $data['submenu']    = 'master/menu_master';
         $data['contents']   = 'master/list_produk';
+        $data['myscripts']  = 'assets/src/js/fn-irs.js';
         $this->load->view('templates/app', $data);
     }
 
@@ -661,7 +662,7 @@ class Master extends CI_Controller{
                     'range_sampai' => 1000000,
                     'tgl_create' => date('Y-m-d h:i:s'),
                     'tgl_update' => date('Y-m-d h:i:s'),
-                    'jenis_komisi' => $this->input->post('jeniskomisi'),
+                    // 'jenis_komisi' => $this->input->post('jeniskomisi'),
                     'status_pinjaman' => $this->input->post('statuspinjaman')
                 );                
             }
@@ -673,7 +674,7 @@ class Master extends CI_Controller{
                     'range_sampai' => $this->input->post('range_sampai'),
                     'tgl_create' => date('Y-m-d h:i:s'),
                     'tgl_update' => date('Y-m-d h:i:s'),
-                    'jenis_komisi' => 'Flat',
+                    // 'jenis_komisi' => 'Flat',
                     'status_pinjaman' => $this->input->post('statuspinjaman')
                 );                            
             }
@@ -685,7 +686,7 @@ class Master extends CI_Controller{
                     'range_sampai' => $this->input->post('range_sampai'),
                     'tgl_create' => date('Y-m-d h:i:s'),
                     'tgl_update' => date('Y-m-d h:i:s'),
-                    'jenis_komisi' => 'Tingkatan',
+                    // 'jenis_komisi' => 'Tingkatan',
                     'status_pinjaman' => $this->input->post('statuspinjaman')
                 );
             }        
@@ -731,7 +732,7 @@ class Master extends CI_Controller{
                 'range_dari' => $this->input->post('range_dari'),
                 'range_sampai' => $this->input->post('range_sampai'),
                 'tgl_update' => date('Y-m-d h:i:s'),
-                'jenis_komisi' => 'Flat',
+                // 'jenis_komisi' => 'Flat',
                 'status_pinjaman' => $this->input->post('statuspinjaman'),
             );
         }
@@ -890,8 +891,131 @@ class Master extends CI_Controller{
             echo json_encode($output);                    
         }
     }
-    
-    public function AddProdukIRS(){
-        $this->load->view('master/add_produk_irs');
+
+
+    /** KHUSUS IRS */
+    public function getListIRSOperatorByCategory($jenis_produk)
+    {
+        $data = $this->getListOperatorIRS($jenis_produk);
+
+        if($data != null && !empty($data))
+            $this->setResponse(true, $data);
+        else
+            $this->setResponse(false, 'Data Tidak Tersedia');
+        
     }
+
+
+    public function getListOperatorIRS($type)
+    {
+        $objects  = new IRS_Services();
+        $operator = $objects->getListIRSOperatorByCategory($type);
+
+        $data = array();
+        if(count($operator) > 0)
+        {
+            foreach ($operator as $key => $value) 
+            {    
+                $str = '';
+                for ($i=0; $i < count($value); $i++) { 
+                    $str .= $value[$i];
+                    if($i < count($value)-1)
+                        $str .= ',';
+                }
+                $data[$key] = $str;
+            }
+        }
+        return $data;
+    }
+
+
+    /** PRODUCT IRS */
+    public function getListProductByOperator()
+    {
+        $objects  = new IRS_Services();
+        $operator_id = json_decode(file_get_contents('php://input'), true)['operator_id'];
+        $response = $objects->getListIRSProductByOperator($operator_id);
+
+        if(is_array($response) && count($response) > 0)
+            $this->setResponse(true, $response);
+        else
+            $this->setResponse(false, $response);
+    }
+
+    public function TambahDataProdukIRS()
+    {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $where = $this->produk_model->checkProductIRSByArray($input['nominal'], $input['nama_operator']);
+        
+        if($where == true)
+        {
+            $this->setResponse(false, 'Tambah Produk '.$input['nama_operator'].' Nominal '.$input['nominal'].'K Gagal. Produk Dengan Operator Tersebut Sudah Pernah Ditambahkan Sebelumnya');
+        }
+        else
+        {
+            $max_kode_produk = $this->produk_model->getMaxCodeInProductIRSByType('4');
+            $kode_produk = ($max_kode_produk != 0) ? $max_kode_produk + 1 : 401;
+
+            $insert_data = array(
+                'nama_singkat'   => $input['nama_alias_kode'],
+                'nama_lengkap'   => $input['nama_lain_produk'],
+                'kode_produk'    => $kode_produk,
+                'kode_vendor'    => $input['kode_produk_irs'],
+                'harga_vendor'   => $input['harga_produk'],
+                'harga_jual'     => $input['harga_jual'],
+                'markup'         => $input['harga_markup'],
+                'nominal'        => $input['nominal'],
+                'harga_terakhir' => $input['harga_produk'],
+                'create_date'    => date('Y-m-d h:i:s'),
+                'update_date'    => date('Y-m-d h:i:s'),
+                'admin_id'       => $this->session->userdata('adminId'),
+                'keterangan'     => $input['nama_operator'].','.$input['nama_produk_irs'].','.$input['kode_produk_irs']
+            );
+
+            $insert = $this->produk_model->addIRSToProductBase($insert_data);
+
+            if($insert == true)
+                $this->setResponse(true, 'Insert Data Produk Berhasil');
+            else
+                $this->setResponse(false, $insert);
+
+        }
+    }
+
+    public function setResponse($status=null, $data=null, $optional=null, $code=200)
+    {
+        $array = array(
+            'status' => ($status==null) ? false : $status,
+            'messages' => ($data != null) ? $data : 'No Response Data'
+        );
+
+        if($optional != null)
+            $array['optional'] = $optional;
+
+        return $this->output->set_content_type('application/json')->set_status_header($code)->set_output(json_encode($array));
+    }
+
+
+    public function SingleUpdateProductIRS()
+    {
+        $objects  = new IRS_Services();
+        $input   = json_decode(file_get_contents('php://input'), true)['kode_produk_vendor'];
+        $records = array();
+        if($input != null && !empty($input))
+            $records = $objects->getListProductIRSByCode($input);
+
+        $this->setResponse(true, $records);
+
+    }
+
+    public function AddProdukIRS(){
+        $data['jenis_produk'] = array(
+            'pulsa' => 'VOUCHER PULSA',
+            'paket_data' => 'PAKET DATA'
+        );
+        //$data['operator_pulsa'] = $this->getListOperatorPulsa();
+        $this->load->view('master/add_produk_irs', $data);
+    }
+
+    
 }

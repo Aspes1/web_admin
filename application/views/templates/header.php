@@ -26,6 +26,11 @@
   <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> -->
   <!-- Styles required by this views -->
 
+  <script>
+      window.siteurl = "<?php echo base_url(); ?>";
+  </script>
+
+
 </head>
 
 <body class="app header-fixed aside-menu-fixed aside-menu-hidden">

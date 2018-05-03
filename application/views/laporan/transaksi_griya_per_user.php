@@ -1,3 +1,4 @@
+<?php $CI =& get_instance(); $CI->load->model('Laporan_model'); $produk = $this->laporan_model->get_produk_griya()->result(); ?>
     <div class="card-body">
 
         <div class="form-group row">
@@ -25,17 +26,23 @@
             <tr>
               <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px;width:20px;"></th>
               <th rowspan="2" class="text-center" style="vertical-align:middle;height:10px;width:100px">Loket</th>
-              <th colspan="2" class="text-center" style="height:10px">Total PDAM</th>
-              <th colspan="2" class="text-center" style="height:10px">Total PLN</th>
+              <?php
+                foreach ($produk as $result) {
+                  echo "<th colspan='2' class='text-center' style='vertical-align:middle; height:10px; width:200px;'>".$result->nama_produk."</th>";
+                  // if($result->id > 1) break;
+                }
+              ?>
             </tr>
             <tr>
-              <th class="text-left" style="height:10px">Jumlah</th>
-              <th class="text-right" style="height:10px">Rupiah</th>
-              <th class="text-left" style="height:10px">Jumlah</th>
-              <th class="text-right" style="height:10px">Rupiah</th>
+              <?php
+                for ($i=1; $i < 156; $i++) { 
+                  echo "<th class='text-center' style='height:10px'; width:150px;>Jumlah</th>";
+                  echo "<th class='text-center' style='height:10px'; width:150px;>Rupiah</th>";
+                }
+              ?>
             </tr>
           </thead>
-          <tfoot>
+          <!-- <tfoot>
               <tr>
                   <th>TOTAL</th>
                   <th></th>
@@ -44,7 +51,7 @@
                   <th></th>
                   <th></th>
               </tr>
-          </tfoot>
+          </tfoot> -->
       </table>
     </div>
         <!-- </div> -->

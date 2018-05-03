@@ -1571,8 +1571,8 @@ $("#import_csv_per_tgl").ready(function() {
 });
 
 var checkExtension2 = function () {
-  var file = document.querySelector("#file_csv");
-  if ( /\.(csv)$/i.test(file.files[0].name) === false ) {
+  var fileme = document.querySelector("#file_csv");
+  if ( /\.(csv)$/i.test(fileme.files[0].name) === false ) {
     $('#file_csv').val('');
     $.alert("Bukan file CSV");
   }
@@ -1916,7 +1916,7 @@ $("#import_file_bukopin").ready(function() {
 
 var checkExtension3 = function () {
   var file = document.querySelector("#userfile");
-  if ( /\.(xlsx|xls)$/i.test(file.files[0].name) === false ) {
+  if ( /\.(xls)$/i.test(file.files[0].name) === false ) {
     $('#userfile').val('');
     $.alert("Bukan file xlsx|xls");
   }
