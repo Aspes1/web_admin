@@ -10,7 +10,6 @@ class Produk_model extends CI_Model{
 
     /** VARIABLE STATIC NAME */
     public $VENDOR_ID_IRS = 3;
-    public $JENIS_PRODUK_ID_IRS = 4;
     public $DEFAULT_STATUS_PRODUCT = 'Aktif';
 
     public $INM_STATUS_PRODUK_AKTIF = 1;
@@ -603,11 +602,12 @@ class Produk_model extends CI_Model{
         return ($select->num_rows() > 0) ? $select->result_array() : 0;
     }
 
-    public function checkProductIRSByArray($nominal, $keterangan)
+    public function checkProductIRSByArray($nominal, $keterangan, $kode_jenis)
     {
         $this->db->select('*')->from($this->TBL_PRODUK.' p');
         $this->db->join($this->TBL_DAFTAR_HARGA.' dh', 'p.vendor_id = dh.vendor_id');
         $this->db->where('p.vendor_id', 3);
+        $this->db->where('p.jenis_produk_id', $kode_jenis);
         $this->db->where('dh.nominal', $nominal);
 
         $select = $this->db->get();
@@ -641,7 +641,7 @@ class Produk_model extends CI_Model{
     {
         $insert_data['default_status']  = $this->DEFAULT_STATUS_PRODUCT;
         $insert_data['vendor_id']       = $this->VENDOR_ID_IRS;
-        $insert_data['jenis_id']        = $this->JENIS_PRODUK_ID_IRS;
+        $insert_data['jenis_id']        = ($insert_data['jenis_produk'] == 'pulsa') ? 4 : 6;
         $insert_data['status_koneksi']  = $this->DEFAULT_STATUS_KONEKSI;
         $insert_data['status_id']       = $this->INM_STATUS_PRODUK_AKTIF;
 
@@ -655,6 +655,45 @@ class Produk_model extends CI_Model{
 
     }
 
+
+    public function editIRSProductPrice($code, $harga_awal, $data)
+    {
+        $set_update = array(
+            'harga_vendor' => $data['harga_produk'],
+            'harga_terakhir' => $harga_awal
+        );
+
+        $kode_produk = $this->db->select('kode_produk')->from('inm_produk')->where('kode_produk_vendor', $code)->get()->row()->kode_produk;
+        $update = $this->db->where('kode_produk', $kode_produk)->update('inm_daftar_harga', $set_update);
+        if($update)
+            return true;
+        else
+            return false;
+    }
+
+    public function updateHargaProdukIRS($kode_produk, $harga_vendor, $harga_terakhir)
+    {
+        $set_update = array(
+            'harga_vendor'  => $harga_vendor,
+            'harga_terakhir' => $harga_terakhir
+        );
+        $update = $this->db->where('kode_produk', $kode_produk)->update('inm_daftar_harga', $set_update);
+        if($update)
+            return true;
+        else
+            return false;
+
+    }
+
+    public function getProductAndPriceByTypeCode($kode_jenis)
+    {
+        $this->db->select('inp.jenis_produk_id, inp.vendor_id, inh.kode_produk ,inp.kode_produk_vendor, inp.nama_lengkap, inh.harga_vendor, inh.harga_terakhir')->from('inm_produk inp');
+        $this->db->join('inm_daftar_harga inh', 'inp.kode_produk = inh.kode_produk');
+        $this->db->where('inp.vendor_id', 3);
+        $this->db->where('inp.jenis_produk_id', $kode_jenis);
+        $select = $this->db->get();
+        return ($select->num_rows() > 0) ? $select->result_array() : null;
+    }
     
 
 }

@@ -773,7 +773,11 @@ class Master extends CI_Controller{
     }
 
     public function DaftarHarga(){
-        $this->load->view('master/list_daftar_harga');
+        $data['jenis_produk'] = array(
+            'pulsa' => 'VOUCHER PULSA',
+            'paket_data' => 'PAKET DATA'
+        );
+        $this->load->view('master/list_daftar_harga', $data);
     }
 
     public function getDaftarHargaJson(){
@@ -945,7 +949,8 @@ class Master extends CI_Controller{
     public function TambahDataProdukIRS()
     {
         $input = json_decode(file_get_contents('php://input'), true);
-        $where = $this->produk_model->checkProductIRSByArray($input['nominal'], $input['nama_operator']);
+        $kode_jenis = ($input['jenis_produk'] == 'pulsa') ? 4 : 6;
+        $where = $this->produk_model->checkProductIRSByArray($input['nominal'], $input['nama_operator'], $kode_jenis);
         
         if($where == true)
         {
@@ -953,10 +958,24 @@ class Master extends CI_Controller{
         }
         else
         {
-            $max_kode_produk = $this->produk_model->getMaxCodeInProductIRSByType('4');
-            $kode_produk = ($max_kode_produk != 0) ? $max_kode_produk + 1 : 401;
+
+
+            $max_kode_produk = 0;
+            $kode_produk = 0;
+
+            if($input['jenis_produk'] == 'pulsa')
+            {
+                $max_kode_produk = $this->produk_model->getMaxCodeInProductIRSByType('4');
+                $kode_produk = ($max_kode_produk != 0) ? $max_kode_produk + 1 : 401;
+            }
+            else
+            {
+                $max_kode_produk = $this->produk_model->getMaxCodeInProductIRSByType('6');
+                $kode_produk = ($max_kode_produk != 0) ? $max_kode_produk + 1 : 601;
+            }
 
             $insert_data = array(
+                'jenis_produk'   => $input['jenis_produk'],
                 'nama_singkat'   => $input['nama_alias_kode'],
                 'nama_lengkap'   => $input['nama_lain_produk'],
                 'kode_produk'    => $kode_produk,
@@ -999,13 +1018,80 @@ class Master extends CI_Controller{
     public function SingleUpdateProductIRS()
     {
         $objects  = new IRS_Services();
-        $input   = json_decode(file_get_contents('php://input'), true)['kode_produk_vendor'];
-        $records = array();
-        if($input != null && !empty($input))
-            $records = $objects->getListProductIRSByCode($input);
+        $input   = json_decode(file_get_contents('php://input'), true);
+        $harga_awal = $input['harga_awal'];
+        $kode_vendor = $input['kode_produk_vendor'];
 
-        $this->setResponse(true, $records);
+        if($kode_vendor != null && !empty($kode_vendor)){
+            $records = $objects->getListProductIRSByCode($kode_vendor)[0];
+            $update = $this->produk_model->editIRSProductPrice($kode_vendor, $harga_awal, $records);
+            if($update == true)
+                $this->setResponse(true, 'Update Harga Produk IRS Berhasil');
+            else
+                $this->setResponse(false, 'Update Harga Produk IRS Gagal');
+        }
+        else
+            $this->setResponse(true, 'Tidak Ada Data Sesuai Kode IRS '. $kode_vendor . ' Tersebut');
+    }
 
+    public function UpdateAllPriceProductIRS()
+    {
+        $objects    = new IRS_Services();
+        $input      = json_decode(file_get_contents('php://input'), true)['jenis_produk'];
+        
+        $kode_jenis = (strtoupper($input) == 'PULSA') ? 4 : 6;
+
+        $data_produk = $this->produk_model->getProductAndPriceByTypeCode($kode_jenis);
+
+        if(is_array($data_produk) && count($data_produk) > 0)
+        {
+            $produk_irs = $objects->getDataProductIRSByCategory($input);
+            $update = $this->getCompareAndUpdateProduct($data_produk, $produk_irs);
+            
+            if($update == true)
+                $this->setResponse(true, 'Proses Update Data Produk '.$input .' IRS Berhasil');
+            else
+                $this->setResponse(false, 'Proses Updata Produk Dari '.$input. ' Gagal');
+        }
+        else{
+            $this->setResponse(false, 'Daftar Produk Dari Kategori Produk '. ($input). ' Kosong');
+        }
+
+    }
+
+    public function getCompareAndUpdateProduct($produk_lama, $produk_irs)
+    {
+        foreach ($produk_lama as $old) 
+        {
+            $kode_vendor = $old['kode_produk_vendor'];
+            $harga_vendor = $old['harga_vendor'];
+            $kode_produk = $old['kode_produk'];
+            
+            $i = 0; $find = false; $update = false;
+            while ($i <= count($produk_irs)-1 && $find == false) 
+            {    
+                if($produk_irs[$i]['kode_produk'] == $kode_vendor)
+                {
+                    if($produk_irs[$i]['harga_produk'] != $harga_vendor)
+                    {
+                        $update = $this->produk_model->updateHargaProdukIRS(
+                            $kode_produk, $produk_irs[$i]['harga_produk'], $harga_vendor
+                        );
+                    }
+                    else
+                        $update = true;
+
+                    $find = true;
+                }
+
+                $i++;
+            }
+
+            if($find == true && $update == false)
+                return false;
+        }
+
+        return true;
     }
 
     public function AddProdukIRS(){

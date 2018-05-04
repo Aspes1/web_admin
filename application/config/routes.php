@@ -117,9 +117,11 @@ $route['error_550'] = 'Error';
 /** IRS Service Route */
 $route['master/single/update/harga/irs'] = 'Master/SingleUpdateProductIRS';
 $route['master/pilih/jenis/irs/(:any)'] = 'Master/getListIRSOperatorByCategory/$1';
-
+$route['master/irs/update/harga/produk'] = 'Master/UpdateAllPriceProductIRS';
 $route['data/produk/irs/by/operator'] = 'Master/getListProductByOperator';
 $route['tambah/product/irs'] = 'Master/TambahDataProdukIRS';
+
+
 
 $route['default_controller'] = $route['login'];
 $route['404_override'] = '';

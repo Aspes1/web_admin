@@ -181,8 +181,9 @@ $(function () {
         this_chooser.nama_alias_kode = txtAliasKodeProduk.val();
 
         var url = window.siteurl + 'tambah/product/irs';
-    
-        if(txtNamaLainProduk.val() != '' && txtAliasKodeProduk.val() != ''){
+        console.log(this_chooser);
+        if(txtNamaLainProduk.val() != '' && txtAliasKodeProduk.val() != '')
+        {
             this_chooser.nama_lain_produk = txtNamaLainProduk.val();
             this_chooser.nama_alias_kode = txtAliasKodeProduk.val()
 
