@@ -655,26 +655,35 @@ class Produk_model extends CI_Model{
 
     }
 
+    
 
     public function editIRSProductPrice($code, $harga_awal, $data)
     {
+        $select = $this->db->select('inp.kode_produk_vendor, inp.kode_produk, inh.harga_vendor, inh.markup')->from('inm_produk inp')
+                           ->join('inm_daftar_harga inh', 'inh.kode_produk = inp.kode_produk', 'left')
+                           ->where('inp.kode_produk_vendor', $code)->get()->row();
+
         $set_update = array(
             'harga_vendor' => $data['harga_produk'],
+            'harga_jual' => intval($select->markup) + intval($data['harga_produk']),
             'harga_terakhir' => $harga_awal
         );
 
-        $kode_produk = $this->db->select('kode_produk')->from('inm_produk')->where('kode_produk_vendor', $code)->get()->row()->kode_produk;
-        $update = $this->db->where('kode_produk', $kode_produk)->update('inm_daftar_harga', $set_update);
+        $update = $this->db->where('kode_produk', $select->kode_produk)->update('inm_daftar_harga', $set_update);
+    
         if($update)
             return true;
-        else
-            return false;
+        
+        return false;
     }
 
     public function updateHargaProdukIRS($kode_produk, $harga_vendor, $harga_terakhir)
     {
+        $select = $this->db->where('kode_produk', $kode_produk)->get('inm_daftar_harga')->row();
+
         $set_update = array(
             'harga_vendor'  => $harga_vendor,
+            'harga_jual' => intval($select->markup) + intval($harga_vendor),
             'harga_terakhir' => $harga_terakhir
         );
         $update = $this->db->where('kode_produk', $kode_produk)->update('inm_daftar_harga', $set_update);

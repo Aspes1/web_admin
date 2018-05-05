@@ -1025,6 +1025,7 @@ class Master extends CI_Controller{
         if($kode_vendor != null && !empty($kode_vendor)){
             $records = $objects->getListProductIRSByCode($kode_vendor)[0];
             $update = $this->produk_model->editIRSProductPrice($kode_vendor, $harga_awal, $records);
+        
             if($update == true)
                 $this->setResponse(true, 'Update Harga Produk IRS Berhasil');
             else
