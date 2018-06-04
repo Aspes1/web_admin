@@ -60,8 +60,19 @@ function AlertSuccess(messages, title=''){
     });
 }
 
+function loadAutoPage(button1, button2, button3, page1, page2){
+    $(button1).show();
+    $(button2).hide();
+    $(button3).hide();
+    $(page1).show();
+    $(page2).hide();
+}
+
 $(function () {
-    
+
+    /** Variable sub - "MANUAL INSERT" */
+    var pageManualInsert = '#pageManualInsert';
+
     var pilihKategoriProduk = $('select[name=pilihKategoriProduk]'),
         pilihOperatorIRS    = $('select[name=pilihOperatorIRS]'), 
         pilihDaftarProdukIRS= $('select[name=pilihDaftarProdukIRS]');
@@ -78,6 +89,29 @@ $(function () {
 
     var tambahProdukIRS = $('#tambahProdukIRS'), resetProdukIRS  = $('#resetProdukIRS');
     var frmAddProduk = $('#frmAddProduk');
+    var btnManualInsert = '#btnManualInsert';
+
+    /** Variable sub "AUTO INSERT" */
+    var pageAutoInsert = '#pageAutoInsert';
+    var btnSubmitAutoInsert = '#btnSubmitAutoInsert';
+    var btnAutoInsert = '#btnAutoInsert';
+
+
+    /** On Load Event */
+
+    $(pageManualInsert).hide();
+
+    loadAutoPage(btnSubmitAutoInsert, tambahProdukIRS, resetProdukIRS, pageAutoInsert, pageManualInsert)
+
+    $(btnAutoInsert).click(function (e) { 
+        e.preventDefault();
+        $(pageAutoInsert).hide();
+    });
+
+
+
+
+
 
     /** Event Click Pilih Kategori Produk */
     pilihKategoriProduk.change(function (e) { 
@@ -163,14 +197,22 @@ $(function () {
 
     });
 
-    txtSetMarkup.keypress(function (e) { 
-        if (e.which == 13) {
-            var harga_jual = CalculatePlusInteger(parseInt($(this).val()), this_chooser.harga_produk);
-            this_chooser.harga_markup = parseInt($(this).val());
-            this_chooser.harga_jual = harga_jual;
-
-            txtHargaJual.val(ConvertNumberToCurrency(harga_jual));
+    txtSetMarkup.keydown(function (e) {
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 || (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || (e.keyCode >= 35 && e.keyCode <= 40)) {
+            return;
         }
+        
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+
+    txtSetMarkup.keyup(function (e) { 
+        var input = $(this).val();
+        var harga_jual = CalculatePlusInteger(parseInt(input), this_chooser.harga_produk);
+        this_chooser.harga_markup = parseInt(input);
+        this_chooser.harga_jual = harga_jual;
+        txtHargaJual.val(ConvertNumberToCurrency(harga_jual));
     });
 
     tambahProdukIRS.click(function (e) { 
@@ -196,6 +238,7 @@ $(function () {
                 contentType: 'application/json',
                 data: JSON.stringify( this_chooser ),
                 success: function( response ){
+                    console.log(response);
                     if(response.status == true)
                         AlertSuccess(response.messages, 'INFORMASI SUKSES');
                     else

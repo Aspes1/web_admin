@@ -39,12 +39,11 @@
                         </div>
                         
                         <div class="form-group">
-                            <label class="control-label col-md-4" for="txtSetMarkup">Set Global Markup Default 100 (IDR)</label>
+                            <label class="control-label col-md-4" for="txtSetMarkup">Set Global Markup (IDR)</label>
                             <div class="col-md-3">
-                                <input type="text" id="txtSetMarkup" class="form-control" value="100">
+                                <input type="text" id="txtSetMarkup" class="form-control" value="0">
                             </div>
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -53,19 +52,14 @@
                 <div class="col-md-12">
                     
                 </div>
-            </div>  
+            </div>
+
+            
         </div>
 
         <div class="card-footer">
-            <button type="button" id="btnSubmitAutoInsert" class="btn btn-sm btn-success">
-                <i class="fa fa-dot-circle-o"></i> Submit Auto Insert
-            </button>
-            <button type="submit" id="tambahProdukIRS" class="btn btn-sm btn-primary">
-                <i class="fa fa-dot-circle-o"></i> Submit Manual Insert
-            </button>
-            <button type="reset" id="resetProdukIRS" class="btn btn-sm btn-danger">
-                <i class="fa fa-ban"></i> Reset
-            </button>
+            <button type="submit" id="tambahProdukIRS" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+            <button type="reset" id="resetProdukIRS" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
         </div>
     </div>
 </div>

@@ -950,7 +950,7 @@ class Master extends CI_Controller{
     {
         $input = json_decode(file_get_contents('php://input'), true);
         $kode_jenis = ($input['jenis_produk'] == 'pulsa') ? 4 : 6;
-        $where = $this->produk_model->checkProductIRSByArray($input['nominal'], $input['nama_operator'], $kode_jenis);
+        $where = $this->produk_model->checkProductIRSByArray($input['nominal'], $kode_jenis, strtoupper($input['nama_operator']));
         
         if($where == true)
         {
@@ -958,8 +958,6 @@ class Master extends CI_Controller{
         }
         else
         {
-
-
             $max_kode_produk = 0;
             $kode_produk = 0;
 
@@ -974,6 +972,8 @@ class Master extends CI_Controller{
                 $kode_produk = ($max_kode_produk != 0) ? $max_kode_produk + 1 : 601;
             }
 
+            $this->setResponse(true, $kode_produk. $max_kode_produk);
+        
             $insert_data = array(
                 'jenis_produk'   => $input['jenis_produk'],
                 'nama_singkat'   => $input['nama_alias_kode'],
@@ -988,7 +988,7 @@ class Master extends CI_Controller{
                 'create_date'    => date('Y-m-d h:i:s'),
                 'update_date'    => date('Y-m-d h:i:s'),
                 'admin_id'       => $this->session->userdata('adminId'),
-                'keterangan'     => $input['nama_operator'].','.$input['nama_produk_irs'].','.$input['kode_produk_irs']
+                'keterangan'     => $input['nama_operator'].','.$input['nama_produk_irs'].','.$input['kode_produk_irs'].','.$input['nama_terminal_irs']
             );
 
             $insert = $this->produk_model->addIRSToProductBase($insert_data);
@@ -997,8 +997,8 @@ class Master extends CI_Controller{
                 $this->setResponse(true, 'Insert Data Produk Berhasil');
             else
                 $this->setResponse(false, $insert);
-
         }
+        
     }
 
     public function setResponse($status=null, $data=null, $optional=null, $code=200)

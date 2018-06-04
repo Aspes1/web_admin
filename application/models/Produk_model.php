@@ -602,30 +602,21 @@ class Produk_model extends CI_Model{
         return ($select->num_rows() > 0) ? $select->result_array() : 0;
     }
 
-    public function checkProductIRSByArray($nominal, $keterangan, $kode_jenis)
+    public function checkProductIRSByArray($nominal, $kode_jenis, $operator)
     {
         $this->db->select('*')->from($this->TBL_PRODUK.' p');
-        $this->db->join($this->TBL_DAFTAR_HARGA.' dh', 'p.vendor_id = dh.vendor_id');
+        $this->db->join($this->TBL_DAFTAR_HARGA.' dh', 'p.kode_produk = dh.kode_produk');
+        $this->db->where('p.status_id', 1);
         $this->db->where('p.vendor_id', 3);
         $this->db->where('p.jenis_produk_id', $kode_jenis);
         $this->db->where('dh.nominal', $nominal);
-
+        $this->db->like('p.keterangan', $operator);
         $select = $this->db->get();
 
         if($select->num_rows() > 0)
-        {
-            $bools = false;
-            foreach ($select->result_array() as $v) {
-                if (strpos($v['keterangan'], $keterangan) !== false) {
-                    $bools = true;
-                    break;
-                }
-            }
-
-            return $bools;
-        }
-
-        return "0";
+            return true;
+        else
+            return false;
     }
 
     /** MODEL TO HANDLE VENDOR */
@@ -652,11 +643,9 @@ class Produk_model extends CI_Model{
         }
 
         return 'Insert Data Ke Tabel Produk Gagal';
-
     }
 
     
-
     public function editIRSProductPrice($code, $harga_awal, $data)
     {
         $select = $this->db->select('inp.kode_produk_vendor, inp.kode_produk, inh.harga_vendor, inh.markup')->from('inm_produk inp')
